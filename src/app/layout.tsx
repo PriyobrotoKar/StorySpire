@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import NextauthProvider from "@/providers/NextauthProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +21,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <NextauthProvider>
+        <body className={`${inter.className} min-h-[100svh]`}>
+          {children}
+          <Toaster />
+        </body>
+      </NextauthProvider>
     </html>
   );
 }

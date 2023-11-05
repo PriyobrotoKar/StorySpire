@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -21,26 +23,27 @@ const LoginForm = () => {
           <button
             type="button"
             onClick={() => setShowPassowrd(!showPassword)}
-            className="absolute right-4 text-lg text-muted-foreground top-1/2 -translate-y-1/2"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-lg text-muted-foreground"
           >
             {showPassword ? <BsEyeSlash /> : <BsEye />}
           </button>
         </div>
-        <Button className="text-base w-full " size={"lg"}>
+        <Button className="w-full text-base " size={"lg"}>
           Login
         </Button>
       </form>
       <div className="flex items-center">
         <hr className="flex-1" />
-        <div className="flex-[2_1_0%] text-center text-muted-foreground text-md">
+        <div className="flex-[2_1_0%] text-center text-md text-muted-foreground">
           or continue with
         </div>
         <hr className="flex-1" />
       </div>
       <Button
-        className="text-xl w-full space-x-3"
+        className="w-full space-x-3 text-xl"
         variant={"outline"}
         size={"lg"}
+        onClick={() => signIn("google", { callbackUrl: "/" })}
       >
         <FcGoogle /> <span className="text-base">Google</span>
       </Button>
