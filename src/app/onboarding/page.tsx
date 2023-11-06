@@ -3,17 +3,19 @@ import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { BsFillCheckCircleFill } from "react-icons/bs";
-import { MdCancel } from "react-icons/md";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { DEFAULT_USER_INTRO } from "../../constants/constant";
 import { toast } from "@/components/ui/use-toast";
-import { fetchSingleUser } from "@/utils/fetchActions";
-import axios from "axios";
+
+import { BsFillCheckCircleFill } from "react-icons/bs";
+import { MdCancel } from "react-icons/md";
+
+import { DEFAULT_USER_INTRO } from "../../constants/constant";
 import { fetchDataFromApi } from "@/utils/fetchData";
+import { Loader2 } from "lucide-react";
 
 const onbaording = () => {
   const { data: session } = useSession();
@@ -25,6 +27,7 @@ const onbaording = () => {
   const [usernameExist, setUsernameExist] = useState<boolean | undefined>(
     false
   );
+  const [btnLoading, setBtnLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -47,7 +50,7 @@ const onbaording = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setBtnLoading(true);
     if (usernameExist) {
       toast({
         variant: "destructive",
@@ -69,7 +72,8 @@ const onbaording = () => {
         if (!response.ok) throw new Error(response.statusText);
         router.push("/");
       } catch (error: any) {
-        console.error("Profile creation error", error.message);
+        setBtnLoading(false);
+        console.error("Profile creation error", error);
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong",
@@ -80,18 +84,34 @@ const onbaording = () => {
   };
 
   const fetchUser = async (username: string) => {
-    const user = await fetchDataFromApi(`/api/user/${username}`);
-    return user;
+    try {
+      const user = await fetchDataFromApi(`/api/user/${username}`);
+      setUsernameExist(user ? true : false);
+    } catch (error: any) {
+      console.error("GET user", error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong",
+        description: "There is a problem connecting the server",
+      });
+    }
   };
 
   useEffect(() => {
+    //force conversion to lowercase
+    setInput((prev) => ({
+      ...prev,
+      username: input.username.toLowerCase(),
+    }));
+    //checking if user exists
     let timeout: NodeJS.Timeout;
     if (input.username) {
       setUsernameExist(undefined);
       timeout = setTimeout(async () => {
-        const user = await fetchUser(input.username);
-        setUsernameExist(user ? true : false);
+        fetchUser(input.username);
       }, 1000);
+    } else {
+      setUsernameExist(false);
     }
     return () => clearTimeout(timeout);
   }, [input.username]);
@@ -155,10 +175,7 @@ const onbaording = () => {
                 ) : usernameExist === false ? (
                   <BsFillCheckCircleFill className="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-blue-600" />
                 ) : (
-                  <img
-                    className="absolute right-3 top-1/2 w-5 -translate-y-1/2"
-                    src="/images/loader.gif"
-                  />
+                  <Loader2 className="absolute right-3 mr-0.5 h-4 w-4 animate-spin " />
                 ))}
             </div>
           </div>
@@ -179,10 +196,17 @@ const onbaording = () => {
           </div>
 
           <Button
-            disabled={usernameExist === undefined ? true : false}
+            disabled={usernameExist === undefined || btnLoading ? true : false}
             className="w-full "
           >
-            Continue
+            {btnLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </>
+            ) : (
+              "Continue"
+            )}
           </Button>
         </form>
       </main>
