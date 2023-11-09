@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { authOptions } from "../api/auth/[...nextauth]/options";
+import AddLinkBtn from "@/components/AddLinkBtn";
 
 const user = async ({ params }: { params: { username: string } }) => {
   const session = await getServerSession(authOptions);
@@ -62,6 +63,8 @@ const user = async ({ params }: { params: { username: string } }) => {
           <div>{/*Followers */}</div>
 
           <p className="text-sm text-muted-foreground">{user.bio}</p>
+
+          <AddLinkBtn />
 
           {user.location && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
