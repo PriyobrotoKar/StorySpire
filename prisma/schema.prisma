@@ -16,8 +16,7 @@ model User {
   fullname    String
   bio         String
   password    String?
-  city        String?
-  country     String?
+  location    String?
   profile_pic String?
   cover_pic   String?
   email       String   @unique

@@ -1,8 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+
+import { useSelector, useDispatch } from "react-redux";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -14,12 +16,25 @@ import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdCancel } from "react-icons/md";
 
 import { DEFAULT_USER_INTRO } from "../../constants/constant";
-import { fetchDataFromApi } from "@/utils/fetchData";
+import { fetchDataFromApi, postFetchAPi } from "@/utils/fetchData";
 import { Loader2 } from "lucide-react";
+import { ApiError } from "@/utils/apiErrorHandler";
+import { RootState } from "@/store/store";
+import { useCookies } from "react-cookie";
 
 const onbaording = () => {
+  const email = useSelector((state: RootState) => state.LoginDetails.email);
+  const password = useSelector(
+    (state: RootState) => state.LoginDetails.passowrd
+  );
   const { data: session } = useSession();
+  const [cookies, setCookies, removeCookie] = useCookies([
+    "fullname",
+    "profile_pic",
+    "email",
+  ]);
   const [input, setInput] = useState({
+    image: "",
     fullname: "",
     username: "",
     intro: "",
@@ -31,13 +46,13 @@ const onbaording = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (session)
-      setInput({
-        fullname: session.user?.name || "",
-        username: "",
-        intro: DEFAULT_USER_INTRO,
-      });
-  }, [session]);
+    setInput({
+      image: cookies.profile_pic || "",
+      fullname: cookies.fullname || "",
+      username: "",
+      intro: DEFAULT_USER_INTRO,
+    });
+  }, []);
 
   const handleInput = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -51,33 +66,42 @@ const onbaording = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setBtnLoading(true);
+
+    //checking if user exists
     if (usernameExist) {
+      setBtnLoading(false);
       toast({
         variant: "destructive",
         title: "Username already exists",
         description: "Try using another username",
       });
     } else {
+      //creating a new user
       try {
-        const response = await fetch(`/api/user`, {
-          method: "POST",
-          body: JSON.stringify({
-            fullname: input.fullname,
-            username: input.username,
-            bio: input.intro,
-            email: session?.user?.email,
-            profile_pic: session?.user?.image,
-          }),
+        const res = await postFetchAPi("/api/user", {
+          fullname: input.fullname,
+          username: input.username,
+          bio: input.intro,
+          email: cookies.email || email,
+          password,
+          profile_pic: input.image,
         });
-        if (!response.ok) throw new Error(response.statusText);
+        if (!session && res.status) {
+          signIn("credentials", {
+            email: email || cookies.email,
+            password,
+            redirect: false,
+          }).then((res) => console.log(res?.ok));
+        }
         router.push("/");
       } catch (error: any) {
-        setBtnLoading(false);
         console.error("Profile creation error", error);
+
+        setBtnLoading(false);
         toast({
           variant: "destructive",
-          title: "Uh oh! Something went wrong",
-          description: "There was a problem creating your profile.",
+          title: error.title,
+          description: error.description,
         });
       }
     }
@@ -91,8 +115,8 @@ const onbaording = () => {
       console.error("GET user", error);
       toast({
         variant: "destructive",
-        title: "Uh oh! Something went wrong",
-        description: "There is a problem connecting the server",
+        title: error.title,
+        description: error.description,
       });
     }
   };
@@ -132,7 +156,7 @@ const onbaording = () => {
           <div>
             <Image
               className="rounded-full "
-              src={session?.user?.image || "/images/avatarFallback.png"}
+              src={input.image || "/images/avatarFallback.png"}
               alt="avatar"
               width={90}
               height={90}

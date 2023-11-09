@@ -1,39 +1,20 @@
 import client from "@/lib/prisma";
+import apiErrorHandler from "@/utils/apiErrorHandler";
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
+import bcrypt from "bcrypt";
 
-export async function POST(req: Request) {
-  try {
-    const userBody = await req.json();
-    const user = await client.user.create({
-      data: userBody,
-    });
-    return NextResponse.json("User created successfully", { status: 200 });
-  } catch (error: any) {
-    console.error(error.message);
-    if (error instanceof Prisma.PrismaClientValidationError) {
-      return NextResponse.json(
-        {
-          error:
-            "The request could not be understood by the server due to malformed syntax.",
-        },
-        { status: 400 }
-      );
-    }
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2002") {
-        return NextResponse.json(
-          {
-            error: "This user already exists.",
-          },
-          { status: 400 }
-        );
-      }
-    }
-
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+export const POST = apiErrorHandler(async (req: Request) => {
+  const userBody = await req.json();
+  if (userBody.password) {
+    const hashPass = await bcrypt.hash(userBody.password, 12);
+    userBody.password = hashPass;
   }
-}
+  const user = await client.user.create({
+    data: userBody,
+  });
+  return NextResponse.json(
+    { status: true, message: "User created successfully" },
+    { status: 200 }
+  );
+});
