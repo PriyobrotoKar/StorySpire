@@ -1,22 +1,14 @@
 import client from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import apiErrorHandler from "../../../../utils/apiErrorHandler";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { username: string } }
-) {
-  try {
+export const GET = apiErrorHandler(
+  async (request: Request, { params }: { params: { username: string } }) => {
     const user = await client.user.findUnique({
       where: {
         username: params.username,
       },
     });
     return NextResponse.json(user, { status: 200 });
-  } catch (error: any) {
-    console.error(error.message);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
   }
-}
+);
