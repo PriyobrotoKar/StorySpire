@@ -20,6 +20,15 @@ model User {
   profile_pic String?
   cover_pic   String?
   email       String   @unique
+  socials     Social[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Social {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  link   String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
 }
