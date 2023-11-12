@@ -1,11 +1,17 @@
 import LoginForm from "@/components/LoginForm";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import Image from "next/image";
 
 export const metadata = {
   title: "Login",
 };
 
-const login = () => {
+const login = async () => {
+  const session = await getServerSession();
+  if (session) {
+    redirect("/");
+  }
   return (
     <div className="flex flex-col items-center lg:h-[100svh] lg:flex-row-reverse">
       <section className="h-64 w-full overflow-hidden  rounded-b-2xl lg:h-auto lg:flex-1 lg:self-stretch  lg:p-4">

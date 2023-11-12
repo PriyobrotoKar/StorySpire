@@ -15,6 +15,9 @@ const register = () => {
   const loginEmail = useSelector(
     (state: RootState) => state.LoginDetails.email
   );
+  if (!loginEmail) {
+    router.replace("/login");
+  }
   const dispatch = useDispatch();
   const [showPassword, setShowPassowrd] = useState({
     password: false,
