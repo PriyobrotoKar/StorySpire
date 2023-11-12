@@ -59,6 +59,9 @@ export const authOptions: NextAuthOptions = {
           });
           if (user) {
             profile.username = user.username;
+            cookies().delete("profile_pic");
+            cookies().delete("email");
+            cookies().delete("fullname");
             return true;
           } else {
             console.log(profile);

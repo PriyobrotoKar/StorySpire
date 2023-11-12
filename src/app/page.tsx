@@ -8,11 +8,11 @@ import { Input } from "@/components/ui/input";
 export default function Home() {
   return (
     <div className="">
-      {/* <Button onClick={() => signOut()}>signout</Button> */}
+      <Button onClick={() => signOut()}>signout</Button>
 
       <section className="mt-16  space-y-6">
         <main className="space-y-4 text-center">
-          <h1 className="text-3xl mx-auto w-[22rem] font-bold leading-tight text-secondary-foreground">
+          <h1 className="mx-auto w-[22rem] text-3xl font-bold leading-tight text-secondary-foreground">
             Discover <span className="text-primary">Untold</span> Stories
           </h1>
           <p className="px-6 text-lg font-medium">
