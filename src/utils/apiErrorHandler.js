@@ -51,12 +51,12 @@ const apiErrorHandler =
       return NextResponse.json(
         {
           error: {
-            type: "SERVER_ERROR",
-            title: "Internal Server Error",
-            description: "There's a problem connecting to the server",
+            title: error.title || "Internal Server Error",
+            description:
+              error.description || "There's a problem connecting to the server",
           },
         },
-        { status: 500 }
+        { status: error.status || 500 }
       );
     }
   };
