@@ -17,6 +17,7 @@ import { FiImage } from "react-icons/fi";
 import useAutosizeTextArea from "@/app/hooks/useAutoSizeTextArea";
 import { uploadToCloud } from "@/utils/uploadToCloudinary";
 import { Button } from "./ui/button";
+import UploadModal from "./UploadModal";
 
 const Editor = () => {
   const ref = useRef<EditorJS | null>();
@@ -24,6 +25,7 @@ const Editor = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState([]);
   const [coverImg, setCoverImg] = useState("");
+  const [showDialogue, setShowDialogue] = useState(true);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useAutosizeTextArea(textAreaRef.current, title);
@@ -99,8 +101,15 @@ const Editor = () => {
   }, []);
 
   return (
-    <>
-      <Button disabled={!content.length || !title}>Publish</Button>
+    <div
+      className={`relative ${showDialogue ? "h-[100svh] overflow-hidden" : ""}`}
+    >
+      <Button
+        onClick={() => setShowDialogue(true)}
+        disabled={!content.length || !title}
+      >
+        Publish
+      </Button>
       <article className="ignoreEditorjs mx-6 mt-20 max-w-3xl space-y-2 md:mx-auto">
         {coverImg && (
           <div>
@@ -143,7 +152,14 @@ const Editor = () => {
         </div>
         <div id="editorjs" className=""></div>
       </article>
-    </>
+      <UploadModal
+        showDialogue={showDialogue}
+        setShowDialogue={setShowDialogue}
+        image={coverImg}
+        title={title}
+        content={content}
+      />
+    </div>
   );
 };
 
