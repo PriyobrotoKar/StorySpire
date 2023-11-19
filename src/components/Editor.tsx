@@ -24,8 +24,12 @@ const Editor = () => {
   const [mounted, setMounted] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState([]);
-  const [coverImg, setCoverImg] = useState("");
-  const [showDialogue, setShowDialogue] = useState(true);
+  const [coverImg, setCoverImg] = useState({
+    localPath: "",
+    file: null,
+  });
+  const [wordCount, setWordCount] = useState(0);
+  const [showDialogue, setShowDialogue] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useAutosizeTextArea(textAreaRef.current, title);
@@ -34,6 +38,20 @@ const Editor = () => {
     const val = evt.target?.value;
 
     setTitle(val);
+  };
+
+  const countTotalWords = (blocks) => {
+    return blocks
+      .filter((block) => {
+        return "text" in block.data;
+      })
+      .reduce((sum, block) => {
+        sum += block.data.text
+          .replaceAll("&nbsp;", " ")
+          .trim()
+          .split(/\s+/).length;
+        return sum;
+      }, 0);
   };
 
   const initEditor = async () => {
@@ -46,7 +64,7 @@ const Editor = () => {
       onChange: async () => {
         let content = await editor.saver.save();
         setContent(content.blocks);
-        console.log(content);
+        setWordCount(countTotalWords(content.blocks));
       },
       tools: {
         header: Header,
@@ -60,11 +78,7 @@ const Editor = () => {
           config: {
             uploader: {
               async uploadByFile(file) {
-                const formdata = new FormData();
-                formdata.append("file", file);
-                formdata.append("upload_preset", "storyspire");
-
-                const url = await uploadToCloud(formdata);
+                const url = await uploadToCloud(file);
                 console.log(url);
                 return {
                   success: 1,
@@ -110,12 +124,18 @@ const Editor = () => {
       >
         Publish
       </Button>
+
       <article className="ignoreEditorjs mx-6 mt-20 max-w-3xl space-y-2 md:mx-auto">
-        {coverImg && (
+        <header className="text-center">
+          <div className="text-sm  text-muted-foreground">
+            {wordCount} Words
+          </div>
+        </header>
+        {coverImg.localPath && (
           <div>
             <img
               className="rounded-xl shadow-2xl"
-              src={coverImg}
+              src={coverImg.localPath}
               alt="Cover Image"
             />
           </div>
@@ -131,9 +151,14 @@ const Editor = () => {
           <input
             id="coverImg"
             onChange={
-              (e) =>
-                e.target.files?.length &&
-                setCoverImg(URL.createObjectURL(e.target.files[0]))
+              (e) => {
+                if (e.target.files?.length) {
+                  setCoverImg({
+                    localPath: URL.createObjectURL(e.target.files[0]),
+                    file: e.target.files[0],
+                  });
+                }
+              }
               // console.log(e.target.files)
             }
             className="hidden"
@@ -158,6 +183,7 @@ const Editor = () => {
         image={coverImg}
         title={title}
         content={content}
+        words={wordCount}
       />
     </div>
   );

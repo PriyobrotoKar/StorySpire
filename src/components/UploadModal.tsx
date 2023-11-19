@@ -2,28 +2,38 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
+import { colors } from "../constants/colors";
 
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 
 import { IoMdClose } from "react-icons/io";
+import { uploadToCloud } from "@/utils/uploadToCloudinary";
+import { postFetchAPi } from "@/utils/fetchData";
+import { toast } from "./ui/use-toast";
 
-interface Tags {
+export interface Tags {
   id: string;
-  text: string;
+  title: string;
+  color: String;
 }
 
 const UploadModal = ({
   image,
   title,
   content,
+  words,
   showDialogue,
   setShowDialogue,
 }: {
-  image: string;
+  image: {
+    localPath: string;
+    file: null;
+  };
   title: string;
   content: any[];
+  words: number;
   showDialogue: boolean;
   setShowDialogue: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
@@ -40,9 +50,35 @@ const UploadModal = ({
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       const newTagId = uuid();
-      setTags([...tags, { id: newTagId, text: topic }]);
+      setTags([
+        ...tags,
+        {
+          id: newTagId,
+          title: topic,
+          color: colors[Number((Math.random() * 10).toFixed(0))],
+        },
+      ]);
       setTopic("");
     }
+  };
+
+  const handleSubmit = async () => {
+    const uploadThumbUrl = image.file ? await uploadToCloud(image.file) : "";
+    const categories = tags.map((tag) => ({
+      title: tag.title,
+      color: tag.color,
+    }));
+    const res = await postFetchAPi("/api/blog", {
+      title,
+      description,
+      content,
+      thumbnail: uploadThumbUrl,
+      length: words,
+      categories,
+    });
+    toast({
+      
+    })
   };
 
   return (
@@ -77,7 +113,7 @@ const UploadModal = ({
                   className="h-full w-full object-cover"
                   width={450}
                   height={250}
-                  src={image}
+                  src={image.localPath}
                   alt="article preview image"
                 />
               ) : (
@@ -102,6 +138,7 @@ const UploadModal = ({
                 {tags.map((tag) => {
                   return (
                     <Button
+                      id={tag.id}
                       className="h-8 gap-2 text-sm"
                       variant={"secondary"}
                       size={"sm"}
@@ -109,7 +146,7 @@ const UploadModal = ({
                         setTags(tags.filter((value) => value.id !== tag.id))
                       }
                     >
-                      {tag.text}
+                      {tag.title}
                       <IoMdClose />
                     </Button>
                   );
@@ -124,7 +161,7 @@ const UploadModal = ({
               />
             </div>
             <div>
-              <Button>Publish Now</Button>
+              <Button onClick={handleSubmit}>Publish Now</Button>
             </div>
           </section>
         </div>
