@@ -32,7 +32,7 @@ const UploadModal = ({
     file: null;
   };
   title: string;
-  content: any[];
+  content: any;
   words: number;
   showDialogue: boolean;
   setShowDialogue: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,8 +40,9 @@ const UploadModal = ({
   const [tags, setTags] = useState<Tags[]>([]);
   const [topic, setTopic] = useState("");
 
-  const description = content?.find((block) => block.type === "paragraph")?.data
-    .text;
+  const description = content?.blocks.find(
+    (block: any) => block.type === "paragraph"
+  )?.data.text;
 
   const handleTopicInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTopic(e.target.value);
@@ -76,9 +77,7 @@ const UploadModal = ({
       length: words,
       categories,
     });
-    toast({
-      
-    })
+    // toast({});
   };
 
   return (
@@ -123,7 +122,7 @@ const UploadModal = ({
                 </p>
               )}
             </div>
-            <div className="space-y-2">
+            <div className="space-y-0">
               <h2 className="text-xl font-semibold">{title}</h2>
               <p className="line-clamp-3">{description}</p>
             </div>
@@ -138,7 +137,7 @@ const UploadModal = ({
                 {tags.map((tag) => {
                   return (
                     <Button
-                      id={tag.id}
+                      key={tag.id}
                       className="h-8 gap-2 text-sm"
                       variant={"secondary"}
                       size={"sm"}

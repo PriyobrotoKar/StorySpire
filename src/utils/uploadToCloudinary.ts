@@ -7,7 +7,7 @@ export const uploadToCloud = async (file: any) => {
     formdata.append("file", file);
     formdata.append("upload_preset", "storyspire");
     const uploadResponse = await axios.post(
-      "https://api.cloudinary.com/v1_1/drkhfjenh/image/upload",
+      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
       formdata
     );
     const imageUrl = uploadResponse.data.secure_url;

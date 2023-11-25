@@ -49,7 +49,6 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, profile }) {
-      console.log("signin called");
       try {
         if (profile) {
           const user = await client.user.findUnique({
@@ -80,7 +79,6 @@ export const authOptions: NextAuthOptions = {
     },
 
     async jwt({ token, user, profile }) {
-      console.log("jwt called", user, profile, token);
       if (user) {
         token.username = user.username;
       }
@@ -92,7 +90,6 @@ export const authOptions: NextAuthOptions = {
 
     async session({ session, user, token }) {
       session.user.username = token.username;
-      console.log("session called", session, token);
       return session;
     },
   },

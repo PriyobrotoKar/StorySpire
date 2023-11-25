@@ -23,7 +23,7 @@ const Editor = () => {
   const ref = useRef<EditorJS | null>();
   const [mounted, setMounted] = useState(false);
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState([]);
+  const [content, setContent] = useState(null);
   const [coverImg, setCoverImg] = useState({
     localPath: "",
     file: null,
@@ -43,14 +43,35 @@ const Editor = () => {
   const countTotalWords = (blocks) => {
     return blocks
       .filter((block) => {
-        return "text" in block.data;
+        return "text" in block.data || "items" in block.data;
       })
       .reduce((sum, block) => {
-        sum += block.data.text
-          .replaceAll("&nbsp;", " ")
-          .trim()
-          .split(/\s+/).length;
-        return sum;
+        if ("text" in block.data) {
+          sum += block.data.text
+            .replaceAll("&nbsp;", " ")
+            .replaceAll(
+              /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
+              ""
+            )
+            .trim()
+            .split(/\s+/).length;
+          return sum;
+        }
+        if ("items" in block.data) {
+          const count =
+            block.data.items.length &&
+            block.data.items
+              .join(" ")
+              .replaceAll("&nbsp;", " ")
+              .replaceAll(
+                /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
+                ""
+              )
+              .trim()
+              .split(/\s+/).length;
+          console.log(count);
+          return sum + count;
+        }
       }, 0);
   };
 
@@ -62,13 +83,23 @@ const Editor = () => {
       },
       placeholder: "Start writing your story",
       onChange: async () => {
-        let content = await editor.saver.save();
-        setContent(content.blocks);
-        setWordCount(countTotalWords(content.blocks));
+        let data = await editor.saver.save();
+        console.log(data.blocks);
+        setContent(data);
+        setWordCount(countTotalWords(data.blocks));
       },
       tools: {
-        header: Header,
-        list: List,
+        header: {
+          class: Header,
+          config: {
+            levels: [2, 3, 4],
+            defaultLevel: 2,
+          },
+        },
+        list: {
+          class: List,
+          inlineToolbar: true,
+        },
         underline: Underline,
         code: Code,
         quote: Quote,
@@ -79,7 +110,6 @@ const Editor = () => {
             uploader: {
               async uploadByFile(file) {
                 const url = await uploadToCloud(file);
-                console.log(url);
                 return {
                   success: 1,
                   file: {
@@ -120,7 +150,7 @@ const Editor = () => {
     >
       <Button
         onClick={() => setShowDialogue(true)}
-        disabled={!content.length || !title}
+        disabled={!content?.blocks.length || !title}
       >
         Publish
       </Button>

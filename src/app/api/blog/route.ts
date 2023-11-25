@@ -22,13 +22,6 @@ export const POST = apiErrorHandler(async (req: Request) => {
   // const title = "This is a sample blog title";
   const slug = body.title.replaceAll(/\s+/g, "-") + "-" + uuid();
 
-  console.log({
-    ...body,
-    slug,
-    author: { connect: { where: { username } } },
-    isPublished: true,
-  });
-
   const blog = await client.blog.create({
     data: {
       ...body,
@@ -47,7 +40,7 @@ export const POST = apiErrorHandler(async (req: Request) => {
   });
 
   return NextResponse.json(
-    { status: true, message: "Blog created successfully" },
+    { success: true, message: "Blog created successfully" },
     { status: 200 }
   );
 });
