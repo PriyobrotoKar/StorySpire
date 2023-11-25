@@ -1,0 +1,54 @@
+.content h2 {
+  padding-top: 1rem; /* Equivalent to py-4 in Tailwind CSS */
+  font-size: 1.25rem; /* Equivalent to text-xl in Tailwind CSS */
+  font-weight: 600; /* Equivalent to font-semibold in Tailwind CSS */
+}
+
+.content ol {
+  list-style-type: decimal; /* Equivalent to list-disc in Tailwind CSS */
+  padding-left: 1.5rem; /* Equivalent to pl-6 in Tailwind CSS */
+}
+
+.content ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.content li {
+  padding-top: 0.5rem; /* Equivalent to py-2 in Tailwind CSS */
+  padding-bottom: 0.5rem; /* Equivalent to py-2 in Tailwind CSS */
+}
+
+.content img {
+  border-radius: 1rem;
+  margin: 2rem 0;
+}
+.content p {
+  padding: 1rem 0;
+}
+
+.content code {
+  background: none;
+}
+
+.content pre {
+  background: #f1f1f1;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid gainsboro;
+  border-radius: 10px;
+}
+
+.content blockquote {
+  margin-top: 1.5rem; /* Equivalent to my-6 in Tailwind CSS */
+  margin-bottom: 1.5rem; /* Equivalent to my-6 in Tailwind CSS */
+  border-left-width: 2px; /* Equivalent to border-l-2 in Tailwind CSS */
+  padding-left: 1rem; /* Equivalent to pl-4 in Tailwind CSS */
+  font-family: Georgia, "Times New Roman", Times, serif; /* Equivalent to font-serif in Tailwind CSS */
+  font-style: italic; /* Equivalent to italic in Tailwind CSS */
+}
+
+.content a {
+  text-decoration: underline;
+  font-weight: 500;
+}

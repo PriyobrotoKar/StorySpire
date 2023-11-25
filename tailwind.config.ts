@@ -12,6 +12,9 @@ module.exports = {
       center: true,
       padding: "2rem",
       screens: {
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
         "2xl": "1400px",
       },
     },
@@ -81,5 +84,10 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography")({
+      className: "ignoreEditorjs",
+    }),
+  ],
 };

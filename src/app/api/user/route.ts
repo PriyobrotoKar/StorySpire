@@ -14,7 +14,7 @@ export const POST = apiErrorHandler(async (req: Request) => {
     data: userBody,
   });
   return NextResponse.json(
-    { status: true, message: "User created successfully" },
+    { success: true, message: "User created successfully" },
     { status: 200 }
   );
 });
