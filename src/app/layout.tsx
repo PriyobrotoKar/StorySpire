@@ -26,7 +26,7 @@ export default function RootLayout({
       <NextauthProvider>
         <ReduxProvider>
           <ReactCookieProvider>
-            <body className={`${inter.className} min-h-[100svh]`}>
+            <body className={`${inter.className} min-h-[100svh] text-base`}>
               {children}
               <Toaster />
             </body>

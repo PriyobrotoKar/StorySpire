@@ -20,6 +20,34 @@ model User {
   profile_pic String?
   cover_pic   String?
   email       String   @unique
+  blogs       Blog[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Blog {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  slug        String     @unique
+  description String
+  content     Json
+  thumbnail   String?
+  length      Int
+  isPublished Boolean
+  author      User       @relation(fields: [authorId], references: [id])
+  authorId    String     @db.ObjectId
+  categories  Category[] @relation(fields: [categoryIDs], references: [id])
+  categoryIDs String[]   @db.ObjectId
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Category {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  color     String
+  posts     Blog[]   @relation(fields: [postIDs], references: [id])
+  postIDs   String[] @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
