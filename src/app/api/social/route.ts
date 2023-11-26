@@ -12,24 +12,23 @@ export const POST = apiErrorHandler(async (req: Request) => {
       { title: "Not Authorized", description: "Please login" },
       401
     );
-  const user = await client.user.findUnique({
-    where: {
-      username: session.user.username,
-    },
-  });
 
   const { name, link } = await req.json();
 
-  await client.social.create({
+  const data = await client.social.create({
     data: {
       name,
       link,
-      userId: user!.id,
+      user: {
+        connect: {
+          username: session.user.username,
+        },
+      },
     },
   });
 
   return NextResponse.json(
-    { status: true, message: "Social added successfully" },
+    { status: true, data, message: "Social added successfully" },
     { status: 200 }
   );
 });

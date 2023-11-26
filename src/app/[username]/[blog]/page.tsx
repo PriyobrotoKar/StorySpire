@@ -27,7 +27,7 @@ const page = async ({
     <>
       <section
         className={
-          "relative flex h-[25rem] flex-col items-center gap-4  bg-blue-400 py-20 text-white before:absolute  before:left-0 before:top-0 before:h-full before:w-full before:bg-white/40 sm:h-[28rem] md:h-[35rem] lg:h-[40rem] lg:gap-10"
+          "relative flex h-[25rem] flex-col items-center gap-4  bg-blue-400 py-20 text-white before:absolute  before:left-0 before:top-0 before:h-full before:w-full before:bg-white/20 sm:h-[28rem] md:h-[35rem] lg:h-[40rem] lg:gap-10"
         }
         style={{
           backgroundColor:
@@ -100,7 +100,7 @@ const page = async ({
         </div>
       </section>
 
-      <section className="mx-6 my-20 flex  items-center gap-2 border-y py-4 lg:container sm:mx-auto  sm:max-w-lg sm:gap-6 sm:px-6 lg:max-w-3xl   lg:gap-10">
+      <section className="mx-6 my-20 flex  items-center gap-2 border-y py-8 lg:container sm:mx-auto  sm:max-w-lg sm:gap-6 sm:px-6 lg:max-w-3xl   lg:gap-10">
         <div className="flex items-center gap-2 sm:gap-6 lg:gap-10">
           <div className="flex-shrink-0">
             <Image

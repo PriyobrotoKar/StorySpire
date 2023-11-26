@@ -9,9 +9,10 @@ import { authOptions } from "../api/auth/[...nextauth]/options";
 import AddLinkBtn from "@/components/AddLinkBtn";
 import UserPostNav from "@/components/UserPostNav";
 import { capitalize, formatDate, readingTime } from "@/utils/helpers";
-import { Blog } from "@/types/schemaTypes";
+import { Blog, User } from "@/types/schemaTypes";
 import Link from "next/link";
 import "../globals.css";
+import Socials from "@/components/Socials";
 
 const user = async ({ params }: { params: { username: string } }) => {
   const session = await getServerSession(authOptions);
@@ -21,7 +22,7 @@ const user = async ({ params }: { params: { username: string } }) => {
     return notFound();
   }
   username = username.slice(3);
-  const user = await fetchSingleUser(username);
+  const user: User = await fetchSingleUser(username);
   if (!user) {
     return notFound();
   }
@@ -72,27 +73,30 @@ const user = async ({ params }: { params: { username: string } }) => {
               </div>
               <div>{/*Followers */}</div>
               <p className="text-sm text-muted-foreground">{user.bio}</p>
-              <AddLinkBtn />
+              <Socials user={user} socials={user.socials} />
               {user.location && (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <HiOutlineLocationMarker />
                   <p>{user.location}</p>
                 </div>
               )}
-              <div className="flex items-center justify-between gap-4 rounded-md border p-4">
-                <div className="text-sm font-medium">
-                  Follow to get new updates in your activity feed or start page
+              {session?.user.username !== user.username && (
+                <div className="flex items-center justify-between gap-4 rounded-md border p-4">
+                  <div className="text-sm font-medium">
+                    Follow to get new updates in your activity feed or start
+                    page
+                  </div>
+                  <Button>Follow</Button>
                 </div>
-                <Button>Follow</Button>
-              </div>
+              )}
             </div>
           </section>
-          <section className="flex-[2_1_0%] space-y-6 px-4 lg:py-12">
+          <section className="flex-[2_1_0%]  px-4 lg:py-12">
             <UserPostNav />
             {blogs.map((blog: Blog, i: number) => {
               return (
-                <>
-                  <article key={blog.id} className="space-y-4">
+                <div key={blog.id}>
+                  <article className="my-6 space-y-4 rounded-md p-4 transition-colors hover:bg-card">
                     <div
                       className="text-md font-semibold"
                       style={{ color: blog.categories[0]?.color }}
@@ -134,7 +138,7 @@ const user = async ({ params }: { params: { username: string } }) => {
                     </div>
                   </article>
                   {i !== blogs.length - 1 && <hr />}
-                </>
+                </div>
               );
             })}
           </section>

@@ -8,6 +8,9 @@ export const GET = apiErrorHandler(
       where: {
         username: params.username,
       },
+      include: {
+        socials: true,
+      },
     });
     return NextResponse.json(user, { status: 200 });
   }

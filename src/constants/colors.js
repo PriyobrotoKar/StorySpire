@@ -1,14 +1,14 @@
 export const colors = [
-  "rgb(65, 105, 225)", // Royal Blue
-  "rgb(0, 128, 0)", // Emerald Green
-  "rgb(128, 0, 128)", // Deep Purple
-  "rgb(224, 17, 95)", // Ruby Red
-  "rgb(255, 69, 0)", // Sunset Orange
-  "rgb(0, 128, 128)", // Teal
-  "rgb(218, 165, 32)", // Goldenrod
-  "rgb(255, 99, 71)", // Tomato
-  "rgb(75, 0, 130)", // Indigo
-  "rgb(255, 140, 0)", // Dark Orange
-  "rgb(106, 90, 205)", // Slate Blue
-  "rgb(153, 50, 204)", // Dark Orchid
+  "hsl(240, 50%, 50%)", // Royal Blue
+  "hsl(120,30%, 50%)", // Emerald Green
+  "hsl(270, 50%, 50%)", // Deep Purple
+  "hsl(330, 75%, 40%)", // Ruby Red
+  "hsl(16, 50%, 50%)", // Sunset Orange
+  "hsl(180, 50%, 50%)", // Teal
+  "hsl(43, 50%, 50%)", // Goldenrod
+  "hsl(10, 50%, 65%)", // Tomato
+  "hsl(275, 50%, 50%)", // Indigo
+  "hsl(30, 50%, 50%)", // Dark Orange
+  "hsl(248, 50%, 50%)", // Slate Blue
+  "hsl(280, 50%, 50%)", // Dark Orchid
 ];

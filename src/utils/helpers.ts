@@ -4,7 +4,6 @@ export const readingTime = (words: number) => {
 };
 
 export const formatDate = (date: Date) => {
-  console.log("server");
   return new Date(date).toLocaleDateString("en-GB", {
     dateStyle: "medium",
   });
