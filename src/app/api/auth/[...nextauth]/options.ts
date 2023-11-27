@@ -58,6 +58,7 @@ export const authOptions: NextAuthOptions = {
           });
           if (user) {
             profile.username = user.username;
+            profile.picture = user.profile_pic || profile.picture;
             cookies().delete("profile_pic");
             cookies().delete("email");
             cookies().delete("fullname");
@@ -81,15 +82,18 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, profile }) {
       if (user) {
         token.username = user.username;
+        token.picture = user.profile_pic;
       }
       if (profile) {
         token.username = profile.username;
+        token.picture = profile.picture;
       }
       return token;
     },
 
     async session({ session, user, token }) {
       session.user.username = token.username;
+      session.user.image = token.picture;
       return session;
     },
   },

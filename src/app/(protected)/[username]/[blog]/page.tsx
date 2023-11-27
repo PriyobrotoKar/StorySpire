@@ -27,7 +27,7 @@ const page = async ({
     <>
       <section
         className={
-          "relative flex h-[25rem] flex-col items-center gap-4  bg-blue-400 py-20 text-white before:absolute  before:left-0 before:top-0 before:h-full before:w-full before:bg-white/20 sm:h-[28rem] md:h-[35rem] lg:h-[40rem] lg:gap-10"
+          "relative flex h-[25rem] flex-col items-center gap-4  bg-blue-400 py-20 text-white before:absolute  before:left-0 before:top-0 before:h-full before:w-full before:bg-white/20 sm:h-[28rem] md:h-[35rem] lg:h-[42rem] lg:gap-10"
         }
         style={{
           backgroundColor:
@@ -35,7 +35,7 @@ const page = async ({
             colors[Number((Math.random() * 10).toFixed(0))],
         }}
       >
-        <div className="relative z-10 font-medium">
+        <div className="relative z-10 mt-10 font-medium">
           {blog.categories.length
             ? capitalize(blog.categories[0].name) + " • "
             : ""}

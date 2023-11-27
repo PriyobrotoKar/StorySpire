@@ -7,13 +7,6 @@ import { NextResponse } from "next/server";
 export const GET = apiErrorHandler(
   async (request: Request, { params }: { params: { slug: string } }) => {
     const session = await getServerSession(authOptions);
-    if (!session) {
-      throw new ApiError(
-        "Unauthorized",
-        { title: "Unauthorized", description: "Please login!" },
-        401
-      );
-    }
 
     const blog = await client.blog.findUnique({
       where: {

@@ -5,6 +5,7 @@ import NextauthProvider from "@/providers/NextauthProvider";
 import { Toaster } from "@/components/ui/toaster";
 import ReduxProvider from "@/providers/ReduxProvider";
 import ReactCookieProvider from "@/providers/ReactCookieProvider";
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 

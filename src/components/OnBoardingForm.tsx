@@ -20,6 +20,17 @@ import { Loader2 } from "lucide-react";
 import { RootState } from "@/store/store";
 import { useCookies } from "react-cookie";
 import { DEFAULT_USER_INTRO } from "@/constants/constant";
+import { uploadToCloud } from "@/utils/uploadToCloudinary";
+
+interface Input {
+  image: {
+    url: string;
+    file: File | null;
+  };
+  fullname: string;
+  username: string;
+  intro: string;
+}
 
 const OnBoardingForm = () => {
   const email = useSelector((state: RootState) => state.LoginDetails.email);
@@ -32,8 +43,11 @@ const OnBoardingForm = () => {
     "profile_pic",
     "email",
   ]);
-  const [input, setInput] = useState({
-    image: "",
+  const [input, setInput] = useState<Input>({
+    image: {
+      url: "",
+      file: null,
+    },
     fullname: "",
     username: "",
     intro: "",
@@ -49,7 +63,7 @@ const OnBoardingForm = () => {
       router.replace("/login");
     } else {
       setInput({
-        image: cookies.profile_pic || "",
+        image: { url: cookies.profile_pic || "", file: null },
         fullname: cookies.fullname || "",
         username: "",
         intro: DEFAULT_USER_INTRO,
@@ -64,6 +78,18 @@ const OnBoardingForm = () => {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleImageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.length) {
+      setInput({
+        ...input,
+        image: {
+          url: URL.createObjectURL(e.target.files[0]),
+          file: e.target.files[0],
+        },
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -81,15 +107,17 @@ const OnBoardingForm = () => {
     } else {
       //creating a new user
       try {
+        const imageUrl =
+          input.image.file && (await uploadToCloud(input.image.file));
         const res = await postFetchAPi("/api/user", {
           fullname: input.fullname,
           username: input.username,
           bio: input.intro,
           email: cookies.email || email,
           password,
-          profile_pic: input.image,
+          profile_pic: imageUrl || input.image.url,
         });
-        if (!session && res.status) {
+        if (!session && res.success) {
           signIn("credentials", {
             email: email || cookies.email,
             password,
@@ -145,14 +173,60 @@ const OnBoardingForm = () => {
 
   return (
     <form onSubmit={(e) => handleSubmit(e)} className="space-y-3 p-4">
-      <div>
-        <Image
-          className="rounded-full "
-          src={input.image || "/images/avatarFallback.png"}
-          alt="avatar"
-          width={90}
-          height={90}
-        />
+      <div className="flex items-center gap-6">
+        <div className="aspect-square w-[6rem] overflow-hidden rounded-full">
+          <Image
+            className="h-full w-full object-cover object-center "
+            src={input.image.url || "/images/avatarFallback.png"}
+            alt="avatar"
+            width={90}
+            height={90}
+          />
+        </div>
+        <div>
+          {input.image.url ? (
+            <div className="space-x-2">
+              <label
+                htmlFor="imageInput"
+                className="cursor-pointer rounded-md border px-4 py-2 text-md font-medium transition-colors hover:bg-secondary/50"
+              >
+                Change
+              </label>
+              <Button
+                className="bg-primary/10  text-primary/80 hover:bg-primary/20 hover:text-primary"
+                variant={"secondary"}
+                onClick={() =>
+                  setInput({
+                    ...input,
+                    image: {
+                      url: "",
+                      file: null,
+                    },
+                  })
+                }
+              >
+                Remove
+              </Button>
+            </div>
+          ) : (
+            <>
+              <label
+                className="cursor-pointer rounded-md bg-secondary/60 px-4 py-2 text-md font-medium transition-colors hover:bg-secondary"
+                htmlFor="imageInput"
+              >
+                Upload
+              </label>
+            </>
+          )}
+          <input
+            className="hidden"
+            type="file"
+            accept=".jpg,.jpeg,.png,.webp"
+            name="imageInput"
+            onChange={handleImageInput}
+            id="imageInput"
+          />
+        </div>
       </div>
 
       <div>
