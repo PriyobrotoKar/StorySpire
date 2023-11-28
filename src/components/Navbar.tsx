@@ -81,7 +81,7 @@ const MobileNav = () => {
 };
 
 const DesktopNav = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const pathname = usePathname();
   const isAtBlogPage = pathname.includes("@") && pathname.includes("/", 1);
@@ -124,7 +124,7 @@ const DesktopNav = () => {
             </Button>
           </Link>
 
-          {!session ? (
+          {status === "unauthenticated" ? (
             <Button
               variant={isAtBlogPage ? "secondary" : "default"}
               onClick={() => router.push("/login")}
