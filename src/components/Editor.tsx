@@ -14,7 +14,7 @@ import ImageTool from "@editorjs/image";
 import { Textarea } from "./ui/textarea";
 import { FiImage } from "react-icons/fi";
 
-import useAutosizeTextArea from "@/app/hooks/useAutoSizeTextArea";
+import useAutosizeTextArea from "../hooks/useAutoSizeTextArea";
 import { uploadToCloud } from "@/utils/uploadToCloudinary";
 import { Button } from "./ui/button";
 import UploadModal from "./UploadModal";

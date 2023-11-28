@@ -74,6 +74,7 @@ const register = () => {
                 value={input.password}
                 onChange={handleInput}
                 required
+                autoComplete="new-password"
                 className={error ? "border-primary" : ""}
               />
               <button
@@ -104,6 +105,7 @@ const register = () => {
                 name="confirmPass"
                 value={input.confirmPass}
                 onChange={handleInput}
+                autoComplete="new-password"
                 required
                 className={error ? "border-primary" : ""}
               />
