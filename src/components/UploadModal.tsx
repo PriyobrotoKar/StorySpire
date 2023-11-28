@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { colors } from "../constants/colors";
-
+import confetti from "canvas-confetti";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -11,13 +11,12 @@ import { Button } from "./ui/button";
 import { IoMdClose } from "react-icons/io";
 import { uploadToCloud } from "@/utils/uploadToCloudinary";
 import { postFetchAPi } from "@/utils/fetchData";
-import { toast } from "./ui/use-toast";
 
-export interface Tags {
-  id: string;
-  title: string;
-  color: String;
-}
+import { useSession } from "next-auth/react";
+import { Blog } from "@/types/schemaTypes";
+import { BlogPreview, Tags } from "@/types/customTypes";
+import BlogArticleCard from "./BlogArticleCard";
+import { useRouter } from "next/navigation";
 
 const UploadModal = ({
   image,
@@ -39,10 +38,39 @@ const UploadModal = ({
 }) => {
   const [tags, setTags] = useState<Tags[]>([]);
   const [topic, setTopic] = useState("");
+  const { data: session } = useSession();
+  const confettiColors = ["#bb0000", "#ffffff"];
+  const router = useRouter();
 
   const description = content?.blocks.find(
     (block: any) => block.type === "paragraph"
   )?.data.text;
+
+  const [blog, setBlog] = useState<BlogPreview>({
+    title,
+    description,
+    length: words,
+    thumbnail: image.localPath,
+    author: {
+      fullname: session?.user.name,
+    },
+    createdAt: new Date(),
+    categories: [],
+  });
+
+  useEffect(() => {
+    setBlog({
+      title,
+      description,
+      length: words,
+      thumbnail: image.localPath,
+      author: {
+        fullname: session?.user.name,
+      },
+      createdAt: new Date(),
+      categories: tags,
+    });
+  }, [title, content, image, tags]);
 
   const handleTopicInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTopic(e.target.value);
@@ -55,7 +83,7 @@ const UploadModal = ({
         ...tags,
         {
           id: newTagId,
-          title: topic,
+          name: topic,
           color: colors[Number((Math.random() * 10).toFixed(0))],
         },
       ]);
@@ -66,7 +94,7 @@ const UploadModal = ({
   const handleSubmit = async () => {
     const uploadThumbUrl = image.file ? await uploadToCloud(image.file) : "";
     const categories = tags.map((tag) => ({
-      title: tag.title,
+      name: tag.name,
       color: tag.color,
     }));
     const res = await postFetchAPi("/api/blog", {
@@ -77,12 +105,26 @@ const UploadModal = ({
       length: words,
       categories,
     });
-    // toast({});
+    confetti({
+      particleCount: 100,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 },
+      colors: confettiColors,
+    });
+    confetti({
+      particleCount: 100,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 },
+      colors: confettiColors,
+    });
+    router.push(`/@${res.data.author.username}/${res.data.slug}`);
   };
 
   return (
     <div
-      className={`absolute top-0 z-10 flex h-[100svh] w-full items-end justify-center overflow-hidden bg-neutral-500/30 backdrop-blur-sm transition md:items-center ${
+      className={`absolute top-0 z-30 flex h-[100svh] w-full items-end justify-center overflow-hidden bg-neutral-500/30 backdrop-blur-sm transition md:items-center ${
         showDialogue ? "" : "pointer-events-none opacity-0"
       }`}
     >
@@ -106,26 +148,7 @@ const UploadModal = ({
         <hr className="md:hidden" />
         <div className="mx-auto flex max-w-md flex-col  gap-8 md:max-w-full md:flex-row">
           <section className="  flex-1 space-y-6">
-            <div className="flex h-56 items-center justify-center overflow-hidden rounded-md bg-neutral-200">
-              {image ? (
-                <Image
-                  className="h-full w-full object-cover"
-                  width={450}
-                  height={250}
-                  src={image.localPath}
-                  alt="article preview image"
-                />
-              ) : (
-                <p className="w-3/4 text-center text-sm text-muted-foreground">
-                  Include a high-quality image in your story to make it more
-                  inviting to readers.
-                </p>
-              )}
-            </div>
-            <div className="space-y-0">
-              <h2 className="text-xl font-semibold">{title}</h2>
-              <p className="line-clamp-3">{description}</p>
-            </div>
+            <BlogArticleCard size={"small"} blog={blog} />
           </section>
           <section className="flex-1 space-y-6">
             <div className="space-y-2">
@@ -145,7 +168,7 @@ const UploadModal = ({
                         setTags(tags.filter((value) => value.id !== tag.id))
                       }
                     >
-                      {tag.title}
+                      {tag.name}
                       <IoMdClose />
                     </Button>
                   );

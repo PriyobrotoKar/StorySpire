@@ -13,7 +13,11 @@ export const GET = apiErrorHandler(
         slug: params.slug,
       },
       include: {
-        categories: true,
+        categories: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
         author: true,
       },
     });

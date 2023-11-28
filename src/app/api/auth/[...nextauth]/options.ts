@@ -83,6 +83,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.username = user.username;
         token.picture = user.profile_pic;
+        token.name = user.fullname;
       }
       if (profile) {
         token.username = profile.username;
@@ -93,6 +94,7 @@ export const authOptions: NextAuthOptions = {
 
     async session({ session, user, token }) {
       session.user.username = token.username;
+      session.user.name = token.name;
       session.user.image = token.picture;
       return session;
     },

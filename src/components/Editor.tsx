@@ -148,18 +148,17 @@ const Editor = () => {
     <div
       className={`relative ${showDialogue ? "h-[100svh] overflow-hidden" : ""}`}
     >
-      <Button
-        onClick={() => setShowDialogue(true)}
-        disabled={!content?.blocks.length || !title}
-      >
-        Publish
-      </Button>
-
-      <article className="ignoreEditorjs mx-6 mt-20 max-w-3xl space-y-2 md:mx-auto">
-        <header className="text-center">
+      <article className="ignoreEditorjs mx-6 max-w-3xl space-y-2 pt-28 md:mx-auto">
+        <header className="flex items-center justify-between">
           <div className="text-sm  text-muted-foreground">
             {wordCount} Words
           </div>
+          <Button
+            onClick={() => setShowDialogue(true)}
+            disabled={!content?.blocks.length || !title}
+          >
+            Publish
+          </Button>
         </header>
         {coverImg.localPath && (
           <div>
