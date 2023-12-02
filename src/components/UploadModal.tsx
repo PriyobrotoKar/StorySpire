@@ -17,6 +17,7 @@ import { Blog } from "@/types/schemaTypes";
 import { BlogPreview, Tags } from "@/types/customTypes";
 import BlogArticleCard from "./BlogArticleCard";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 const UploadModal = ({
   image,
@@ -39,6 +40,7 @@ const UploadModal = ({
   const [tags, setTags] = useState<Tags[]>([]);
   const [topic, setTopic] = useState("");
   const { data: session } = useSession();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const confettiColors = ["#bb0000", "#ffffff"];
   const router = useRouter();
 
@@ -53,6 +55,8 @@ const UploadModal = ({
     thumbnail: image.localPath,
     author: {
       fullname: session?.user.name,
+      username: session?.user.username,
+      profile_pic: session?.user.image,
     },
     createdAt: new Date(),
     categories: [],
@@ -66,6 +70,8 @@ const UploadModal = ({
       thumbnail: image.localPath,
       author: {
         fullname: session?.user.name,
+        username: session?.user.username,
+        profile_pic: session?.user.image,
       },
       createdAt: new Date(),
       categories: tags,
@@ -92,6 +98,7 @@ const UploadModal = ({
   };
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
     const uploadThumbUrl = image.file ? await uploadToCloud(image.file) : "";
     const categories = tags.map((tag) => ({
       name: tag.name,
@@ -183,7 +190,16 @@ const UploadModal = ({
               />
             </div>
             <div>
-              <Button onClick={handleSubmit}>Publish Now</Button>
+              <Button disabled={isSubmitting} onClick={handleSubmit}>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Publishing
+                  </>
+                ) : (
+                  "Publish Now"
+                )}
+              </Button>
             </div>
           </section>
         </div>

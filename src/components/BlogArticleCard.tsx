@@ -8,12 +8,15 @@ import React from "react";
 const BlogArticleCard = ({
   blog,
   size,
+  showAuthor = true,
 }: {
   blog: Blog | BlogPreview;
+  showAuthor?: boolean;
   size?: "large" | "small";
 }) => {
+  console.log(blog);
   return (
-    <article className="my-6 space-y-4 rounded-md p-4 transition-colors hover:bg-card">
+    <article className="flex min-w-[10rem] flex-1  flex-col  gap-4 rounded-md transition-colors md:p-4 lg:hover:bg-card">
       <div
         className="text-md font-semibold"
         style={{ color: blog.categories[0]?.color }}
@@ -23,7 +26,7 @@ const BlogArticleCard = ({
           : ""}
         {readingTime(blog.length)} mins
       </div>
-      <div>
+      <div className="flex-1">
         <Link
           href={
             blog.author.username && blog.slug
@@ -32,7 +35,7 @@ const BlogArticleCard = ({
           }
         >
           <div
-            className={`flex  gap-2 lg:gap-6 ${
+            className={`flex h-full gap-4 ${
               size === undefined
                 ? " flex-col sm:flex-row-reverse"
                 : size === "small"
@@ -41,7 +44,12 @@ const BlogArticleCard = ({
             }`}
           >
             {blog.thumbnail && (
-              <div className="h-[12rem] flex-1 overflow-hidden sm:h-[8rem] lg:h-[10rem]">
+              <div
+                className={
+                  "overflow-hidden " +
+                  (size === "small" ? "flex-[0_0_12rem]" : "")
+                }
+              >
                 <Image
                   src={blog.thumbnail}
                   alt="Blog thumbnail"
@@ -51,7 +59,7 @@ const BlogArticleCard = ({
                 />
               </div>
             )}
-            <div className="flex-[2_1_0%] space-y-4">
+            <div className="flex  flex-1 flex-col justify-between gap-4 lg:flex-[2_1_0%]">
               <div className="space-y-2">
                 <h2 className="text-lg font-semibold leading-tight">
                   {blog.title}
@@ -60,7 +68,31 @@ const BlogArticleCard = ({
                   {blog.description}
                 </p>
               </div>
-              <div className=" text-sm font-semibold text-muted-foreground">
+              <div className="flex items-center gap-1 text-sm font-semibold text-muted-foreground">
+                {showAuthor && (
+                  <>
+                    <Link href={`/@${blog.author.username}`}>
+                      <div className="group  flex items-center gap-2">
+                        <div className="aspect-square w-8 overflow-hidden rounded-full">
+                          <Image
+                            className="h-full w-full object-cover "
+                            src={
+                              blog.author.profile_pic ||
+                              "/images/avatarFallback.png"
+                            }
+                            alt="Author Profile Picture"
+                            width={32}
+                            height={32}
+                          />
+                        </div>
+                        <div className="group-hover:underline">
+                          {blog.author.fullname}
+                        </div>
+                      </div>
+                    </Link>
+                    <span>•</span>
+                  </>
+                )}
                 {formatDate(blog.createdAt)}
               </div>
             </div>

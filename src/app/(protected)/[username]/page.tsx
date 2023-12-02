@@ -101,7 +101,7 @@ const user = async ({ params }: { params: { username: string } }) => {
             {blogs.map((blog: Blog, i: number) => {
               return (
                 <div key={blog.id}>
-                  <BlogArticleCard blog={blog} />
+                  <BlogArticleCard showAuthor={false} blog={blog} />
                   {i !== blogs.length - 1 && <hr />}
                 </div>
               );

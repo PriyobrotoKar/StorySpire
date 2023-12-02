@@ -117,6 +117,15 @@ const Editor = () => {
                   },
                 };
               },
+              async uploadByUrl(url) {
+                console.log(url);
+                return {
+                  success: 1,
+                  file: {
+                    url,
+                  },
+                };
+              },
             },
           },
         },

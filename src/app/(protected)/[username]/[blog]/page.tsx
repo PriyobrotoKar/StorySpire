@@ -46,7 +46,7 @@ const page = async ({
           {readingTime(blog.length)} mins
         </div>
 
-        <h1 className="relative z-10  mx-auto max-w-3xl text-center text-xl font-bold leading-tight sm:container sm:text-2xl md:text-3xl">
+        <h1 className="relative z-10  mx-auto text-center text-xl font-bold leading-tight sm:container sm:text-2xl md:text-3xl lg:max-w-3xl">
           {blog.title}
         </h1>
 

@@ -33,12 +33,15 @@ const MobileNav = ({ showNav }: { showNav: boolean }) => {
   return (
     <motion.div
       variants={{
-        visible: { y: 0, x: "-50%" },
-        hidden: { y: "150%", x: "-50%" },
+        visible: { y: 0 },
+        hidden: { y: "150%" },
       }}
       animate={showNav ? "visible" : "hidden"}
       transition={{ duration: 0.2, ease: "easeIn" }}
-      className="fixed bottom-6 left-1/2 z-20  sm:hidden"
+      style={{
+        x: "-50%",
+      }}
+      className="fixed bottom-6 left-1/2 z-20   sm:hidden"
     >
       <nav className="w-fit rounded-xl bg-white/50 px-6 py-4 shadow-xl backdrop-blur">
         <ul className="flex items-center gap-8">

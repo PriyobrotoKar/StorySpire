@@ -13,6 +13,7 @@ export interface BlogPreview {
   author: {
     fullname: string;
     username?: string;
+    profile_pic?: string;
   };
   createdAt: Date;
   categories: Tags[];
