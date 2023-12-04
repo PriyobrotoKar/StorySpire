@@ -8,7 +8,7 @@ export const GET = apiErrorHandler(async (request: NextRequest) => {
   const recent = await client.blog.findMany({
     where: {
       isPublished: true,
-      //isFeatured:false,
+      isFeatured: false,
     },
     include: {
       categories: {
@@ -18,7 +18,7 @@ export const GET = apiErrorHandler(async (request: NextRequest) => {
       },
       author: true,
     },
-    take: limit || 5,
+    // take: limit || 5,
     orderBy: {
       createdAt: "desc",
     },

@@ -43,6 +43,7 @@ model Blog {
   thumbnail   String?
   length      Int
   isPublished Boolean
+  isFeatured  Boolean    @default(false)
   author      User       @relation(fields: [authorId], references: [id])
   authorId    String     @db.ObjectId
   categories  Category[] @relation(fields: [categoryIDs], references: [id])

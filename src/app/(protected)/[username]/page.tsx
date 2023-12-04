@@ -91,7 +91,7 @@ const user = async ({ params }: { params: { username: string } }) => {
               )}
             </div>
           </section>
-          <section className="flex-[2_1_0%]  px-4 lg:py-12">
+          <section className="flex-[2_1_0%]  space-y-6 px-4 lg:py-12">
             <UserPostNav />
             {!blogs.length && (
               <p className="my-32 text-center text-sm text-muted-foreground">
@@ -100,7 +100,7 @@ const user = async ({ params }: { params: { username: string } }) => {
             )}
             {blogs.map((blog: Blog, i: number) => {
               return (
-                <div key={blog.id}>
+                <div key={blog.id} className="space-y-6">
                   <BlogArticleCard showAuthor={false} blog={blog} />
                   {i !== blogs.length - 1 && <hr />}
                 </div>

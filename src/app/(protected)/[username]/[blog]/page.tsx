@@ -55,8 +55,8 @@ const page = async ({
             <Image
               src={blog.author.profile_pic || "/images/avatarFallback.png"}
               alt="Author Profile Picture"
-              width={60}
-              height={60}
+              width={90}
+              height={90}
               className="h-full w-full object-cover"
             />
           </div>
@@ -77,8 +77,8 @@ const page = async ({
             <Image
               src={blog.thumbnail}
               alt="Thumbnail"
-              width={500}
-              height={300}
+              width={1200}
+              height={800}
               className="my-0 h-full w-full object-cover "
             />
           </div>
