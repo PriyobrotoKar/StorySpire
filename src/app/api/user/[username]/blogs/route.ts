@@ -31,7 +31,11 @@ export const GET = apiErrorHandler(
         createdAt: "desc",
       },
       include: {
-        categories: true,
+        categories: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
         author: true,
       },
     });

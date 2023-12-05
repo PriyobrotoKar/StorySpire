@@ -11,6 +11,7 @@ import { capitalize, formatDate, readingTime } from "@/utils/helpers";
 import { Blog } from "@/types/schemaTypes";
 import Codeblock from "@/components/Codeblock";
 import { colors } from "@/constants/colors";
+import { notFound } from "next/navigation";
 
 const page = async ({
   params,
@@ -21,6 +22,9 @@ const page = async ({
   const { username, blog: slug } = params;
 
   const blog: Blog = await fetchSingleBlog(slug);
+  if (!blog) {
+    return notFound();
+  }
   const html = edjsParser.parse(blog.content as any);
 
   return (
@@ -42,18 +46,18 @@ const page = async ({
           {readingTime(blog.length)} mins
         </div>
 
-        <h1 className="relative z-10  mx-auto max-w-3xl text-center text-xl font-bold leading-tight sm:container sm:text-2xl md:text-3xl">
+        <h1 className="relative z-10  mx-auto text-center text-xl font-bold leading-tight sm:container sm:text-2xl md:text-3xl lg:max-w-3xl">
           {blog.title}
         </h1>
 
         <div className="relative z-10 flex items-center gap-4">
-          <div>
+          <div className="aspect-square w-12 overflow-hidden rounded-full shadow-xl lg:w-16">
             <Image
               src={blog.author.profile_pic || "/images/avatarFallback.png"}
               alt="Author Profile Picture"
-              width={60}
-              height={60}
-              className="w-12 rounded-full shadow-xl lg:w-16"
+              width={90}
+              height={90}
+              className="h-full w-full object-cover"
             />
           </div>
           <div>
@@ -73,8 +77,8 @@ const page = async ({
             <Image
               src={blog.thumbnail}
               alt="Thumbnail"
-              width={500}
-              height={300}
+              width={1200}
+              height={800}
               className="my-0 h-full w-full object-cover "
             />
           </div>
@@ -102,13 +106,13 @@ const page = async ({
 
       <section className="mx-6 my-20 flex  items-center gap-2 border-y py-8 lg:container sm:mx-auto  sm:max-w-lg sm:gap-6 sm:px-6 lg:max-w-3xl   lg:gap-10">
         <div className="flex items-center gap-2 sm:gap-6 lg:gap-10">
-          <div className="flex-shrink-0">
+          <div className="aspect-square w-12  flex-shrink-0 overflow-hidden rounded-full shadow-xl sm:w-14 lg:w-16">
             <Image
               src={blog.author.profile_pic || "/images/avatarFallback.png"}
               alt="Author Profile Picture"
               width={60}
               height={60}
-              className="my-0 w-12 rounded-full shadow-xl sm:w-14 lg:w-16"
+              className=" h-full w-full object-cover"
             />
           </div>
           <div>

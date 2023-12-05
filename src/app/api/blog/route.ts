@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/options";
 import { v4 as uuid } from "uuid";
 import client from "@/lib/prisma";
-import { Tags } from "@/components/UploadModal";
+import { Tags } from "@/types/customTypes";
 
 export const POST = apiErrorHandler(async (req: Request) => {
   const session = await getServerSession(authOptions);
@@ -28,8 +28,8 @@ export const POST = apiErrorHandler(async (req: Request) => {
       categories: {
         connectOrCreate: body.categories.map((cat: Tags) => {
           return {
-            where: { name: cat.title },
-            create: { name: cat.title, color: cat.color },
+            where: { name: cat.name },
+            create: { name: cat.name, color: cat.color },
           };
         }),
       },
@@ -37,10 +37,13 @@ export const POST = apiErrorHandler(async (req: Request) => {
       author: { connect: { username } },
       isPublished: true,
     },
+    include: {
+      author: true,
+    },
   });
 
   return NextResponse.json(
-    { success: true, message: "Blog created successfully" },
+    { success: true, message: "Blog created successfully", data: blog },
     { status: 200 }
   );
 });

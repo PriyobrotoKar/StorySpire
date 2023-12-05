@@ -12,6 +12,7 @@ import { Blog, User } from "@/types/schemaTypes";
 import Link from "next/link";
 import Socials from "@/components/Socials";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import BlogArticleCard from "@/components/BlogArticleCard";
 
 const user = async ({ params }: { params: { username: string } }) => {
   const session = await getServerSession(authOptions);
@@ -43,14 +44,14 @@ const user = async ({ params }: { params: { username: string } }) => {
       </section>
       <div className="flex-grow -translate-y-2  rounded-t-2xl bg-background  shadow-[0_0_50px_0] shadow-black/20">
         <div className="mx-auto flex flex-col  sm:container lg:flex-row">
-          <section className="relative z-10 flex-1 px-4 py-12 lg:py-20">
-            <div>
+          <section className="relative z-10 flex-1 px-4 py-16 lg:py-20">
+            <div className="absolute -top-10 h-24 w-24 overflow-hidden rounded-full border-[4px] border-white shadow-lg lg:-top-16 lg:h-32 lg:w-32">
               <Image
                 src={user.profile_pic || "/images/avatarFallback.png"}
                 alt="user profile picture"
                 width={150}
                 height={150}
-                className="absolute -top-12 rounded-full border-[4px] border-white shadow-lg lg:-top-16 lg:h-32 lg:w-32"
+                className="h-full w-full object-cover"
               />
             </div>
             {session?.user.username === user.username && (
@@ -90,57 +91,17 @@ const user = async ({ params }: { params: { username: string } }) => {
               )}
             </div>
           </section>
-          <section className="flex-[2_1_0%]  px-4 lg:py-12">
+          <section className="flex-[2_1_0%]  space-y-6 px-4 lg:py-12">
             <UserPostNav />
             {!blogs.length && (
-              <p className="mt-20 text-center text-sm text-muted-foreground">
+              <p className="my-32 text-center text-sm text-muted-foreground">
                 {user.fullname} hasn't written any blogs yet.
               </p>
             )}
             {blogs.map((blog: Blog, i: number) => {
               return (
-                <div key={blog.id}>
-                  <article className="my-6 space-y-4 rounded-md p-4 transition-colors hover:bg-card">
-                    <div
-                      className="text-md font-semibold"
-                      style={{ color: blog.categories[0]?.color }}
-                    >
-                      {blog.categories.length
-                        ? capitalize(blog.categories[0].name) + " • "
-                        : ""}
-                      {readingTime(blog.length)} mins
-                    </div>
-                    <div>
-                      <Link href={`/@${blog.author.username}/${blog.slug}`}>
-                        <div className="flex flex-col gap-3 sm:flex-row-reverse">
-                          {blog.thumbnail && (
-                            <div className="h-[12rem] flex-1 overflow-hidden sm:h-[8rem] lg:h-[10rem]">
-                              <Image
-                                src={blog.thumbnail}
-                                alt="Blog thumbnail"
-                                width={250}
-                                height={250}
-                                className="h-full w-full rounded-xl object-cover"
-                              />
-                            </div>
-                          )}
-                          <div className="flex-[2_1_0%] space-y-4">
-                            <div className="space-y-1">
-                              <h2 className="text-lg font-semibold leading-tight">
-                                {blog.title}
-                              </h2>
-                              <p className="line-clamp-3 text-md leading-snug">
-                                {blog.description}
-                              </p>
-                            </div>
-                            <div className=" text-sm font-semibold text-muted-foreground">
-                              {formatDate(blog.createdAt)}
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
-                  </article>
+                <div key={blog.id} className="space-y-6">
+                  <BlogArticleCard showAuthor={false} blog={blog} />
                   {i !== blogs.length - 1 && <hr />}
                 </div>
               );

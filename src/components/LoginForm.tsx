@@ -31,7 +31,7 @@ const LoginForm = () => {
       setError(false);
     }
   };
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (input.email && input.password) {
       signIn("credentials", {
@@ -52,7 +52,7 @@ const LoginForm = () => {
   };
   return (
     <>
-      <form className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           type="email"
           name="email"
@@ -60,6 +60,7 @@ const LoginForm = () => {
           onChange={handleInputChange}
           placeholder="Email"
           className="py-6 text-md"
+          required
         />
         <div className="relative">
           <Input
@@ -71,6 +72,7 @@ const LoginForm = () => {
             className={`py-6 text-md ${
               error ? "border-primary text-primary" : ""
             }`}
+            required
           />
           <button
             type="button"
@@ -83,11 +85,7 @@ const LoginForm = () => {
         {error && (
           <span className="mt-2 text-sm text-primary">Invalid Password</span>
         )}
-        <Button
-          onClick={handleSubmit}
-          className="w-full text-base "
-          size={"lg"}
-        >
+        <Button className="w-full text-base " size={"lg"}>
           Login
         </Button>
       </form>

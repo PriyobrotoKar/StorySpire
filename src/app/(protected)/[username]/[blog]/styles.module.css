@@ -1,7 +1,18 @@
-.content h2 {
+.content h2,
+.content h3,
+.content h4 {
   padding-top: 1rem; /* Equivalent to py-4 in Tailwind CSS */
-  font-size: 1.25rem; /* Equivalent to text-xl in Tailwind CSS */
+
   font-weight: 600; /* Equivalent to font-semibold in Tailwind CSS */
+}
+.content h2 {
+  font-size: 1.4rem; /* Equivalent to text-xl in Tailwind CSS */
+}
+.content h3 {
+  font-size: 1.3rem; /* Equivalent to text-xl in Tailwind CSS */
+}
+.content h4 {
+  font-size: 1.2rem; /* Equivalent to text-xl in Tailwind CSS */
 }
 
 .content ol {

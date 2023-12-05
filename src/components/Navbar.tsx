@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import {
   FaBookmark,
   FaCompass,
@@ -26,12 +26,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { FiLogOut } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import { useMotionValueEvent, useScroll, motion } from "framer-motion";
 
-const MobileNav = () => {
+const MobileNav = ({ showNav }: { showNav: boolean }) => {
   const pathname = usePathname();
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 sm:hidden">
-      <nav className="w-fit rounded-xl bg-white/50 px-6 py-4 shadow-xl">
+    <motion.div
+      variants={{
+        visible: { y: 0 },
+        hidden: { y: "150%" },
+      }}
+      animate={showNav ? "visible" : "hidden"}
+      transition={{ duration: 0.2, ease: "easeIn" }}
+      style={{
+        x: "-50%",
+      }}
+      className="fixed bottom-6 left-1/2 z-20   sm:hidden"
+    >
+      <nav className="w-fit rounded-xl bg-white/50 px-6 py-4 shadow-xl backdrop-blur">
         <ul className="flex items-center gap-8">
           <li className="relative text-[1.8rem]">
             <Link href={"/"}>
@@ -76,7 +88,7 @@ const MobileNav = () => {
           </li>
         </ul>
       </nav>
-    </div>
+    </motion.div>
   );
 };
 
@@ -86,100 +98,123 @@ const DesktopNav = () => {
   const pathname = usePathname();
   const isAtBlogPage = pathname.includes("@") && pathname.includes("/", 1);
   return (
-    <div>
-      <header className="absolute top-0 z-10 flex w-full justify-between p-4 text-secondary">
-        <div>
-          <Image
-            src={isAtBlogPage ? "/logo-white.svg" : "/logo.svg"}
-            alt="Logo"
-            width={120}
-            height={36}
-          />
-        </div>
-        <nav>
-          <ul
-            className={`flex h-full items-center gap-12 text-md font-medium ${
-              !isAtBlogPage ? "text-foreground" : ""
-            } `}
-          >
-            <li>
-              <Link href={"/"}>Home</Link>
-            </li>
-            <li>Explore</li>
-            <li>Bookmarks</li>
-            <li>About</li>
-          </ul>
-        </nav>
-        <div className="flex items-center gap-6">
-          <Link href={"/search"}>
-            <Button
-              variant={"secondary"}
-              className={`rounded-full px-[0.65rem] text-lg ${
-                isAtBlogPage
-                  ? "bg-secondary/30 text-muted hover:bg-secondary/50"
-                  : ""
-              }`}
-            >
-              <GoSearch />
-            </Button>
-          </Link>
+    <header className="absolute top-0 z-10 hidden w-full justify-between p-4 text-secondary sm:flex">
+      <div>
+        <Image
+          src={isAtBlogPage ? "/logo-white.svg" : "/logo.svg"}
+          alt="Logo"
+          width={120}
+          height={36}
+        />
+      </div>
+      <nav>
+        <ul
+          className={`flex h-full items-center gap-12 text-md font-medium ${
+            !isAtBlogPage ? "text-foreground" : ""
+          } `}
+        >
+          <li>
+            <Link href={"/"}>Home</Link>
+          </li>
+          <li>Explore</li>
+          <li>Bookmarks</li>
+          <li>About</li>
+        </ul>
+      </nav>
+      <div className="flex items-center gap-6">
+        <Link
+          href={"/search"}
+          className={`flex h-full items-center justify-center rounded-full px-[0.65rem] text-lg ${
+            isAtBlogPage
+              ? "bg-secondary/30 text-muted hover:bg-secondary/50"
+              : "bg-secondary text-foreground"
+          }`}
+        >
+          <GoSearch />
+        </Link>
 
-          {status === "unauthenticated" ? (
-            <Button
-              variant={isAtBlogPage ? "secondary" : "default"}
-              onClick={() => router.push("/login")}
-              className={
-                isAtBlogPage
-                  ? "bg-secondary/30 text-muted hover:bg-secondary/50"
-                  : ""
-              }
-            >
-              Login
-            </Button>
-          ) : (
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Avatar>
+        {status === "unauthenticated" ? (
+          <Button
+            variant={isAtBlogPage ? "secondary" : "default"}
+            onClick={() => router.push("/login")}
+            className={
+              isAtBlogPage
+                ? "bg-secondary/30 text-muted hover:bg-secondary/50"
+                : ""
+            }
+          >
+            Login
+          </Button>
+        ) : (
+          <DropdownMenu>
+            <DropdownMenuTrigger className="rounded-full">
+              <Avatar>
+                <AvatarImage
+                  src={session?.user.image || "/images/avatarFallback.png"}
+                  alt="Profile"
+                  className="object-cover"
+                />
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="mx-2 text-lg font-medium">
+              <DropdownMenuLabel className="flex items-center gap-2">
+                <Avatar className="h-12 w-12">
                   <AvatarImage
                     src={session?.user.image || "/images/avatarFallback.png"}
                     alt="Profile"
+                    className="object-cover"
                   />
                 </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="mx-2 text-lg font-medium">
-                <Link href={`/@${session?.user.username}`}>
-                  <DropdownMenuItem>
-                    <FaRegUser />
-                    Profile
-                  </DropdownMenuItem>
-                </Link>
-                <Link href={"/write"}>
-                  <DropdownMenuItem>
-                    <PiNotePencil className="text-lg" />
-                    Write
-                  </DropdownMenuItem>
-                </Link>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => signOut()}
-                  className="focus:bg-primary/10 focus:text-primary"
-                >
-                  <FiLogOut />
-                  Logout
+                <div>
+                  <div className="text-md">{session?.user.name}</div>
+                  <div className="font-medium ">{session?.user.email}</div>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <Link href={`/@${session?.user.username}`}>
+                <DropdownMenuItem>
+                  <FaRegUser />
+                  Profile
                 </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-        </div>
-      </header>
-    </div>
+              </Link>
+              <Link href={"/write"}>
+                <DropdownMenuItem>
+                  <PiNotePencil className="text-lg" />
+                  Write
+                </DropdownMenuItem>
+              </Link>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => signOut()}
+                className="focus:bg-primary/10 focus:text-primary"
+              >
+                <FiLogOut />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+      </div>
+    </header>
   );
 };
 
 const Navbar = () => {
+  const [showNav, setShowNav] = useState(true);
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious();
+    if (latest < previous) {
+      console.log("Scrolling up");
+      setShowNav(true);
+    } else {
+      console.log("Scrolling down");
+      setShowNav(false);
+    }
+  });
   return (
     <>
-      <MobileNav />
+      <MobileNav showNav={showNav} />
       <DesktopNav />
     </>
   );
