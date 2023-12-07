@@ -18,3 +18,13 @@ export interface BlogPreview {
   createdAt: Date;
   categories: Tags[];
 }
+
+export interface UserDetailsInput {
+  image: {
+    url: string;
+    file: File | null;
+  };
+  fullname: string;
+  username: string;
+  intro: string;
+}
