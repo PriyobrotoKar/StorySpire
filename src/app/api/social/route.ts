@@ -32,3 +32,24 @@ export const POST = apiErrorHandler(async (req: Request) => {
     { status: 200 }
   );
 });
+
+export const GET = apiErrorHandler(async (req: Request) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session)
+    throw new ApiError(
+      "Not Authorized",
+      { title: "Not Authorized", description: "Please login" },
+      401
+    );
+
+  const socials = await client.social.findMany({
+    where: {
+      user: {
+        username: session.user.username,
+      },
+    },
+  });
+
+  return NextResponse.json(socials, { status: 200 });
+});

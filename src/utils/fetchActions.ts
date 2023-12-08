@@ -32,6 +32,14 @@ export const fetchUserBlogs = async (username: string) => {
   return await response.json();
 };
 
+export const fetchCurrentUserSocialLinks = async () => {
+  const response = await fetch(`${BASE_URL}/api/social`, {
+    method: "GET",
+    headers: headers(),
+  });
+  return await response.json();
+};
+
 export const fetchRecentBlogs = async (limit?: number) => {
   const response = await fetch(`${BASE_URL}/api/blog/recent?limit=${limit}`, {
     method: "GET",

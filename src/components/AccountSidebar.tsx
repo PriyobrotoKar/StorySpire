@@ -16,16 +16,17 @@ const MobileSidebar = () => {
       <Select
         defaultValue={pathname.slice(pathname.lastIndexOf("/") + 1)}
         onValueChange={(value) =>
-          router.push(value === "general" ? `/account` : `/account/${value}`)
+          router.push(value === "account" ? `/account` : `/account/${value}`)
         }
       >
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Theme" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="general">General</SelectItem>
+          <SelectItem value="account">General</SelectItem>
           <SelectItem value="profile">Edit Profile</SelectItem>
           <SelectItem value="password">Password</SelectItem>
+          <SelectItem value="socials">Social Links</SelectItem>
         </SelectContent>
       </Select>
     </aside>

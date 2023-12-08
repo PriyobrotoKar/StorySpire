@@ -63,7 +63,7 @@ const AddLinkBtn = ({
         className={`border-none bg-transparent  focus-visible:ring-0 focus-visible:ring-offset-0 ${
           show ? "w-auto" : "w-0 p-0"
         }`}
-        type="text"
+        type="url"
         placeholder="Type your link address"
         value={input}
         onChange={handleInputChange}

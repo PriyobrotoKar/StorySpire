@@ -39,7 +39,7 @@ const SocialButtons = ({ social }: { social: Social }) => {
               "white",
           }}
         >
-          {<LinkIcon link={social.link} show /> || <Link />}
+          {<LinkIcon link={social.link} /> || <Link />}
         </span>
         <span className="">
           {social.name in socialObj
