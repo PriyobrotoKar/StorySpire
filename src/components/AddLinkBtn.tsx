@@ -51,13 +51,18 @@ const AddLinkBtn = ({
       <span
         onClick={(e) => {
           e.stopPropagation();
-          !input && show ? setShow(false) : setShow(true);
+          if (show) {
+            setShow(false);
+            setInput("");
+          } else {
+            setShow(true);
+          }
         }}
         className={`h-fit rounded-[6px] bg-slate-300 px-1 py-[0.27rem] text-slate-500  ${
-          !input && show && " hover:bg-primary/20 hover:text-primary"
+          show && " hover:bg-primary/20 hover:text-primary"
         }`}
       >
-        {<MdAdd className={`transition ${!input && show && "rotate-45"}`} />}
+        {<MdAdd className={`transition ${show && "rotate-45"}`} />}
       </span>
       <Input
         className={`border-none bg-transparent  focus-visible:ring-0 focus-visible:ring-offset-0 ${

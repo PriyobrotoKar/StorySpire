@@ -35,7 +35,6 @@ export const POST = apiErrorHandler(async (req: Request) => {
 
 export const GET = apiErrorHandler(async (req: Request) => {
   const session = await getServerSession(authOptions);
-
   if (!session)
     throw new ApiError(
       "Not Authorized",

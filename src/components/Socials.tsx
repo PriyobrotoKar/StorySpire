@@ -12,6 +12,23 @@ import { User } from "@/types/schemaTypes";
 const SocialButtons = ({ social }: { social: Social }) => {
   const [isHovering, setIsHovering] = useState(false);
 
+  const extractUsername = (social: Social) => {
+    if (social.name in socialObj) {
+      console.log(social.link);
+      if (social.name === "mail") {
+        return social.link;
+      }
+      const subDomain = new URL(social.link).hostname.split(".")[0];
+      if (subDomain === "www" || subDomain === social.name) {
+        return social.link.slice(social.link.lastIndexOf("/") + 1);
+      } else {
+        return subDomain;
+      }
+    } else {
+      return social.link.slice(8);
+    }
+  };
+
   return (
     <a
       href={social.name === "mail" ? `mailto:${social.link}` : social.link}
@@ -41,11 +58,7 @@ const SocialButtons = ({ social }: { social: Social }) => {
         >
           {<LinkIcon link={social.link} /> || <Link />}
         </span>
-        <span className="">
-          {social.name in socialObj
-            ? social.link.slice(social.link.lastIndexOf("/") + 1)
-            : social.link.slice(8)}
-        </span>
+        <span className="">{extractUsername(social)}</span>
       </Button>
     </a>
   );
