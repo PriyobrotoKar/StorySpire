@@ -14,7 +14,6 @@ const SocialButtons = ({ social }: { social: Social }) => {
 
   const extractUsername = (social: Social) => {
     if (social.name in socialObj) {
-      console.log(social.link);
       if (social.name === "mail") {
         return social.link;
       }

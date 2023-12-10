@@ -70,3 +70,24 @@ export const patchFetchAPi = async (url: string, body: any) => {
     });
   }
 };
+export const deleteFetchAPi = async (url: string) => {
+  try {
+    const response = await fetch(BASE_URL + url, {
+      method: "DELETE",
+    });
+    if (!response.ok && response.status !== 404) {
+      const { error } = await response.json();
+      throw new ApiError("Bad Request", error, response.status);
+    }
+    if (response.ok) {
+      return await response.json();
+    }
+  } catch (error: any) {
+    console.log(error.message);
+    toast({
+      variant: "destructive",
+      title: error.title,
+      description: error.description,
+    });
+  }
+};

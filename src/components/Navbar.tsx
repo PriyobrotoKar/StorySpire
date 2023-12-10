@@ -205,10 +205,8 @@ const Navbar = () => {
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious();
     if (latest < previous) {
-      console.log("Scrolling up");
       setShowNav(true);
     } else {
-      console.log("Scrolling down");
       setShowNav(false);
     }
   });

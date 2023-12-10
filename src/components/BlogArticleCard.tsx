@@ -16,7 +16,6 @@ const BlogArticleCard = ({
   size?: "large" | "small";
   isFeatured?: boolean;
 }) => {
-  console.log(blog);
   return (
     <article
       className={

@@ -29,3 +29,25 @@ export const PATCH = apiErrorHandler(
     return NextResponse.json(updatedLink, { status: 200 });
   }
 );
+export const DELETE = apiErrorHandler(
+  async (req: Request, { params }: { params: { id: string } }) => {
+    const session = await getServerSession(authOptions);
+    if (!session)
+      throw new ApiError(
+        "Not Authorized",
+        { title: "Not Authorized", description: "Please login" },
+        401
+      );
+
+    const deletedLink = await client.social.delete({
+      where: {
+        id: params.id,
+      },
+    });
+
+    return NextResponse.json(
+      { success: true, message: "Social Link deleted successfully" },
+      { status: 200 }
+    );
+  }
+);

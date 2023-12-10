@@ -36,4 +36,8 @@ export const social = {
     icon: "FaFacebookF",
     color: "#316ff6",
   },
+  youtube: {
+    icon: "FaYoutube",
+    color: "#ff0000",
+  },
 };
