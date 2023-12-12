@@ -33,7 +33,7 @@ const LoginForm = () => {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (input.email && input.password) {
+    if (input.email) {
       signIn("credentials", {
         ...input,
         redirect: false,
@@ -69,10 +69,10 @@ const LoginForm = () => {
             value={input.password}
             onChange={handleInputChange}
             placeholder="Password"
+            autoComplete="current-password"
             className={`py-6 text-md ${
               error ? "border-primary text-primary" : ""
             }`}
-            required
           />
           <button
             type="button"
@@ -83,7 +83,9 @@ const LoginForm = () => {
           </button>
         </div>
         {error && (
-          <span className="mt-2 text-sm text-primary">Invalid Password</span>
+          <span className="mt-2 text-sm text-primary">
+            {input.password ? "Invalid Password" : "Please enter your password"}
+          </span>
         )}
         <Button className="w-full text-base " size={"lg"}>
           Login

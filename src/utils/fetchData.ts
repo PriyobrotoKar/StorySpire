@@ -54,6 +54,7 @@ export const patchFetchAPi = async (url: string, body: any) => {
       method: "PATCH",
       body: JSON.stringify(body),
     });
+    console.log(response.ok);
     if (!response.ok && response.status !== 404) {
       const { error } = await response.json();
       throw new ApiError("Bad Request", error, response.status);
@@ -68,6 +69,7 @@ export const patchFetchAPi = async (url: string, body: any) => {
       title: error.title,
       description: error.description,
     });
+    return error;
   }
 };
 export const deleteFetchAPi = async (url: string) => {
