@@ -1,8 +1,10 @@
 import { Prisma } from "@prisma/client";
 
-export type Blog = Prisma.BlogGetPayload<{
-  include: { categories: true; author: true };
-}>;
-export type User = Prisma.UserGetPayload<{
-  include: { socials: true };
-}>;
+export interface Blog
+  extends Prisma.BlogGetPayload<{
+    include: { categories: true; author: true };
+  }> {}
+export interface User
+  extends Prisma.UserGetPayload<{
+    include: { socials: true };
+  }> {}

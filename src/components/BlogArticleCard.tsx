@@ -7,13 +7,17 @@ import React from "react";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { Avatar, AvatarImage } from "./ui/avatar";
 
+const isBlog = (blog: any): blog is Blog => {
+  return "content" in blog;
+};
+
 const BlogArticleCard = ({
   blog,
   size,
   showAuthor = true,
   isFeatured = false,
 }: {
-  blog: Blog;
+  blog: Blog | BlogPreview;
   showAuthor?: boolean;
   size?: "large" | "small";
   isFeatured?: boolean;
@@ -147,31 +151,33 @@ const BlogArticleCard = ({
                         </div>
                       </Link>
                     </HoverCardTrigger>
-                    <HoverCardContent className="w-80">
-                      <div className="flex justify-between space-x-4">
-                        <Avatar>
-                          <AvatarImage
-                            src={
-                              blog.author.profile_pic ||
-                              "/images/avatarFallback.png"
-                            }
-                          />
-                        </Avatar>
-                        <div className="space-y-0">
-                          <h4 className="text-md font-semibold">
-                            {blog.author.fullname}
-                          </h4>
-                          <p className="line-clamp-2 text-sm">
-                            {blog.author.bio}
-                          </p>
-                          <div className="flex items-center pt-2">
-                            <span className="text-xs text-muted-foreground">
-                              Joined December 2021
-                            </span>
+                    {isBlog(blog) && (
+                      <HoverCardContent className="w-80">
+                        <div className="flex justify-between space-x-4">
+                          <Avatar>
+                            <AvatarImage
+                              src={
+                                blog.author.profile_pic ||
+                                "/images/avatarFallback.png"
+                              }
+                            />
+                          </Avatar>
+                          <div className="space-y-0">
+                            <h4 className="text-md font-semibold">
+                              {blog.author.fullname}
+                            </h4>
+                            <p className="line-clamp-2 text-sm">
+                              {blog.author.bio}
+                            </p>
+                            <div className="flex items-center pt-2">
+                              <span className="text-xs text-muted-foreground">
+                                Joined December 2021
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </HoverCardContent>
+                      </HoverCardContent>
+                    )}
                   </HoverCard>
                   <span>•</span>
                 </>

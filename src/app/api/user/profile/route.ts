@@ -7,7 +7,6 @@ import {
   deleteFromCloud,
   uploadToCloudinary,
 } from "@/utils/deleteFromCloudinary";
-import { uploadToCloud } from "@/utils/uploadToCloudinary";
 
 export const PATCH = apiErrorHandler(async (req: Request) => {
   const session = await getServerSession(authOptions);

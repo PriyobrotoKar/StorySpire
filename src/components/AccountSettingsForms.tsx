@@ -5,6 +5,7 @@ import { Input } from "./ui/input";
 import { useSession } from "next-auth/react";
 import { BASE_URL } from "@/constants/constant";
 import { Button } from "./ui/button";
+import { Loader2 } from "lucide-react";
 
 const GeneralSettingsForms = () => {
   const { data: session } = useSession();
@@ -30,8 +31,13 @@ const GeneralSettingsForms = () => {
     });
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    if (input.email && input.username) {
+    }
+  };
+
   return (
-    <form action="" className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1">
         <Label htmlFor="username">Username</Label>
         <Input
@@ -70,11 +76,16 @@ const GeneralSettingsForms = () => {
             autoComplete="password"
             value={input.password}
             onChange={handleInputChange}
-            required
           />
         </div>
       )}
-      <Button className="w-full">Save Changes</Button>
+      <Button className="w-full">
+        <>
+          <Loader2 />
+          Saving
+        </>
+        :"Save Changes"
+      </Button>
     </form>
   );
 };
