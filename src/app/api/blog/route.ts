@@ -8,7 +8,6 @@ import { Tags } from "@/types/customTypes";
 
 export const POST = apiErrorHandler(async (req: Request) => {
   const session = await getServerSession(authOptions);
-  console.log(session);
   if (!session)
     throw new ApiError(
       "Not Authorized",
