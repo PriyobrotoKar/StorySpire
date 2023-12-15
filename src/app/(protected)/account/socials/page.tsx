@@ -11,9 +11,9 @@ import React from "react";
 
 const page = async () => {
   return (
-    <section className="pb-10">
+    <>
       <SocialLinksSettings />
-    </section>
+    </>
   );
 };
 

@@ -18,6 +18,11 @@ const GeneralSettingsForms = () => {
     email: "",
     password: "",
   });
+  const [error, setError] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
 
   useEffect(() => {
     if (!session) return;
@@ -34,6 +39,7 @@ const GeneralSettingsForms = () => {
       ...input,
       [e.target.name]: e.target.value,
     });
+    setError({ username: "", email: "", password: "" });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,18 +47,18 @@ const GeneralSettingsForms = () => {
     if (input.email && input.username && session) {
       setIsSubmitting(true);
       const res = await patchFetchAPi("/api/user/account", input);
-      if (res.status >= 400) {
+      if (res.title) {
+        setError({ ...error, [res.field]: res.description });
         setIsSubmitting(false);
         return;
       }
-      console.log(res);
       await updateUser();
       setIsSubmitting(false);
       toast({
         variant: "default",
         title: "Account updated Successfully",
       });
-      update({
+      await update({
         ...session,
         user: {
           ...session.user,
@@ -64,9 +70,11 @@ const GeneralSettingsForms = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-1">
       <div className="space-y-1">
-        <Label htmlFor="username">Username</Label>
+        <Label htmlFor="username" className={error.username && " text-red-600"}>
+          Username
+        </Label>
         <Input
           type="text"
           id="username"
@@ -74,15 +82,27 @@ const GeneralSettingsForms = () => {
           autoComplete="username"
           value={input.username}
           onChange={handleInputChange}
+          className={error.username && "border-red-600 text-red-600"}
           required
         />
         <p className="text-sm text-muted-foreground">
           Your Profile URL: {BASE_URL + "/"}
           <span className="font-medium">{input.username}</span>
         </p>
+
+        <p
+          className={
+            "h-5 text-sm text-red-600 " +
+            (error.username ? "opacity-100" : "opacity-0")
+          }
+        >
+          {error.username}
+        </p>
       </div>
       <div className="space-y-1">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email" className={error.email && " text-red-600"}>
+          Email
+        </Label>
         <Input
           type="email"
           id="email"
@@ -90,23 +110,48 @@ const GeneralSettingsForms = () => {
           autoComplete="email"
           value={input.email}
           onChange={handleInputChange}
+          className={error.email && "border-red-600 text-red-600"}
           required
         />
+
+        <p
+          className={
+            "h-5 text-sm text-red-600 " +
+            (error.email ? "opacity-100" : "opacity-0")
+          }
+        >
+          {error.email}
+        </p>
       </div>
       {session && input.email !== session.user.email && (
         <div className="space-y-1 pb-6">
-          <Label htmlFor="password">Password (if changing email)</Label>
+          <Label
+            htmlFor="password"
+            className={error.password && " text-red-600"}
+          >
+            Password (if changing email)
+          </Label>
           <Input
             type="password"
             id="password"
             name="password"
             autoComplete="password"
             value={input.password}
+            className={error.password && "border-red-600 text-red-600"}
             onChange={handleInputChange}
           />
+
+          <p
+            className={
+              "h-5 text-sm text-red-600 " +
+              (error.password ? "opacity-100" : "opacity-0")
+            }
+          >
+            {error.password}
+          </p>
         </div>
       )}
-      <Button disabled={isSubmitting} className="w-full">
+      <Button disabled={isSubmitting} className="w-full md:w-fit">
         {isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

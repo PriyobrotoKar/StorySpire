@@ -8,7 +8,6 @@ import { Textarea } from "./ui/textarea";
 import { useSession } from "next-auth/react";
 import { User } from "@/types/schemaTypes";
 import { patchFetchAPi } from "@/utils/fetchData";
-import { Session } from "next-auth";
 import { toast } from "./ui/use-toast";
 import { Loader2 } from "lucide-react";
 import { updateUser } from "@/utils/fetchActions";

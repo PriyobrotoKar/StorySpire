@@ -8,9 +8,9 @@ const page = async () => {
   const session = await getServerSession(authOptions);
   const profile = await fetchSingleUser(session?.user.username);
   return (
-    <section>
+    <>
       <ProfileSettingsForm userDetails={profile} />
-    </section>
+    </>
   );
 };
 

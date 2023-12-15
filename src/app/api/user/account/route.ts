@@ -4,6 +4,7 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 import client from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
+import { errResponse } from "../password/route";
 
 export const PATCH = apiErrorHandler(async (req: Request) => {
   const session = await getServerSession(authOptions);
@@ -39,11 +40,12 @@ export const PATCH = apiErrorHandler(async (req: Request) => {
   });
 
   if (!user) {
-    throw new ApiError(
+    return errResponse(
       "Invalid Params",
       {
         title: "Username Invalid",
         description: "This user does not exists",
+        field: "username",
       },
       404
     );
@@ -64,41 +66,63 @@ export const PATCH = apiErrorHandler(async (req: Request) => {
       },
     });
     if (existedUser) {
-      throw new ApiError(
+      return errResponse(
         "Invalid Params",
         {
           title: "Username already exists",
           description: "Please enter a different username",
+          field: "username",
         },
         409
       );
     }
   }
 
-  if ("email" in updatedFields && user.password) {
-    if (!body.password)
-      throw new ApiError(
-        "Missing Fields",
-        {
-          title: "Required fields are missing",
-          description: "Password is required",
-        },
-        400
-      );
-
-    const isPasswordCorrect = await bcrypt.compare(
-      body.password,
-      user.password
-    );
-    if (!isPasswordCorrect)
-      throw new ApiError(
+  if ("email" in updatedFields) {
+    const existedUser = await client.user.findUnique({
+      where: {
+        email: body.email,
+      },
+    });
+    if (existedUser) {
+      return errResponse(
         "Invalid Params",
         {
-          title: "Incorrect Password",
-          description: "Please enter the correct password",
+          title: "Email address already exists",
+          description: "Please enter a different email address",
+          field: "email",
         },
-        400
+        409
       );
+    }
+
+    if (user.password) {
+      if (!body.password)
+        return errResponse(
+          "Missing Fields",
+          {
+            title: "Required fields are missing",
+            description: "Password is required",
+            field: "password",
+          },
+          400
+        );
+
+      const isPasswordCorrect = await bcrypt.compare(
+        body.password,
+        user.password
+      );
+      if (!isPasswordCorrect)
+        return errResponse(
+          "Invalid Params",
+          {
+            title: "Incorrect Password",
+            description: "Please enter the correct password",
+            field: "password",
+          },
+          400
+        );
+    }
   }
 
   const updatedUser = await client.user.update({

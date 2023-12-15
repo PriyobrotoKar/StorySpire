@@ -71,7 +71,7 @@ export const PATCH = apiErrorHandler(async (req: Request) => {
   return NextResponse.json("Password updated successfully", { status: 200 });
 });
 
-const errResponse = (
+export const errResponse = (
   message: string,
   {
     title,

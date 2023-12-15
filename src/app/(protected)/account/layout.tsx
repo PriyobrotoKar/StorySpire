@@ -6,11 +6,12 @@ const AccountLayout = ({
   children: React.ReactNode;
 }) => {
   return (
-    <section className="mx-auto flex max-w-screen-lg flex-col gap-4 px-4 py-12">
+    <section className="mx-auto max-w-screen-lg space-y-4 px-4 py-32">
       <h1 className="text-xl font-bold">Account Settings:</h1>
-      <aside className="hidden lg:block">sidebar</aside>
-      <AccountSidebar />
-      {children}
+      <main className="flex flex-col gap-4 md:flex-row md:gap-12 ">
+        <AccountSidebar />
+        <section className="flex-1">{children}</section>
+      </main>
     </section>
   );
 };

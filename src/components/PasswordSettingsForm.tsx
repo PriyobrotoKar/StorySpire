@@ -60,7 +60,7 @@ const PasswordSettingsForm = () => {
   }, [input]);
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
+    <form className="space-y-1" onSubmit={handleSubmit}>
       <div className="space-y-1">
         <Label
           htmlFor="passwordOld"
@@ -87,7 +87,7 @@ const PasswordSettingsForm = () => {
         </div>
       </div>
 
-      <div className="space-y-1 pb-6">
+      <div className="space-y-1 ">
         <Label
           htmlFor="passwordNew"
           className={error.passwordNew && "text-red-600"}
