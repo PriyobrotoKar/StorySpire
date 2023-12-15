@@ -57,6 +57,24 @@ export const PATCH = apiErrorHandler(async (req: Request) => {
       updatedFields = { ...updatedFields, [field]: body[field] };
   }
 
+  if ("username" in updatedFields) {
+    const existedUser = await client.user.findUnique({
+      where: {
+        username: body.username,
+      },
+    });
+    if (existedUser) {
+      throw new ApiError(
+        "Invalid Params",
+        {
+          title: "Username already exists",
+          description: "Please enter a different username",
+        },
+        409
+      );
+    }
+  }
+
   if ("email" in updatedFields && user.password) {
     if (!body.password)
       throw new ApiError(

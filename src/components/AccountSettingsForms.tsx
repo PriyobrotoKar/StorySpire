@@ -1,22 +1,27 @@
 "use client";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { useSession } from "next-auth/react";
 import { BASE_URL } from "@/constants/constant";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
+import { patchFetchAPi } from "@/utils/fetchData";
+import { toast } from "./ui/use-toast";
+import { updateUser } from "@/utils/fetchActions";
 
 const GeneralSettingsForms = () => {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [input, setInput] = useState({
     username: "",
     email: "",
     password: "",
   });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!session) return;
+    console.log(session);
     setInput({
       username: session.user.username,
       email: session.user.email,
@@ -32,7 +37,29 @@ const GeneralSettingsForms = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    if (input.email && input.username) {
+    e.preventDefault();
+    if (input.email && input.username && session) {
+      setIsSubmitting(true);
+      const res = await patchFetchAPi("/api/user/account", input);
+      if (res.status >= 400) {
+        setIsSubmitting(false);
+        return;
+      }
+      console.log(res);
+      await updateUser();
+      setIsSubmitting(false);
+      toast({
+        variant: "default",
+        title: "Account updated Successfully",
+      });
+      update({
+        ...session,
+        user: {
+          ...session.user,
+          username: res.username,
+          email: res.email,
+        },
+      });
     }
   };
 
@@ -79,12 +106,15 @@ const GeneralSettingsForms = () => {
           />
         </div>
       )}
-      <Button className="w-full">
-        <>
-          <Loader2 />
-          Saving
-        </>
-        :"Save Changes"
+      <Button disabled={isSubmitting} className="w-full">
+        {isSubmitting ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Saving
+          </>
+        ) : (
+          "Save Changes"
+        )}
       </Button>
     </form>
   );
