@@ -21,16 +21,7 @@ import { RootState } from "@/store/store";
 import { useCookies } from "react-cookie";
 import { DEFAULT_USER_INTRO } from "@/constants/constant";
 import { uploadToCloud } from "@/utils/uploadToCloudinary";
-
-interface Input {
-  image: {
-    url: string;
-    file: File | null;
-  };
-  fullname: string;
-  username: string;
-  intro: string;
-}
+import { UserDetailsInput } from "@/types/customTypes";
 
 const OnBoardingForm = () => {
   const email = useSelector((state: RootState) => state.LoginDetails.email);
@@ -43,7 +34,7 @@ const OnBoardingForm = () => {
     "profile_pic",
     "email",
   ]);
-  const [input, setInput] = useState<Input>({
+  const [input, setInput] = useState<UserDetailsInput>({
     image: {
       url: "",
       file: null,

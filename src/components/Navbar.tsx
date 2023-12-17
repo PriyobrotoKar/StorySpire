@@ -98,8 +98,8 @@ const DesktopNav = () => {
   const pathname = usePathname();
   const isAtBlogPage = pathname.includes("@") && pathname.includes("/", 1);
   return (
-    <header className="absolute top-0 z-10 hidden w-full justify-between p-4 text-secondary sm:flex">
-      <div>
+    <header className="absolute top-0 z-10 hidden w-full justify-between border-b border-b-foreground/10 bg-background/60 px-4 py-3 text-secondary backdrop-blur sm:flex">
+      <div className="flex items-center justify-center">
         <Image
           src={isAtBlogPage ? "/logo-white.svg" : "/logo.svg"}
           alt="Logo"
@@ -109,7 +109,7 @@ const DesktopNav = () => {
       </div>
       <nav>
         <ul
-          className={`flex h-full items-center gap-12 text-md font-medium ${
+          className={`flex h-full items-center gap-6 text-md font-medium lg:gap-12 ${
             !isAtBlogPage ? "text-foreground" : ""
           } `}
         >
@@ -205,10 +205,8 @@ const Navbar = () => {
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious();
     if (latest < previous) {
-      console.log("Scrolling up");
       setShowNav(true);
     } else {
-      console.log("Scrolling down");
       setShowNav(false);
     }
   });

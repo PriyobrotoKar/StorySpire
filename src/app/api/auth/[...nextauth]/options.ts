@@ -6,8 +6,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
 
-let isPassMatch: Boolean = true;
-
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -24,7 +22,6 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email) {
           return null;
         }
-        console.log("credentials email", credentials.email);
         //check if user exits
         const user = await client.user.findUnique({
           where: {
@@ -32,23 +29,14 @@ export const authOptions: NextAuthOptions = {
           },
         });
         if (!user) {
-          console.log("user does not exist");
           return null;
         }
-        //check if user is signed in with OAuth
-        if (!user.password) {
-          return user;
-        }
-
-        //check if passwords match
-        isPassMatch = await bcrypt.compare(credentials.password, user.password);
-
         return user;
       },
     }),
   ],
   callbacks: {
-    async signIn({ user, profile }) {
+    async signIn({ user, profile, credentials }) {
       try {
         if (profile) {
           const user = await client.user.findUnique({
@@ -59,18 +47,31 @@ export const authOptions: NextAuthOptions = {
           if (user) {
             profile.username = user.username;
             profile.picture = user.profile_pic || profile.picture;
+            profile.name = user.fullname || profile.name;
             cookies().delete("profile_pic");
             cookies().delete("email");
             cookies().delete("fullname");
             return true;
           } else {
-            console.log(profile);
             cookies().set("profile_pic", profile.picture || "");
             cookies().set("email", profile.email || "");
             cookies().set("fullname", profile.name || "");
             return "/onboarding";
           }
         } else {
+          //check if user is signed in with OAuth
+          if (!user.password) {
+            return true;
+          }
+
+          if (!credentials?.password) {
+            return false;
+          }
+
+          const isPassMatch = await bcrypt.compare(
+            credentials.password as string,
+            user.password
+          );
           return isPassMatch ? true : false;
         }
       } catch (error: any) {
@@ -79,7 +80,10 @@ export const authOptions: NextAuthOptions = {
       }
     },
 
-    async jwt({ token, user, profile }) {
+    async jwt({ token, user, profile, trigger, session }) {
+      if (trigger === "update") {
+        return { ...session.user, picture: session.user.image };
+      }
       if (user) {
         token.username = user.username;
         token.picture = user.profile_pic;
@@ -88,6 +92,7 @@ export const authOptions: NextAuthOptions = {
       if (profile) {
         token.username = profile.username;
         token.picture = profile.picture;
+        token.name = profile.name;
       }
       return token;
     },
@@ -96,6 +101,7 @@ export const authOptions: NextAuthOptions = {
       session.user.username = token.username;
       session.user.name = token.name;
       session.user.image = token.picture;
+      session.user.email = token.email;
       return session;
     },
   },

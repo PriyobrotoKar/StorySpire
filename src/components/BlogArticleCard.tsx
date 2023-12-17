@@ -4,6 +4,12 @@ import { capitalize, formatDate, readingTime } from "@/utils/helpers";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
+import { Avatar, AvatarImage } from "./ui/avatar";
+
+const isBlog = (blog: any): blog is Blog => {
+  return "content" in blog;
+};
 
 const BlogArticleCard = ({
   blog,
@@ -16,7 +22,6 @@ const BlogArticleCard = ({
   size?: "large" | "small";
   isFeatured?: boolean;
 }) => {
-  console.log(blog);
   return (
     <article
       className={
@@ -47,7 +52,7 @@ const BlogArticleCard = ({
         >
           <div
             className={
-              "overflow-hidden rounded-xl transition-shadow duration-500 " +
+              "overflow-hidden rounded-xl transition-shadow " +
               (size === undefined
                 ? "h-[10rem] lg:flex-1"
                 : size === "small"
@@ -119,30 +124,61 @@ const BlogArticleCard = ({
             >
               {showAuthor && (
                 <>
-                  <Link href={`/@${blog.author.username}`}>
-                    <div className="group/author  flex items-center gap-2">
-                      <div
-                        className={
-                          "aspect-square  overflow-hidden rounded-full " +
-                          (isFeatured ? "w-10" : "w-8")
-                        }
-                      >
-                        <Image
-                          className="h-full w-full object-cover "
-                          src={
-                            blog.author.profile_pic ||
-                            "/images/avatarFallback.png"
-                          }
-                          alt="Author Profile Picture"
-                          width={48}
-                          height={48}
-                        />
-                      </div>
-                      <div className="group-hover/author:underline">
-                        {blog.author.fullname}
-                      </div>
-                    </div>
-                  </Link>
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <Link href={`/@${blog.author.username}`}>
+                        <div className="group/author  flex items-center gap-2">
+                          <div
+                            className={
+                              "aspect-square  overflow-hidden rounded-full " +
+                              (isFeatured ? "w-10" : "w-8")
+                            }
+                          >
+                            <Image
+                              className="h-full w-full object-cover "
+                              src={
+                                blog.author.profile_pic ||
+                                "/images/avatarFallback.png"
+                              }
+                              alt="Author Profile Picture"
+                              width={48}
+                              height={48}
+                            />
+                          </div>
+                          <div className="group-hover/author:underline">
+                            {blog.author.fullname}
+                          </div>
+                        </div>
+                      </Link>
+                    </HoverCardTrigger>
+                    {isBlog(blog) && (
+                      <HoverCardContent className="w-80">
+                        <div className="flex justify-between space-x-4">
+                          <Avatar>
+                            <AvatarImage
+                              src={
+                                blog.author.profile_pic ||
+                                "/images/avatarFallback.png"
+                              }
+                            />
+                          </Avatar>
+                          <div className="space-y-0">
+                            <h4 className="text-md font-semibold">
+                              {blog.author.fullname}
+                            </h4>
+                            <p className="line-clamp-2 text-sm">
+                              {blog.author.bio}
+                            </p>
+                            <div className="flex items-center pt-2">
+                              <span className="text-xs text-muted-foreground">
+                                Joined December 2021
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </HoverCardContent>
+                    )}
+                  </HoverCard>
                   <span>•</span>
                 </>
               )}

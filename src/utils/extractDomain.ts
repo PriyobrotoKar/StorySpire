@@ -2,10 +2,17 @@ export const extractDomain = (link: string) => {
   if (!link.includes("https") && link.indexOf("@") < link.indexOf(".com")) {
     return "mail";
   }
+  try {
+    const url = new URL(link).hostname;
+    const startInd = url.indexOf(".") + 1;
+    const endInd = url.indexOf(".", url.indexOf(".") + 1);
 
-  const host = link.substring(link.indexOf("/", 7) + 1, link.indexOf("/", 8));
+    if (endInd === -1) {
+      return url.slice(0, startInd - 1);
+    }
 
-  return host
-    .match(/^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\.\n]+)/im)
-    ?.at(1);
+    return url.substring(startInd, endInd);
+  } catch (error) {
+    return null;
+  }
 };

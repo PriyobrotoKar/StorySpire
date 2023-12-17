@@ -69,7 +69,6 @@ const Editor = () => {
               )
               .trim()
               .split(/\s+/).length;
-          console.log(count);
           return sum + count;
         }
       }, 0);
@@ -84,7 +83,6 @@ const Editor = () => {
       placeholder: "Start writing your story",
       onChange: async () => {
         let data = await editor.saver.save();
-        console.log(data.blocks);
         setContent(data);
         setWordCount(countTotalWords(data.blocks));
       },
@@ -118,7 +116,6 @@ const Editor = () => {
                 };
               },
               async uploadByUrl(url) {
-                console.log(url);
                 return {
                   success: 1,
                   file: {
@@ -188,17 +185,14 @@ const Editor = () => {
           </label>
           <input
             id="coverImg"
-            onChange={
-              (e) => {
-                if (e.target.files?.length) {
-                  setCoverImg({
-                    localPath: URL.createObjectURL(e.target.files[0]),
-                    file: e.target.files[0],
-                  });
-                }
+            onChange={(e) => {
+              if (e.target.files?.length) {
+                setCoverImg({
+                  localPath: URL.createObjectURL(e.target.files[0]),
+                  file: e.target.files[0],
+                });
               }
-              // console.log(e.target.files)
-            }
+            }}
             className="hidden"
             accept=".jpg,.jpeg,.png,.webp"
             type="file"

@@ -31,7 +31,7 @@ const user = async ({ params }: { params: { username: string } }) => {
 
   return (
     <div className="flex min-h-[inherit] flex-col">
-      <section className="h-[16rem] bg-muted-foreground/20">
+      <section className="lg:mih-h-[20rem] h-[16rem] bg-muted-foreground/20 lg:h-[40svh] ">
         {user.cover_pic && (
           <Image
             src={user.cover_pic}
@@ -42,7 +42,7 @@ const user = async ({ params }: { params: { username: string } }) => {
           />
         )}
       </section>
-      <div className="flex-grow -translate-y-2  rounded-t-2xl bg-background  shadow-[0_0_50px_0] shadow-black/20">
+      <div className="flex-grow -translate-y-3  rounded-t-2xl bg-background  shadow-[0_-10px_50px_0] shadow-black/20">
         <div className="mx-auto flex flex-col  sm:container lg:flex-row">
           <section className="relative z-10 flex-1 px-4 py-16 lg:py-20">
             <div className="absolute -top-10 h-24 w-24 overflow-hidden rounded-full border-[4px] border-white shadow-lg lg:-top-16 lg:h-32 lg:w-32">

@@ -4,7 +4,7 @@ import * as FontAwesome from "react-icons/fa6";
 import React from "react";
 import { MdLink } from "react-icons/md";
 
-const LinkIcon = ({ link, show }: { link: string; show: boolean }) => {
+const LinkIcon = ({ link }: { link: string }) => {
   const domain = extractDomain(link);
 
   const iconName = domain && social[domain as keyof typeof social]?.icon;

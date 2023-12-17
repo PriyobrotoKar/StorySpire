@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export class ApiError extends Error {
   constructor(message, errResponse, status) {
-    super(message),
-      (this.status = status),
-      (this.title = errResponse.title),
-      (this.description = errResponse.description);
+    super(message);
+    this.status = status;
+    this.title = errResponse.title;
+    this.description = errResponse.description;
+    this.field = errResponse.field;
   }
 }
 

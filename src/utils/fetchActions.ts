@@ -1,10 +1,17 @@
+"use server";
 import { BASE_URL } from "@/constants/constant";
 import { headers } from "next/headers";
 import { ApiError } from "./apiErrorHandler";
+import { revalidateTag } from "next/cache";
+
+export const updateUser = async () => {
+  revalidateTag("user");
+};
 
 export const fetchSingleUser = async (username: string) => {
   const response = await fetch(`${BASE_URL}/api/user/${username}`, {
     method: "GET",
+    next: { tags: ["user"] },
   });
   const user = await response.json();
   return user;
