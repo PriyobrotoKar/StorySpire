@@ -54,3 +54,10 @@ export const fetchFeaturedBlogs = async () => {
   });
   return await response.json();
 };
+
+export const fetchCategories = async (offset = 0) => {
+  const response = await fetch(`${BASE_URL}/api/category?offset=${offset}`, {
+    method: "GET",
+  });
+  return await response.json();
+};

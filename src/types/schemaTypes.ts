@@ -8,3 +8,6 @@ export interface User
   extends Prisma.UserGetPayload<{
     include: { socials: true };
   }> {}
+export type Category = Prisma.CategoryGetPayload<{
+  include: { _count: true; posts: true };
+}>;

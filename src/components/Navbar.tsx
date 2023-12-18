@@ -14,7 +14,6 @@ import { GoHome, GoHomeFill, GoSearch } from "react-icons/go";
 import { PiNotePencil, PiNotePencilFill } from "react-icons/pi";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { CiUser } from "react-icons/ci";
 import { signOut, useSession } from "next-auth/react";
 import {
   DropdownMenu,
@@ -116,7 +115,9 @@ const DesktopNav = () => {
           <li>
             <Link href={"/"}>Home</Link>
           </li>
-          <li>Explore</li>
+          <li>
+            <Link href={"/explore"}>Explore</Link>
+          </li>
           <li>Bookmarks</li>
           <li>About</li>
         </ul>

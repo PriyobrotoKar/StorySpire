@@ -15,11 +15,13 @@ const BlogArticleCard = ({
   blog,
   size,
   showAuthor = true,
+  showTopic = true,
   isFeatured = false,
 }: {
   blog: Blog | BlogPreview;
   showAuthor?: boolean;
   size?: "large" | "small";
+  showTopic?: boolean;
   isFeatured?: boolean;
 }) => {
   return (
@@ -33,7 +35,7 @@ const BlogArticleCard = ({
         className="text-md font-semibold"
         style={{ color: blog.categories[0]?.color }}
       >
-        {blog.categories.length
+        {showTopic && blog.categories.length
           ? capitalize(blog.categories[0].name) + " • "
           : ""}
         {readingTime(blog.length)} mins
