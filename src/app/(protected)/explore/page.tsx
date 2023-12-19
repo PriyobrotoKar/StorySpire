@@ -1,5 +1,5 @@
 import BlogArticleCard from "@/components/BlogArticleCard";
-import InfiniteScrollCategories from "@/components/InfiniteScrollCategories";
+import Categories from "@/components/Categories";
 import { Input } from "@/components/ui/input";
 import { Blog, Category } from "@/types/schemaTypes";
 import { fetchCategories } from "@/utils/fetchActions";
@@ -29,7 +29,7 @@ const page = async () => {
           />
         </div>
       </section>
-      <InfiniteScrollCategories
+      <Categories
         initialCategories={initialCategories.categories}
         total={initialCategories._count}
       />
