@@ -95,7 +95,7 @@ const user = async ({ params }: { params: { username: string } }) => {
             <UserPostNav />
             {!blogs.length && (
               <p className="my-32 text-center text-sm text-muted-foreground">
-                {user.fullname} hasn't written any blogs yet.
+                {user.fullname} hasn&apos;t written any blogs yet.
               </p>
             )}
             {blogs.map((blog: Blog, i: number) => {

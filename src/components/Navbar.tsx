@@ -97,7 +97,12 @@ const DesktopNav = () => {
   const pathname = usePathname();
   const isAtBlogPage = pathname.includes("@") && pathname.includes("/", 1);
   return (
-    <header className="absolute top-0 z-10 hidden w-full justify-between border-b border-b-foreground/10 bg-background/60 px-4 py-3 text-secondary backdrop-blur sm:flex">
+    <header
+      className={
+        "absolute top-0 z-10 hidden w-full justify-between border-b border-b-foreground/10  px-4 py-3 text-secondary backdrop-blur sm:flex " +
+        (isAtBlogPage ? "bg-background/5" : "bg-background/60")
+      }
+    >
       <div className="flex items-center justify-center">
         <Image
           src={isAtBlogPage ? "/logo-white.svg" : "/logo.svg"}

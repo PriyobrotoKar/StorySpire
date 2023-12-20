@@ -93,7 +93,7 @@ const page = async ({
                 item.indexOf(">", item.indexOf("<code>")) + 1,
                 item.indexOf("</code>")
               );
-              return <Codeblock>{innerHTML}</Codeblock>;
+              return <Codeblock key={uuid()}>{innerHTML}</Codeblock>;
             }
             const element =
               item.substring(0, item.indexOf(">")) +

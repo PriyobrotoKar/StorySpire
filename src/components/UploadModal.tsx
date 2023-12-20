@@ -48,7 +48,7 @@ const UploadModal = ({
     (block: any) => block.type === "paragraph"
   )?.data.text;
 
-  const [blog, setBlog] = useState<BlogPreview>({
+  const blog = {
     title,
     description,
     length: words,
@@ -59,24 +59,8 @@ const UploadModal = ({
       profile_pic: session?.user.image,
     },
     createdAt: new Date(),
-    categories: [],
-  });
-
-  useEffect(() => {
-    setBlog({
-      title,
-      description,
-      length: words,
-      thumbnail: image.localPath,
-      author: {
-        fullname: session?.user.name,
-        username: session?.user.username,
-        profile_pic: session?.user.image,
-      },
-      createdAt: new Date(),
-      categories: tags,
-    });
-  }, [title, content, image, tags]);
+    categories: tags,
+  };
 
   const handleTopicInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTopic(e.target.value);

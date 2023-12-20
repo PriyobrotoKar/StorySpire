@@ -23,7 +23,7 @@ const useInfiniteScroll = <T>(
     if (inView) {
       loadMoreItems();
     }
-  }, [inView, offset]);
+  }, [inView, offset, fetchItems]);
 
   return { items, ref };
 };
