@@ -2,7 +2,7 @@
 import { BASE_URL } from "@/constants/constant";
 import { headers } from "next/headers";
 import { ApiError } from "./apiErrorHandler";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export const updateUser = async () => {
   revalidateTag("user");
@@ -20,6 +20,7 @@ export const fetchSingleUser = async (username: string) => {
 export const fetchSingleBlog = async (slug: string) => {
   const response = await fetch(`${BASE_URL}/api/blog/${slug}`, {
     method: "GET",
+    next: { tags: ["blog"] },
     headers: headers(),
   });
   if (!response.ok && response.status !== 404) {

@@ -6,12 +6,15 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CiBookmark, CiBookmarkCheck } from "react-icons/ci";
 
-const BlogPostBookmark = ({ blog, user }: { blog: Blog; user: User }) => {
+const BlogPostBookmark = ({
+  blog,
+  user,
+}: {
+  blog: Blog & { isBookmarked: boolean };
+  user: User;
+}) => {
   const router = useRouter();
-  const [isBookmarked, setIsBookmarked] = useState(() => {
-    const savedBlogs = user?.savedBlogsIDs ?? [];
-    return savedBlogs.includes(blog.id);
-  });
+  const [isBookmarked, setIsBookmarked] = useState(blog.isBookmarked);
 
   const handleBookmark = async () => {
     if (user) {

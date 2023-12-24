@@ -2,7 +2,8 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import client from "@/lib/prisma";
 import apiErrorHandler, { ApiError } from "@/utils/apiErrorHandler";
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
+import { NextRequest, NextResponse } from "next/server";
 
 export const POST = apiErrorHandler(
   async (req: Request, { params }: { params: { slug: string } }) => {
@@ -41,13 +42,17 @@ export const POST = apiErrorHandler(
         },
       },
     });
+    revalidatePath("/bookmarks");
+    revalidatePath(`/@${updatedBookmark.username}/${blog.slug}`);
 
     return NextResponse.json("Bookmark added successfully", { status: 200 });
   }
 );
 export const DELETE = apiErrorHandler(
-  async (req: Request, { params }: { params: { slug: string } }) => {
+  async (req: NextRequest, { params }: { params: { slug: string } }) => {
     const session = await getServerSession(authOptions);
+    const path = req.nextUrl.pathname;
+    console.log(path);
     if (!session) {
       throw new ApiError(
         "Unauthorized",
@@ -82,6 +87,9 @@ export const DELETE = apiErrorHandler(
         },
       },
     });
+
+    revalidatePath("/bookmarks");
+    revalidatePath(`/@${updatedBookmark.username}/${blog.slug}`);
 
     return NextResponse.json("Bookmark added successfully", { status: 200 });
   }

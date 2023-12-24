@@ -33,10 +33,11 @@ const page = async ({
     ? await fetchSingleUser(session.user.username)
     : null;
 
-  const blog: Blog = await fetchSingleBlog(slug);
+  const blog: Blog & { isBookmarked: boolean } = await fetchSingleBlog(slug);
   if (!blog) {
     return notFound();
   }
+  console.log(blog.isBookmarked);
   const html = edjsParser.parse(blog.content as any);
 
   return (

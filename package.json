@@ -37,7 +37,7 @@
     "html-react-parser": "^5.0.6",
     "isomorphic-dompurify": "^1.9.0",
     "lucide-react": "^0.292.0",
-    "next": "14.0.1",
+    "next": "^14.0.4",
     "next-auth": "^4.24.4",
     "react": "^18",
     "react-cookie": "^6.1.1",
