@@ -1,14 +1,12 @@
-import BlogArticleCard from "@/components/BlogArticleCard";
 import Categories from "@/components/Categories";
+import CategoryList from "@/components/CategoryList";
 import { Input } from "@/components/ui/input";
-import { Blog, Category } from "@/types/schemaTypes";
-import { fetchCategories } from "@/utils/fetchActions";
-import { capitalize } from "@/utils/helpers";
+import { fetchAllCategories } from "@/utils/fetchActions";
 import React from "react";
 import { FiSearch } from "react-icons/fi";
 
 const page = async () => {
-  const initialCategories = await fetchCategories();
+  const initialCategories = await fetchAllCategories(4);
   return (
     <div className="container space-y-10 ">
       <section className="space-y-6 pt-10 sm:pt-28">
@@ -29,6 +27,7 @@ const page = async () => {
           />
         </div>
       </section>
+      <CategoryList />
       <Categories
         initialCategories={initialCategories.categories}
         total={initialCategories._count}

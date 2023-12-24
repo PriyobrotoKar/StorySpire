@@ -55,9 +55,30 @@ export const fetchFeaturedBlogs = async () => {
   return await response.json();
 };
 
-export const fetchCategories = async (offset = 0) => {
-  const response = await fetch(`${BASE_URL}/api/category?offset=${offset}`, {
+export const fetchAllCategories = async (postCount = 0, offset = 0) => {
+  const response = await fetch(
+    `${BASE_URL}/api/category?offset=${offset}&post_count=${postCount}`,
+    {
+      method: "GET",
+    }
+  );
+  return await response.json();
+};
+
+export const fetchCategory = async (name: string, offset = 0) => {
+  const response = await fetch(
+    `${BASE_URL}/api/category/${name}?offset=${offset}`,
+    {
+      method: "GET",
+    }
+  );
+  return await response.json();
+};
+
+export const fetchBookmarks = async () => {
+  const response = await fetch(`${BASE_URL}/api/user/bookmark`, {
     method: "GET",
+    headers: headers(),
   });
   return await response.json();
 };

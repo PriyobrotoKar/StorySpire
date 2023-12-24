@@ -10,6 +10,7 @@ export const GET = apiErrorHandler(
       },
       include: {
         socials: true,
+        savedBlogs: true,
       },
     });
     return NextResponse.json(user, { status: 200 });

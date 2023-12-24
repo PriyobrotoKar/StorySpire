@@ -123,7 +123,9 @@ const DesktopNav = () => {
           <li>
             <Link href={"/explore"}>Explore</Link>
           </li>
-          <li>Bookmarks</li>
+          <li>
+            <Link href={"/bookmarks"}>Bookmarks</Link>
+          </li>
           <li>About</li>
         </ul>
       </nav>

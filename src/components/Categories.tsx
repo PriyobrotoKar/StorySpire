@@ -3,7 +3,7 @@ import { Blog, Category } from "@/types/schemaTypes";
 import { capitalize } from "@/utils/helpers";
 import BlogArticleCard from "./BlogArticleCard";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { fetchCategories } from "@/utils/fetchActions";
+import { fetchAllCategories } from "@/utils/fetchActions";
 import { v4 as uuid } from "uuid";
 import Image from "next/image";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
@@ -19,7 +19,8 @@ const Categories = ({
 }) => {
   const { items: topics, ref } = useInfiniteScroll<Category>(
     initialCategories,
-    fetchCategories
+    fetchAllCategories,
+    [4]
   );
 
   return (
@@ -29,7 +30,7 @@ const Categories = ({
           <section key={uuid()} className="space-y-2">
             <div className="flex justify-between gap-8">
               <h2 className="text-xl font-bold">{capitalize(topic.name)}</h2>
-              <Link href={`/category/${topic.name.toLowerCase()}`}>
+              <Link href={`/explore/${topic.name.toLowerCase()}`}>
                 <Button className="group gap-2">
                   View All
                   <FaArrowRightLong

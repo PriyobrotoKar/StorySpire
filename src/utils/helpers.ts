@@ -13,3 +13,8 @@ export const capitalize = (text: string | null) => {
   if (!text) return "";
   return text[0].toUpperCase() + text.slice(1);
 };
+
+export const capitalizeSentence = (sentence: string) => {
+  const capWords = sentence.split(" ").map((word) => capitalize(word));
+  return capWords.join(" ");
+};

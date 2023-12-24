@@ -4,10 +4,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = apiErrorHandler(async (req: NextRequest) => {
   const offset = req.nextUrl.searchParams.get("offset") ?? 0;
+  const postCount = req.nextUrl.searchParams.get("post_count") ?? 0;
   const categoriesCount = await client.category.aggregate({
     _count: true,
   });
-  console.log("offset", offset);
+  console.log("count", postCount);
   const categories = await client.category.findMany({
     orderBy: {
       posts: {
@@ -35,8 +36,9 @@ export const GET = apiErrorHandler(async (req: NextRequest) => {
             },
           },
           author: true,
+          createdAt: true,
         },
-        take: 4,
+        take: Number(postCount),
       },
       _count: {
         select: {

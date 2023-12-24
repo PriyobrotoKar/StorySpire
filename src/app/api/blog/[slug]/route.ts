@@ -19,6 +19,7 @@ export const GET = apiErrorHandler(
           },
         },
         author: true,
+        savedBy: true,
       },
     });
 

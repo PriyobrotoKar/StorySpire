@@ -11,19 +11,21 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  username    String   @unique
-  fullname    String
-  bio         String
-  password    String?
-  location    String?
-  profile_pic String?
-  cover_pic   String?
-  email       String   @unique
-  socials     Social[]
-  blogs       Blog[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  username      String   @unique
+  fullname      String
+  bio           String
+  password      String?
+  location      String?
+  profile_pic   String?
+  cover_pic     String?
+  email         String   @unique
+  socials       Social[]
+  blogs         Blog[]
+  savedBlogs    Blog[]   @relation("Bookmarks", fields: [savedBlogsIDs], references: [id])
+  savedBlogsIDs String[] @db.ObjectId
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Social {
@@ -46,6 +48,8 @@ model Blog {
   isFeatured  Boolean    @default(false)
   author      User       @relation(fields: [authorId], references: [id])
   authorId    String     @db.ObjectId
+  savedBy     User[]     @relation("Bookmarks", fields: [savedByIDs], references: [id])
+  savedByIDs  String[]   @db.ObjectId
   categories  Category[] @relation(fields: [categoryIDs], references: [id])
   categoryIDs String[]   @db.ObjectId
   createdAt   DateTime   @default(now())

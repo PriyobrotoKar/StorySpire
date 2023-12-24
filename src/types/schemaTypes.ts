@@ -4,10 +4,40 @@ export interface Blog
   extends Prisma.BlogGetPayload<{
     include: { categories: true; author: true };
   }> {}
+
+export type BlogWithoutContent = Prisma.BlogGetPayload<{
+  select: {
+    title: true;
+    thumbnail: true;
+    description: true;
+    id: true;
+    length: true;
+    slug: true;
+    categories: true;
+    author: true;
+    createdAt: true;
+  };
+}>;
+
 export interface User
   extends Prisma.UserGetPayload<{
-    include: { socials: true };
+    include: { socials: true; savedBlogs: true };
   }> {}
 export type Category = Prisma.CategoryGetPayload<{
-  include: { _count: true; posts: true };
+  include: {
+    _count: true;
+    posts: {
+      select: {
+        title: true;
+        thumbnail: true;
+        description: true;
+        id: true;
+        length: true;
+        slug: true;
+        categories: true;
+        author: true;
+        createdAt: true;
+      };
+    };
+  };
 }>;

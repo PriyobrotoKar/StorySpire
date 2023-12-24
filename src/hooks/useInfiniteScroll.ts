@@ -3,7 +3,8 @@ import { useInView } from "react-intersection-observer";
 
 const useInfiniteScroll = <T>(
   initialItems: T[],
-  fetchItems: (offset: number) => Promise<any>
+  fetchItems: (...args: any[]) => Promise<any>,
+  args?: any[]
 ) => {
   const [items, setItems] = useState(initialItems);
   const [offset, setOffset] = useState(0);
@@ -12,7 +13,7 @@ const useInfiniteScroll = <T>(
   useEffect(() => {
     const loadMoreItems = async () => {
       const next = offset + 10;
-      const res = await fetchItems(next);
+      const res = await fetchItems(...(args as []), next);
       const newItems = Object.values(res)[0] as T[];
       console.log(newItems);
       if (newItems?.length) {
@@ -23,7 +24,7 @@ const useInfiniteScroll = <T>(
     if (inView) {
       loadMoreItems();
     }
-  }, [inView, offset, fetchItems]);
+  }, [inView, offset, fetchItems, args]);
 
   return { items, ref };
 };
