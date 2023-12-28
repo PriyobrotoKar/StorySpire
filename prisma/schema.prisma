@@ -26,6 +26,7 @@ model User {
   savedBlogsIDs String[] @db.ObjectId
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  Like          Like[]
 }
 
 model Social {
@@ -54,6 +55,7 @@ model Blog {
   categoryIDs String[]   @db.ObjectId
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  Like        Like[]
 }
 
 model Category {
@@ -64,4 +66,16 @@ model Category {
   postIDs   String[] @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Like {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  likedBy   User     @relation(fields: [userId], references: [id])
+  post      Blog     @relation(fields: [postID], references: [id])
+  postID    String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String   @db.ObjectId
+
+  @@unique([postID, userId])
 }

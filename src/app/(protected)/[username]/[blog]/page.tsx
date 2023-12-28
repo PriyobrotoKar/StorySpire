@@ -19,6 +19,7 @@ import BlogPostActions from "@/components/BlogPostActions";
 import BlogPostBookmark from "@/components/BlogPostBookmark";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import BlogPostLike from "@/components/BlogPostLike";
 
 const page = async ({
   params,
@@ -33,7 +34,11 @@ const page = async ({
     ? await fetchSingleUser(session.user.username)
     : null;
 
-  const blog: Blog & { isBookmarked: boolean } = await fetchSingleBlog(slug);
+  const blog: Blog & {
+    isBookmarked: boolean;
+    isLiked: Boolean;
+    _count: { Like: number };
+  } = await fetchSingleBlog(slug);
   if (!blog) {
     return notFound();
   }
@@ -82,7 +87,10 @@ const page = async ({
         </div>
 
         {/* <BlogPostActions blog={blog} user={user} /> */}
-        <BlogPostBookmark blog={blog} user={user} />
+        <div className="flex gap-4">
+          <BlogPostLike blog={blog} user={user} />
+          <BlogPostBookmark blog={blog} user={user} />
+        </div>
       </section>
 
       {blog.thumbnail && (

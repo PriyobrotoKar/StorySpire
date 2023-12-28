@@ -14,10 +14,7 @@ const BlogPostActions = ({ blog, user }: { blog: Blog; user: User }) => {
 
   return (
     <div className="relative z-10 flex gap-4">
-      <div className="flex cursor-pointer items-center gap-1 text-xl">
-        <IoHeartOutline />
-        <span className="text-sm"></span>
-      </div>
+      
       <div className="flex cursor-pointer items-center gap-1 text-xl">
         <TbMessageCircle2 />
         <span className="text-sm"></span>

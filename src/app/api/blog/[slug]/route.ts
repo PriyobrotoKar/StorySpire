@@ -7,7 +7,6 @@ import { NextResponse } from "next/server";
 export const GET = apiErrorHandler(
   async (request: Request, { params }: { params: { slug: string } }) => {
     const session = await getServerSession(authOptions);
-    console.log(session);
     const blog = await client.blog.findUnique({
       where: {
         slug: params.slug,
@@ -27,13 +26,31 @@ export const GET = apiErrorHandler(
             id: true,
           },
         },
+        Like: {
+          where: {
+            likedBy: {
+              username: session ? session.user.username : "",
+            },
+          },
+          select: {
+            id: true,
+          },
+        },
+        _count: {
+          select: {
+            Like: true,
+          },
+        },
       },
     });
     if (blog) {
-      console.log(blog.savedBy);
       const isBookmarked = blog && blog.savedBy.length > 0;
-      const { savedBy, ...restBlog } = blog;
-      return NextResponse.json({ ...restBlog, isBookmarked }, { status: 200 });
+      const isLiked = blog && blog.Like.length > 0;
+      const { savedBy, Like, ...restBlog } = blog;
+      return NextResponse.json(
+        { ...restBlog, isBookmarked, isLiked },
+        { status: 200 }
+      );
     }
 
     return NextResponse.json(blog, { status: 200 });
