@@ -1,6 +1,6 @@
 //@ts-nocheck
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
@@ -18,6 +18,7 @@ import useAutosizeTextArea from "../hooks/useAutoSizeTextArea";
 import { uploadToCloud } from "@/utils/uploadToCloudinary";
 import { Button } from "./ui/button";
 import UploadModal from "./UploadModal";
+import Image from "next/image";
 
 const Editor = () => {
   const ref = useRef<EditorJS | null>();
@@ -74,7 +75,7 @@ const Editor = () => {
       }, 0);
   };
 
-  const initEditor = async () => {
+  const initEditor = useCallback(async () => {
     const editor = new EditorJS({
       holder: "editorjs",
       onReady: () => {
@@ -83,6 +84,7 @@ const Editor = () => {
       placeholder: "Start writing your story",
       onChange: async () => {
         let data = await editor.saver.save();
+        console.log(data.blocks);
         setContent(data);
         setWordCount(countTotalWords(data.blocks));
       },
@@ -128,7 +130,7 @@ const Editor = () => {
         },
       },
     });
-  };
+  }, []);
   useEffect(() => {
     const init = async () => {
       await initEditor();
@@ -143,7 +145,7 @@ const Editor = () => {
         }
       };
     }
-  }, [mounted]);
+  }, [mounted, initEditor]);
   useEffect(() => {
     if (typeof window !== undefined) {
       setMounted(true);
@@ -168,9 +170,12 @@ const Editor = () => {
         </header>
         {coverImg.localPath && (
           <div>
-            <img
-              className="rounded-xl shadow-2xl"
+            <Image
+              unoptimized={false}
+              className="aspect-video w-full rounded-xl shadow-2xl"
               src={coverImg.localPath}
+              width={500}
+              height={200}
               alt="Cover Image"
             />
           </div>
@@ -181,7 +186,7 @@ const Editor = () => {
             className="flex w-fit items-center gap-2 rounded-md px-3 py-1 font-medium hover:cursor-pointer hover:bg-secondary"
           >
             <FiImage />
-            {coverImg ? "Change Cover" : "Add Cover"}
+            {coverImg.localPath ? "Change Cover" : "Add Cover"}
           </label>
           <input
             id="coverImg"

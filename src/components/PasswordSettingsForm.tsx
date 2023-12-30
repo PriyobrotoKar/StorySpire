@@ -54,7 +54,10 @@ const PasswordSettingsForm = () => {
     if (input.passwordNew && input.passwordOld) {
       {
         if (input.passwordNew === input.passwordOld)
-          setError({ ...error, passwordNew: "Please provide a new password" });
+          setError((error) => ({
+            ...error,
+            passwordNew: "Please provide a new password",
+          }));
       }
     }
   }, [input]);

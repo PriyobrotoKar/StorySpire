@@ -63,18 +63,26 @@ const SocialButtons = ({ social }: { social: Social }) => {
   );
 };
 
-const Socials = ({ socials, user }: { socials: Social[]; user: User }) => {
+const Socials = ({
+  socials,
+  user,
+  isSameUser,
+}: {
+  socials: Social[];
+  user: User;
+  isSameUser: boolean;
+}) => {
   const [socialLinks, setSocialLinks] = useState(socials);
   const { data: session } = useSession();
 
   return (
     <>
-      <div className="flex flex-wrap gap-2">
+      <div className=" flex flex-wrap gap-2">
         {socialLinks.map((social) => {
           return <SocialButtons key={social.id} social={social} />;
         })}
       </div>
-      {session?.user.username === user.username && (
+      {isSameUser && (
         <AddLinkBtn socialLinks={socialLinks} setSocialLinks={setSocialLinks} />
       )}
     </>

@@ -10,7 +10,7 @@ import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { Button } from "@/components/ui/button";
 import { updatePassword } from "@/reducers/loginDetailsSlice";
 
-const register = () => {
+const Register = () => {
   const router = useRouter();
   const loginEmail = useSelector(
     (state: RootState) => state.LoginDetails.email
@@ -124,7 +124,7 @@ const register = () => {
             </div>
             {error && (
               <span className="text-sm text-primary">
-                Passwords don't match
+                Passwords don&apos;t match
               </span>
             )}
           </div>
@@ -135,4 +135,4 @@ const register = () => {
   );
 };
 
-export default register;
+export default Register;

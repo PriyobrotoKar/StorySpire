@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-const notfound = () => {
+const NotFound = () => {
   const router = useRouter();
   return (
     <div className="flex min-h-[inherit] items-center justify-center px-2 md:px-0">
@@ -28,4 +28,4 @@ const notfound = () => {
     </div>
   );
 };
-export default notfound;
+export default NotFound;

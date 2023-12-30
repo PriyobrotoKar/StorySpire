@@ -72,6 +72,7 @@ export const patchFetchAPi = async (url: string, body: any) => {
     return error;
   }
 };
+
 export const deleteFetchAPi = async (url: string) => {
   try {
     const response = await fetch(BASE_URL + url, {

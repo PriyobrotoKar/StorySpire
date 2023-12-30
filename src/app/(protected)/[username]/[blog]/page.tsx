@@ -1,4 +1,4 @@
-import { fetchSingleBlog } from "@/utils/fetchActions";
+import { fetchSingleBlog, fetchSingleUser } from "@/utils/fetchActions";
 import Image from "next/image";
 import React from "react";
 import edjsHTML from "editorjs-html";
@@ -7,11 +7,19 @@ import { v4 as uuid } from "uuid";
 import "highlight.js/styles/github.css";
 import styles from "./styles.module.css";
 import { Button } from "@/components/ui/button";
+import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
+import { TbMessageCircle2 } from "react-icons/tb";
+import { CiBookmark } from "react-icons/ci";
 import { capitalize, formatDate, readingTime } from "@/utils/helpers";
-import { Blog } from "@/types/schemaTypes";
+import { Blog, User } from "@/types/schemaTypes";
 import Codeblock from "@/components/Codeblock";
 import { colors } from "@/constants/colors";
 import { notFound } from "next/navigation";
+import BlogPostActions from "@/components/BlogPostActions";
+import BlogPostBookmark from "@/components/BlogPostBookmark";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import BlogPostLike from "@/components/BlogPostLike";
 
 const page = async ({
   params,
@@ -20,18 +28,28 @@ const page = async ({
 }) => {
   const edjsParser = edjsHTML();
   const { username, blog: slug } = params;
+  const session = await getServerSession(authOptions);
 
-  const blog: Blog = await fetchSingleBlog(slug);
+  const user: User = session
+    ? await fetchSingleUser(session.user.username)
+    : null;
+
+  const blog: Blog & {
+    isBookmarked: boolean;
+    isLiked: Boolean;
+    _count: { Like: number };
+  } = await fetchSingleBlog(slug);
   if (!blog) {
     return notFound();
   }
+  console.log(blog.isBookmarked);
   const html = edjsParser.parse(blog.content as any);
 
   return (
     <>
       <section
         className={
-          "relative flex h-[25rem] flex-col items-center gap-4  bg-blue-400 py-20 text-white before:absolute  before:left-0 before:top-0 before:h-full before:w-full before:bg-white/20 sm:h-[28rem] md:h-[35rem] lg:h-[42rem] lg:gap-10"
+          "relative flex h-[25rem] flex-col items-center gap-4  bg-blue-400 py-20 text-white before:absolute  before:left-0 before:top-0 before:h-full before:w-full before:bg-white/30 sm:h-[28rem] md:h-[35rem] lg:h-[42rem] lg:gap-10"
         }
         style={{
           backgroundColor:
@@ -68,7 +86,11 @@ const page = async ({
           </div>
         </div>
 
-        <div>{/* TODO: Like, Comment And bookmark */}</div>
+        {/* <BlogPostActions blog={blog} user={user} /> */}
+        <div className="flex gap-4">
+          <BlogPostLike blog={blog} user={user} />
+          <BlogPostBookmark blog={blog} user={user} />
+        </div>
       </section>
 
       {blog.thumbnail && (
@@ -93,7 +115,7 @@ const page = async ({
                 item.indexOf(">", item.indexOf("<code>")) + 1,
                 item.indexOf("</code>")
               );
-              return <Codeblock>{innerHTML}</Codeblock>;
+              return <Codeblock key={uuid()}>{innerHTML}</Codeblock>;
             }
             const element =
               item.substring(0, item.indexOf(">")) +

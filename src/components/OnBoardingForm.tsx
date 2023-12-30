@@ -60,6 +60,7 @@ const OnBoardingForm = () => {
         intro: DEFAULT_USER_INTRO,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleInput = (

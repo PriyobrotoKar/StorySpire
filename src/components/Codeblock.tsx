@@ -7,7 +7,7 @@ const Codeblock = ({ children }: { children: string }) => {
   useEffect(() => {
     hljs.highlightAll();
     setLanguage(hljs.highlightAuto(children).language);
-  }, []);
+  }, [children]);
   return (
     <>
       <pre className="relative">

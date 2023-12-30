@@ -11,19 +11,24 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  username    String   @unique
-  fullname    String
-  bio         String
-  password    String?
-  location    String?
-  profile_pic String?
-  cover_pic   String?
-  email       String   @unique
-  socials     Social[]
-  blogs       Blog[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  username      String   @unique
+  fullname      String
+  bio           String
+  password      String?
+  location      String?
+  profile_pic   String?
+  cover_pic     String?
+  email         String   @unique
+  socials       Social[]
+  blogs         Blog[]
+  savedBlogs    Blog[]   @relation("Bookmarks", fields: [savedBlogsIDs], references: [id])
+  savedBlogsIDs String[] @db.ObjectId
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  Like          Like[]
+  following     Follow[] @relation("Following")
+  follower      Follow[] @relation("Follower")
 }
 
 model Social {
@@ -46,10 +51,13 @@ model Blog {
   isFeatured  Boolean    @default(false)
   author      User       @relation(fields: [authorId], references: [id])
   authorId    String     @db.ObjectId
+  savedBy     User[]     @relation("Bookmarks", fields: [savedByIDs], references: [id])
+  savedByIDs  String[]   @db.ObjectId
   categories  Category[] @relation(fields: [categoryIDs], references: [id])
   categoryIDs String[]   @db.ObjectId
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  Like        Like[]
 }
 
 model Category {
@@ -60,4 +68,26 @@ model Category {
   postIDs   String[] @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Like {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  likedBy   User     @relation(fields: [userId], references: [id])
+  post      Blog     @relation(fields: [postID], references: [id])
+  postID    String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String   @db.ObjectId
+
+  @@unique([postID, userId])
+}
+
+model Follow {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  follower    User   @relation(name: "Following", fields: [followerID], references: [id])
+  followerID  String @db.ObjectId
+  following   User   @relation(name: "Follower", fields: [followingID], references: [id])
+  followingID String @db.ObjectId
+
+  @@unique([followerID, followingID])
 }

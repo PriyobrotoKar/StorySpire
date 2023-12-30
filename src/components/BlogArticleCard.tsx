@@ -1,5 +1,5 @@
 import { BlogPreview } from "@/types/customTypes";
-import { Blog } from "@/types/schemaTypes";
+import { Blog, BlogWithoutContent } from "@/types/schemaTypes";
 import { capitalize, formatDate, readingTime } from "@/utils/helpers";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,11 +15,13 @@ const BlogArticleCard = ({
   blog,
   size,
   showAuthor = true,
+  showTopic = true,
   isFeatured = false,
 }: {
-  blog: Blog | BlogPreview;
+  blog: Blog | BlogPreview | BlogWithoutContent;
   showAuthor?: boolean;
   size?: "large" | "small";
+  showTopic?: boolean;
   isFeatured?: boolean;
 }) => {
   return (
@@ -33,7 +35,7 @@ const BlogArticleCard = ({
         className="text-md font-semibold"
         style={{ color: blog.categories[0]?.color }}
       >
-        {blog.categories.length
+        {showTopic && blog.categories.length
           ? capitalize(blog.categories[0].name) + " • "
           : ""}
         {readingTime(blog.length)} mins
@@ -106,7 +108,7 @@ const BlogArticleCard = ({
                 </h2>
                 <p
                   className={
-                    "line-clamp-3 leading-snug" +
+                    "line-clamp-3 leading-snug " +
                     (isFeatured
                       ? " font-medium lg:text-lg 2xl:text-xl"
                       : "text-md ")
