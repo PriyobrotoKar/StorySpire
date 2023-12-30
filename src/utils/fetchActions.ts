@@ -7,6 +7,9 @@ import { revalidatePath, revalidateTag } from "next/cache";
 export const updateUser = async () => {
   revalidateTag("user");
 };
+export const updateUserPage = async (username: string) => {
+  revalidatePath(`/@${username}`);
+};
 
 export const fetchSingleUser = async (username: string) => {
   const response = await fetch(`${BASE_URL}/api/user/${username}`, {
@@ -35,7 +38,6 @@ export const fetchSingleBlog = async (slug: string) => {
 export const fetchUserBlogs = async (username: string) => {
   const response = await fetch(`${BASE_URL}/api/user/${username}/blogs`, {
     method: "GET",
-    headers: headers(),
   });
   return await response.json();
 };
@@ -81,5 +83,24 @@ export const fetchBookmarks = async () => {
     method: "GET",
     headers: headers(),
   });
+  return await response.json();
+};
+export const fetchFollowers = async (username: string) => {
+  const response = await fetch(`${BASE_URL}/api/user/${username}/followers`, {
+    method: "GET",
+  });
+  return await response.json();
+};
+
+export const checkIsFollowing = async (
+  sourceUsername: string,
+  targerUsername: string
+) => {
+  const response = await fetch(
+    `${BASE_URL}/api/user/${sourceUsername}/follow/${targerUsername}`,
+    {
+      method: "GET",
+    }
+  );
   return await response.json();
 };

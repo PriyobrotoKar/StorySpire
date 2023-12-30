@@ -1,4 +1,9 @@
-import { fetchSingleUser, fetchUserBlogs } from "@/utils/fetchActions";
+import {
+  checkIsFollowing,
+  fetchFollowers,
+  fetchSingleUser,
+  fetchUserBlogs,
+} from "@/utils/fetchActions";
 import React from "react";
 import { notFound } from "next/navigation";
 import { getServerSession } from "next-auth";
@@ -13,6 +18,8 @@ import Link from "next/link";
 import Socials from "@/components/Socials";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import BlogArticleCard from "@/components/BlogArticleCard";
+import FollowUserButton from "@/components/FollowUserButton";
+import UserFollowerCount from "@/components/UserFollowerCount";
 
 const user = async ({ params }: { params: { username: string } }) => {
   const session = await getServerSession(authOptions);
@@ -26,8 +33,15 @@ const user = async ({ params }: { params: { username: string } }) => {
   if (!user) {
     return notFound();
   }
-
+  const isSameUser = session?.user.username === user.username;
   const blogs = await fetchUserBlogs(username);
+  const { _count: followerCount } = await fetchFollowers(username);
+  const { isFollowing } =
+    session && !isSameUser
+      ? await checkIsFollowing(session.user.username, username)
+      : { isFollowing: false };
+
+  console.log(isFollowing);
 
   return (
     <div className="flex min-h-[inherit] flex-col">
@@ -62,7 +76,7 @@ const user = async ({ params }: { params: { username: string } }) => {
                 Edit
               </Button>
             )}
-            <div className="space-y-4">
+            <div className="space-y-2">
               <div>
                 <h1 className="text-xl font-bold text-secondary-foreground">
                   {user.fullname}
@@ -71,24 +85,25 @@ const user = async ({ params }: { params: { username: string } }) => {
                   @{user.username}
                 </p>
               </div>
-              <div>{/*Followers */}</div>
+              <UserFollowerCount followerCount={followerCount} />
               <p className="text-sm text-muted-foreground">{user.bio}</p>
-              <Socials user={user} socials={user.socials} />
               {user.location && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1 text-sm text-muted-foreground">
                   <HiOutlineLocationMarker />
                   <p>{user.location}</p>
                 </div>
               )}
-              {session?.user.username !== user.username && (
-                <div className="flex items-center justify-between gap-4 rounded-md border p-4">
-                  <div className="text-sm font-medium">
-                    Follow to get new updates in your activity feed or start
-                    page
-                  </div>
-                  <Button>Follow</Button>
-                </div>
-              )}
+              <Socials
+                user={user}
+                socials={user.socials}
+                isSameUser={isSameUser}
+              />
+              <FollowUserButton
+                isSameUser={isSameUser}
+                isFollowing={isFollowing}
+                targetUser={user}
+                followerCount={followerCount}
+              />
             </div>
           </section>
           <section className="flex-[2_1_0%]  space-y-6 px-4 lg:py-12">

@@ -27,6 +27,8 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   Like          Like[]
+  following     Follow[] @relation("Following")
+  follower      Follow[] @relation("Follower")
 }
 
 model Social {
@@ -78,4 +80,14 @@ model Like {
   userId    String   @db.ObjectId
 
   @@unique([postID, userId])
+}
+
+model Follow {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  follower    User   @relation(name: "Following", fields: [followerID], references: [id])
+  followerID  String @db.ObjectId
+  following   User   @relation(name: "Follower", fields: [followingID], references: [id])
+  followingID String @db.ObjectId
+
+  @@unique([followerID, followingID])
 }
