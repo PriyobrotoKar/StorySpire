@@ -26,7 +26,6 @@ const GeneralSettingsForms = () => {
 
   useEffect(() => {
     if (!session) return;
-    console.log(session);
     setInput({
       username: session.user.username,
       email: session.user.email,

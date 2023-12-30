@@ -41,7 +41,7 @@ const user = async ({ params }: { params: { username: string } }) => {
       ? await checkIsFollowing(session.user.username, username)
       : { isFollowing: false };
 
-  console.log(isFollowing);
+
 
   return (
     <div className="flex min-h-[inherit] flex-col">

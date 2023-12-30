@@ -52,7 +52,6 @@ export const DELETE = apiErrorHandler(
   async (req: NextRequest, { params }: { params: { slug: string } }) => {
     const session = await getServerSession(authOptions);
     const path = req.nextUrl.pathname;
-    console.log(path);
     if (!session) {
       throw new ApiError(
         "Unauthorized",

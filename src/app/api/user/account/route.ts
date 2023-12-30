@@ -136,7 +136,5 @@ export const PATCH = apiErrorHandler(async (req: Request) => {
     },
   });
 
-  console.log(updatedFields);
-
   return NextResponse.json(updatedUser, { status: 200 });
 });

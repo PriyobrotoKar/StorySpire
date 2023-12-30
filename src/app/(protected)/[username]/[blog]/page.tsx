@@ -42,7 +42,6 @@ const page = async ({
   if (!blog) {
     return notFound();
   }
-  console.log(blog.isBookmarked);
   const html = edjsParser.parse(blog.content as any);
 
   return (

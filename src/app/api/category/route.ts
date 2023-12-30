@@ -8,7 +8,6 @@ export const GET = apiErrorHandler(async (req: NextRequest) => {
   const categoriesCount = await client.category.aggregate({
     _count: true,
   });
-  console.log("count", postCount);
   const categories = await client.category.findMany({
     orderBy: {
       posts: {

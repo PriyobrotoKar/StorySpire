@@ -50,8 +50,6 @@ export const POST = apiErrorHandler(
       (value) => value.username === target_user
     ) as User;
 
-    console.log(self_user.username, other_user.username);
-
     const followStatus = await client.follow.findUnique({
       where: {
         followerID_followingID: {

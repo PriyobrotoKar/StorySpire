@@ -84,7 +84,6 @@ const Editor = () => {
       placeholder: "Start writing your story",
       onChange: async () => {
         let data = await editor.saver.save();
-        console.log(data.blocks);
         setContent(data);
         setWordCount(countTotalWords(data.blocks));
       },
