@@ -36,13 +36,13 @@ const FollowUserButton = ({
 
     if (isFollowing) {
       //TODO: unfollow the user
-      await deleteFetchAPi(`/api/user/${targetUser.username}/follow`);
       setIsFollowed(false);
       dispatch(decreaseFollowers(followerCount));
+      await deleteFetchAPi(`/api/user/${targetUser.username}/follow`);
     } else {
-      await postFetchAPi(`/api/user/${targetUser.username}/follow`, {});
       setIsFollowed(true);
       dispatch(increaseFollowers(followerCount));
+      await postFetchAPi(`/api/user/${targetUser.username}/follow`, {});
     }
     updateUserPage(targetUser.username);
   };

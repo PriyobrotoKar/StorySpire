@@ -11,14 +11,16 @@ import { useDispatch, useSelector } from "react-redux";
 const UserFollowerCount = ({ followerCount }: { followerCount: number }) => {
   const followCount = useSelector((state: RootState) => state.FollowerCount);
   const dispatch = useDispatch();
-
   useEffect(() => {
-    dispatch(receiveFollowers(followerCount));
-  }, [dispatch, followerCount]);
+    console.log("user follow count render", followCount);
+    if (followCount === -1) {
+      dispatch(receiveFollowers(followerCount));
+    }
+  }, [dispatch, followerCount, followCount]);
 
   return (
     <div className="text-md font-medium text-muted-foreground">
-      {followCount || followerCount} Followers
+      {followCount !== -1 ? followCount : followerCount} Followers
     </div>
   );
 };
