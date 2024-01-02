@@ -1,12 +1,40 @@
 import apiErrorHandler, { ApiError } from "@/utils/apiErrorHandler";
-import { getServerSession } from "next-auth";
+import { Session, getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import client from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
+const hasViewed = async (session: Session | null, slug: string, ip: string) => {
+  if (session) {
+    const view = await client.bLogView.findFirst({
+      where: {
+        user: {
+          username: session.user.username,
+        },
+        blog: {
+          slug,
+        },
+      },
+    });
+
+    return !!view;
+  } else {
+    const view = await client.bLogView.findFirst({
+      where: {
+        userIP: ip,
+        blog: {
+          slug,
+        },
+      },
+    });
+  }
+};
 
 export const GET = apiErrorHandler(
-  async (request: Request, { params }: { params: { slug: string } }) => {
+  async (request: NextRequest, { params }: { params: { slug: string } }) => {
     const session = await getServerSession(authOptions);
+    const userIP = request.ip ?? request.headers.get("X-Forwarded-For");
+
     const blog = await client.blog.findUnique({
       where: {
         slug: params.slug,
