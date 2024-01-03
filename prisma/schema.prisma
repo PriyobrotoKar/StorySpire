@@ -63,12 +63,12 @@ model Blog {
 }
 
 model BLogView {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  user   User   @relation(fields: [userID], references: [id])
-  userID String @db.ObjectId
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  user   User?   @relation(fields: [userID], references: [id])
+  userID String? @db.ObjectId
   userIP String
-  blog   Blog   @relation(fields: [blogID], references: [id])
-  blogID String @db.ObjectId
+  blog   Blog    @relation(fields: [blogID], references: [id])
+  blogID String  @db.ObjectId
 }
 
 model Category {
