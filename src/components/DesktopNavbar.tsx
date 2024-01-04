@@ -19,11 +19,13 @@ import { FaRegUser } from "react-icons/fa6";
 import { PiNotePencil } from "react-icons/pi";
 import { signOut } from "next-auth/react";
 import { FiLogOut } from "react-icons/fi";
+import { useLayoutEffect } from "react";
 
 const DesktopNavbar = ({ session }: { session: Session | null }) => {
   const router = useRouter();
   const pathname = usePathname();
   const isAtBlogPage = pathname.includes("@") && pathname.includes("/", 1);
+
   return (
     <header
       className={

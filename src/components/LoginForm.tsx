@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { FcGoogle } from "react-icons/fc";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { updateEmail } from "@/reducers/loginDetailsSlice";
+import { Loader2 } from "lucide-react";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const LoginForm = () => {
     email: "",
     password: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(false);
   const router = useRouter();
 
@@ -34,17 +36,19 @@ const LoginForm = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (input.email) {
+      setIsSubmitting(true);
       signIn("credentials", {
         ...input,
         redirect: false,
         callbackUrl: "/",
       }).then((res) => {
         if (res?.ok) {
-          router.push("/");
+          window.location.href = "/";
         } else if (res?.status === 401) {
           dispatch(updateEmail(input.email));
           router.push("/register");
         } else {
+          setIsSubmitting(false);
           setError(true);
         }
       });
@@ -87,8 +91,19 @@ const LoginForm = () => {
             {input.password ? "Invalid Password" : "Please enter your password"}
           </span>
         )}
-        <Button className="w-full text-base " size={"lg"}>
-          Login
+        <Button
+          disabled={isSubmitting}
+          className="w-full text-base "
+          size={"lg"}
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Logging In
+            </>
+          ) : (
+            "Login"
+          )}
         </Button>
       </form>
       <div className="flex items-center">

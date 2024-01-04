@@ -92,6 +92,13 @@ export const fetchFollowers = async (username: string) => {
   return await response.json();
 };
 
+export const fetchBlogViews = async (slug: string) => {
+  const response = await fetch(`${BASE_URL}/api/blog/${slug}/views`, {
+    method: "GET",
+  });
+  return await response.json();
+};
+
 export const checkIsFollowing = async (
   sourceUsername: string,
   targerUsername: string

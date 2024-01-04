@@ -1,12 +1,107 @@
 import apiErrorHandler, { ApiError } from "@/utils/apiErrorHandler";
-import { getServerSession } from "next-auth";
+import { Session, getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import client from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
+const hasViewed = async (
+  session: Session | null,
+  slug: string,
+  ip: string | null
+) => {
+  if (session) {
+    const view = await client.bLogView.findFirst({
+      where: {
+        user: {
+          username: session.user.username,
+        },
+        blog: {
+          slug,
+        },
+      },
+    });
+
+    return !!view;
+  } else {
+    if (!ip) {
+      return true;
+    }
+    const view = await client.bLogView.findFirst({
+      where: {
+        userIP: ip,
+        blog: {
+          slug,
+        },
+      },
+    });
+    return !!view;
+  }
+};
+
+const increaseViews = async (
+  session: Session | null,
+  slug: string,
+  ip: string
+) => {
+  if (session) {
+    const viewWithIP = await client.bLogView.findFirst({
+      where: {
+        userIP: ip,
+        blog: {
+          slug,
+        },
+      },
+    });
+
+    if (viewWithIP && !viewWithIP.userID) {
+      await client.bLogView.update({
+        where: {
+          id: viewWithIP.id,
+        },
+        data: {
+          user: {
+            connect: {
+              username: session.user.username,
+            },
+          },
+        },
+      });
+    } else {
+      await client.bLogView.create({
+        data: {
+          user: {
+            connect: {
+              username: session.user.username,
+            },
+          },
+          blog: {
+            connect: {
+              slug,
+            },
+          },
+          userIP: ip,
+        },
+      });
+    }
+  } else {
+    await client.bLogView.create({
+      data: {
+        blog: {
+          connect: {
+            slug,
+          },
+        },
+        userIP: ip,
+      },
+    });
+  }
+};
 
 export const GET = apiErrorHandler(
-  async (request: Request, { params }: { params: { slug: string } }) => {
+  async (request: NextRequest, { params }: { params: { slug: string } }) => {
     const session = await getServerSession(authOptions);
+    const userIP = request.ip ?? request.headers.get("X-Forwarded-For");
+
     const blog = await client.blog.findUnique({
       where: {
         slug: params.slug,
@@ -45,7 +140,15 @@ export const GET = apiErrorHandler(
     });
     if (blog) {
       const isBookmarked = blog && blog.savedBy.length > 0;
+
       const isLiked = blog && blog.Like.length > 0;
+
+      const hasAlreadyViewed = await hasViewed(session, blog.slug, userIP);
+
+      if (!hasAlreadyViewed && userIP) {
+        await increaseViews(session, blog.slug, userIP);
+      }
+
       const { savedBy, Like, ...restBlog } = blog;
       return NextResponse.json(
         { ...restBlog, isBookmarked, isLiked },

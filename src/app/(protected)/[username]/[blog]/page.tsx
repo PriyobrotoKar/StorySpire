@@ -1,4 +1,8 @@
-import { fetchSingleBlog, fetchSingleUser } from "@/utils/fetchActions";
+import {
+  fetchBlogViews,
+  fetchSingleBlog,
+  fetchSingleUser,
+} from "@/utils/fetchActions";
 import Image from "next/image";
 import React from "react";
 import edjsHTML from "editorjs-html";
@@ -7,6 +11,7 @@ import { v4 as uuid } from "uuid";
 import "highlight.js/styles/github.css";
 import styles from "./styles.module.css";
 import { Button } from "@/components/ui/button";
+import { LuEye } from "react-icons/lu";
 import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 import { TbMessageCircle2 } from "react-icons/tb";
 import { CiBookmark } from "react-icons/ci";
@@ -43,6 +48,7 @@ const page = async ({
     return notFound();
   }
   const html = edjsParser.parse(blog.content as any);
+  const { views } = await fetchBlogViews(blog.slug);
 
   return (
     <>
@@ -87,6 +93,10 @@ const page = async ({
 
         {/* <BlogPostActions blog={blog} user={user} /> */}
         <div className="flex gap-4">
+          <div className="flex items-center gap-1">
+            <LuEye className="text-xl" />
+            <p>{views}</p>
+          </div>
           <BlogPostLike blog={blog} user={user} />
           <BlogPostBookmark blog={blog} user={user} />
         </div>

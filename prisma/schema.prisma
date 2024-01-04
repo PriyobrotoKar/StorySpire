@@ -11,24 +11,25 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  username      String   @unique
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  username      String     @unique
   fullname      String
   bio           String
   password      String?
   location      String?
   profile_pic   String?
   cover_pic     String?
-  email         String   @unique
+  email         String     @unique
   socials       Social[]
   blogs         Blog[]
-  savedBlogs    Blog[]   @relation("Bookmarks", fields: [savedBlogsIDs], references: [id])
-  savedBlogsIDs String[] @db.ObjectId
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  savedBlogs    Blog[]     @relation("Bookmarks", fields: [savedBlogsIDs], references: [id])
+  savedBlogsIDs String[]   @db.ObjectId
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   Like          Like[]
-  following     Follow[] @relation("Following")
-  follower      Follow[] @relation("Follower")
+  following     Follow[]   @relation("Following")
+  follower      Follow[]   @relation("Follower")
+  blogsViewed   BLogView[]
 }
 
 model Social {
@@ -58,6 +59,16 @@ model Blog {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   Like        Like[]
+  BLogView    BLogView[]
+}
+
+model BLogView {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  user   User?   @relation(fields: [userID], references: [id])
+  userID String? @db.ObjectId
+  userIP String
+  blog   Blog    @relation(fields: [blogID], references: [id])
+  blogID String  @db.ObjectId
 }
 
 model Category {
