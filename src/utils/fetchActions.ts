@@ -111,3 +111,13 @@ export const checkIsFollowing = async (
   );
   return await response.json();
 };
+export const checkIsFollowingTopic = async (category_name: string) => {
+  const response = await fetch(
+    `${BASE_URL}/api/category/${category_name}/follow`,
+    {
+      method: "GET",
+      headers: headers(),
+    }
+  );
+  return await response.json();
+};

@@ -11,25 +11,26 @@ datasource db {
 }
 
 model User {
-  id            String     @id @default(auto()) @map("_id") @db.ObjectId
-  username      String     @unique
-  fullname      String
-  bio           String
-  password      String?
-  location      String?
-  profile_pic   String?
-  cover_pic     String?
-  email         String     @unique
-  socials       Social[]
-  blogs         Blog[]
-  savedBlogs    Blog[]     @relation("Bookmarks", fields: [savedBlogsIDs], references: [id])
-  savedBlogsIDs String[]   @db.ObjectId
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  Like          Like[]
-  following     Follow[]   @relation("Following")
-  follower      Follow[]   @relation("Follower")
-  blogsViewed   BLogView[]
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  username       String        @unique
+  fullname       String
+  bio            String
+  password       String?
+  location       String?
+  profile_pic    String?
+  cover_pic      String?
+  email          String        @unique
+  socials        Social[]
+  blogs          Blog[]
+  savedBlogs     Blog[]        @relation("Bookmarks", fields: [savedBlogsIDs], references: [id])
+  savedBlogsIDs  String[]      @db.ObjectId
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  Like           Like[]
+  following      Follow[]      @relation("Following")
+  follower       Follow[]      @relation("Follower")
+  blogsViewed    BLogView[]
+  followedTopics FollowTopic[]
 }
 
 model Social {
@@ -72,13 +73,14 @@ model BLogView {
 }
 
 model Category {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String   @unique
-  color     String
-  posts     Blog[]   @relation(fields: [postIDs], references: [id])
-  postIDs   String[] @db.ObjectId
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  name        String        @unique
+  color       String
+  posts       Blog[]        @relation(fields: [postIDs], references: [id])
+  postIDs     String[]      @db.ObjectId
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  FollowTopic FollowTopic[]
 }
 
 model Like {
@@ -101,4 +103,14 @@ model Follow {
   followingID String @db.ObjectId
 
   @@unique([followerID, followingID])
+}
+
+model FollowTopic {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  follower      User     @relation(fields: [followerID], references: [id])
+  followerID    String   @db.ObjectId
+  followTopic   Category @relation(fields: [followTopicID], references: [id])
+  followTopicID String   @db.ObjectId
+
+  @@unique([followerID, followTopicID])
 }

@@ -1,15 +1,16 @@
 import CategoryPagePosts from "@/components/CategoryPagePosts";
+import FollowTopicButton from "@/components/FollowTopicButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Category } from "@/types/schemaTypes";
-import { fetchCategory } from "@/utils/fetchActions";
+import { checkIsFollowingTopic, fetchCategory } from "@/utils/fetchActions";
 import { capitalize } from "@/utils/helpers";
 import React from "react";
 import { FiSearch } from "react-icons/fi";
 
 const page = async ({ params }: { params: { category: string } }) => {
   const category: Category = await fetchCategory(params.category);
-
+  const { isFollowing } = await checkIsFollowingTopic(category.name);
   return (
     <div className="container">
       <section className="space-y-6 pt-10 sm:pt-28">
@@ -20,7 +21,10 @@ const page = async ({ params }: { params: { category: string } }) => {
           <p className="mx-6 text-lg font-medium ">
             Topic • {category._count.posts} Articles
           </p>
-          <Button>Follow</Button>
+          <FollowTopicButton
+            category_name={category.name}
+            isFollowing={isFollowing}
+          />
         </main>
       </section>
       <CategoryPagePosts posts={category.posts} categoryName={category.name} />
