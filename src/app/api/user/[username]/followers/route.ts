@@ -27,19 +27,12 @@ export const GET = apiErrorHandler(
           username: params.username,
         },
       },
+      select: {
+        follower: true,
+      },
       take: 10,
     });
-    const followersCount = await client.follow.count({
-      where: {
-        following: {
-          username: params.username,
-        },
-      },
-    });
 
-    return NextResponse.json(
-      { _count: followersCount, followers },
-      { status: 200 }
-    );
+    return NextResponse.json(followers, { status: 200 });
   }
 );

@@ -21,7 +21,10 @@ export type BlogWithoutContent = Prisma.BlogGetPayload<{
 
 export interface User
   extends Prisma.UserGetPayload<{
-    include: { socials: true; savedBlogs: true };
+    include: {
+      socials: true;
+      _count: { select: { follower: true } };
+    };
   }> {}
 export type Category = Prisma.CategoryGetPayload<{
   include: {

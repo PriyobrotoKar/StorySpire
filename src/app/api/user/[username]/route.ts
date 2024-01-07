@@ -10,7 +10,11 @@ export const GET = apiErrorHandler(
       },
       include: {
         socials: true,
-        savedBlogs: true,
+        _count: {
+          select: {
+            follower: true,
+          },
+        },
       },
     });
     return NextResponse.json(user, { status: 200 });
