@@ -32,7 +32,7 @@ const BlogArticleCard = ({
       }
     >
       <div
-        className="text-md font-semibold"
+        className="text-sm font-semibold"
         style={{ color: blog.categories[0]?.color }}
       >
         {showTopic && blog.categories.length
@@ -41,29 +41,9 @@ const BlogArticleCard = ({
         {readingTime(blog.length)} mins
       </div>
       <div className="flex-1">
-        <div
-          className={`flex h-full gap-4 ${
-            size === undefined
-              ? isFeatured
-                ? "flex-col lg:flex-row-reverse lg:gap-20"
-                : " flex-col sm:flex-row-reverse lg:gap-20 "
-              : size === "small"
-              ? "flex-col"
-              : "flex-row-reverse"
-          }`}
-        >
+        <div className={`flex h-full flex-row-reverse gap-4`}>
           <div
-            className={
-              "overflow-hidden rounded-xl transition-shadow " +
-              (size === undefined
-                ? "h-[10rem] lg:flex-1"
-                : size === "small"
-                ? "flex-[0_0_12rem]"
-                : "") +
-              (isFeatured
-                ? " h-[12rem] sm:h-[18rem]  md:shadow-xl md:group-hover:shadow-2xl lg:h-[18rem]"
-                : "")
-            }
+            className={`h-[8rem] flex-[0_0_8rem] overflow-hidden rounded-xl transition-shadow sm:h-[10rem] sm:flex-[0_0_16rem]`}
           >
             <Link
               href={
@@ -82,12 +62,7 @@ const BlogArticleCard = ({
             </Link>
           </div>
 
-          <div
-            className={
-              "flex  flex-1 flex-col justify-between gap-4 " +
-              (isFeatured ? "2xl:flex-[2_1_0%]" : "sm:flex-[2_1_0%]")
-            }
-          >
+          <div className={`flex  flex-1 flex-col justify-between gap-4`}>
             <Link
               href={
                 blog.author.username && blog.slug
@@ -98,7 +73,7 @@ const BlogArticleCard = ({
               <div className="space-y-2">
                 <h2
                   className={
-                    " font-semibold leading-tight " +
+                    " line-clamp-3 font-semibold leading-tight" +
                     (isFeatured
                       ? " text-xl font-bold lg:text-2xl 2xl:text-3xl"
                       : "text-lg")
@@ -108,7 +83,7 @@ const BlogArticleCard = ({
                 </h2>
                 <p
                   className={
-                    "line-clamp-3 leading-snug " +
+                    "hidden leading-snug sm:line-clamp-2 " +
                     (isFeatured
                       ? " font-medium lg:text-lg 2xl:text-xl"
                       : "text-md ")
@@ -128,11 +103,14 @@ const BlogArticleCard = ({
                 <>
                   <HoverCard>
                     <HoverCardTrigger asChild>
-                      <Link href={`/@${blog.author.username}`}>
-                        <div className="group/author  flex items-center gap-2">
+                      <Link
+                        className="min-w-0 flex-1"
+                        href={`/@${blog.author.username}`}
+                      >
+                        <div className="group/author flex items-center gap-2">
                           <div
                             className={
-                              "aspect-square  overflow-hidden rounded-full " +
+                              "aspect-square overflow-hidden rounded-full " +
                               (isFeatured ? "w-10" : "w-8")
                             }
                           >
@@ -147,7 +125,7 @@ const BlogArticleCard = ({
                               height={48}
                             />
                           </div>
-                          <div className="group-hover/author:underline">
+                          <div className="flex-1 truncate group-hover/author:underline">
                             {blog.author.fullname}
                           </div>
                         </div>
@@ -184,7 +162,7 @@ const BlogArticleCard = ({
                   <span>•</span>
                 </>
               )}
-              {formatDate(blog.createdAt)}
+              <p className="flex-[0_0_5rem]">{formatDate(blog.createdAt)}</p>
             </div>
           </div>
         </div>

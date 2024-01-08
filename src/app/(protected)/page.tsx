@@ -14,7 +14,7 @@ const RecentBlogs = ({ blogs }: { blogs: Blog[] }) => {
       <h2 className="text-xl font-bold">Recent Blogs</h2>
       <div className="grid grid-cols-1 gap-8 overflow-hidden sm:grid-cols-2  sm:gap-2 lg:auto-rows-[0rem] lg:grid-cols-3 lg:grid-rows-1 2xl:grid-cols-4">
         {blogs.map((blog) => {
-          return <BlogArticleCard size={"small"} key={blog.id} blog={blog} />;
+          return <BlogArticleCard key={blog.id} blog={blog} />;
         })}
       </div>
     </section>
