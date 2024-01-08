@@ -35,13 +35,10 @@ const user = async ({ params }: { params: { username: string } }) => {
   }
   const isSameUser = session?.user.username === user.username;
   const blogs = await fetchUserBlogs(username);
-  const { _count: followerCount } = await fetchFollowers(username);
   const { isFollowing } =
     session && !isSameUser
       ? await checkIsFollowing(session.user.username, username)
       : { isFollowing: false };
-
-
 
   return (
     <div className="flex min-h-[inherit] flex-col">
@@ -58,7 +55,7 @@ const user = async ({ params }: { params: { username: string } }) => {
       </section>
       <div className="flex-grow -translate-y-3  rounded-t-2xl bg-background  shadow-[0_-10px_50px_0] shadow-black/20">
         <div className="mx-auto flex flex-col  sm:container lg:flex-row">
-          <section className="relative z-10 flex-1 px-4 py-16 lg:py-20">
+          <section className="sticky top-20 z-10 flex-1 self-start px-4 py-16 lg:py-20">
             <div className="absolute -top-10 h-24 w-24 overflow-hidden rounded-full border-[4px] border-white shadow-lg lg:-top-16 lg:h-32 lg:w-32">
               <Image
                 src={user.profile_pic || "/images/avatarFallback.png"}
@@ -85,7 +82,7 @@ const user = async ({ params }: { params: { username: string } }) => {
                   @{user.username}
                 </p>
               </div>
-              <UserFollowerCount followerCount={followerCount} />
+              <UserFollowerCount followerCount={user._count.follower} />
               <p className="text-sm text-muted-foreground">{user.bio}</p>
               {user.location && (
                 <div className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -102,7 +99,7 @@ const user = async ({ params }: { params: { username: string } }) => {
                 isSameUser={isSameUser}
                 isFollowing={isFollowing}
                 targetUser={user}
-                followerCount={followerCount}
+                followerCount={user._count.follower}
               />
             </div>
           </section>
