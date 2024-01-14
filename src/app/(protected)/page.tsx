@@ -12,9 +12,9 @@ const RecentBlogs = ({ blogs }: { blogs: Blog[] }) => {
   return (
     <section className="space-y-4">
       <h2 className="text-xl font-bold">Recent Blogs</h2>
-      <div className="grid grid-cols-1 gap-8 overflow-hidden sm:grid-cols-2  sm:gap-2 lg:auto-rows-[0rem] lg:grid-cols-3 lg:grid-rows-1 2xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-8 overflow-hidden sm:auto-rows-[0rem]  sm:grid-cols-2 sm:grid-rows-2 sm:gap-2 lg:grid-cols-3 lg:grid-rows-1 2xl:grid-cols-4">
         {blogs.map((blog) => {
-          return <BlogArticleCard key={blog.id} blog={blog} />;
+          return <BlogArticleCard size="small" key={blog.id} blog={blog} />;
         })}
       </div>
     </section>
@@ -23,7 +23,7 @@ const RecentBlogs = ({ blogs }: { blogs: Blog[] }) => {
 
 const FeaturedBlogs = ({ blogs }: { blogs: Blog[] }) => {
   return (
-    <section className="grid grid-cols-1 grid-rows-2 gap-8 overflow-hidden sm:auto-rows-[0rem] sm:grid-cols-2  sm:gap-2  lg:grid-cols-3 2xl:grid-cols-4">
+    <section className="grid grid-cols-1 grid-rows-[auto_1fr] gap-8 overflow-hidden sm:auto-rows-[0rem] sm:grid-cols-2  sm:gap-2  lg:grid-cols-3 2xl:grid-cols-4">
       <div className="sm:col-span-2 lg:col-span-3 2xl:col-span-4">
         <BlogArticleCard blog={blogs[0]} isFeatured />
       </div>

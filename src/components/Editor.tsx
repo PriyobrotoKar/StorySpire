@@ -155,8 +155,8 @@ const Editor = () => {
     <div
       className={`relative ${showDialogue ? "h-[100svh] overflow-hidden" : ""}`}
     >
-      <article className="ignoreEditorjs mx-6 max-w-3xl space-y-2 pt-28 md:mx-auto">
-        <header className="flex items-center justify-between">
+      <article className="ignoreEditorjs mx-6 max-w-3xl space-y-2 pt-6 sm:pt-28 md:mx-auto">
+        <header className="mx-auto flex max-w-2xl items-center justify-between">
           <div className="text-sm  text-muted-foreground">
             {wordCount} Words
           </div>
@@ -182,7 +182,7 @@ const Editor = () => {
         <div className="md:mx-10">
           <label
             htmlFor="coverImg"
-            className="flex w-fit items-center gap-2 rounded-md px-3 py-1 font-medium hover:cursor-pointer hover:bg-secondary"
+            className="flex w-fit items-center gap-2 rounded-md font-medium hover:cursor-pointer md:px-3 md:py-1 md:hover:bg-secondary"
           >
             <FiImage />
             {coverImg.localPath ? "Change Cover" : "Add Cover"}
@@ -211,7 +211,7 @@ const Editor = () => {
             className="mx-auto max-w-2xl resize-none border-none p-0 text-2xl font-bold focus-visible:ring-0 focus-visible:ring-offset-0"
           />
         </div>
-        <div id="editorjs" className=""></div>
+        <div id="editorjs" className="md:-ml-4"></div>
       </article>
       <UploadModal
         showDialogue={showDialogue}

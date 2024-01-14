@@ -1,4 +1,5 @@
 import {
+  checkIsFollowing,
   fetchBlogViews,
   fetchSingleBlog,
   fetchSingleUser,
@@ -25,6 +26,7 @@ import BlogPostBookmark from "@/components/BlogPostBookmark";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import BlogPostLike from "@/components/BlogPostLike";
+import FollowUserButton from "@/components/FollowUserButton";
 
 const page = async ({
   params,
@@ -47,6 +49,13 @@ const page = async ({
   if (!blog) {
     return notFound();
   }
+  const isSameUser = session
+    ? session.user.username === blog.author.username
+    : false;
+  const { isFollowing } =
+    session && !isSameUser
+      ? await checkIsFollowing(session.user.username, blog.author.username)
+      : { isFollowing: false };
   const html = edjsParser.parse(blog.content as any);
   const { views } = await fetchBlogViews(blog.slug);
 
@@ -156,7 +165,13 @@ const page = async ({
             </div>
           </div>
         </div>
-        <Button>Follow</Button>
+        <FollowUserButton
+          showDesc={false}
+          isFollowing={isFollowing}
+          targetUsername={blog.author.username}
+          followerCount={blog.author._count.follower}
+          isSameUser={isSameUser}
+        />
       </section>
 
       <section className="mx-4">

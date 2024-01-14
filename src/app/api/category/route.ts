@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const GET = apiErrorHandler(async (req: NextRequest) => {
   const offset = req.nextUrl.searchParams.get("offset") ?? 0;
   const postCount = req.nextUrl.searchParams.get("post_count") ?? 0;
+  const limit = Number(postCount) === 0 ? 20 : 10;
   const categoriesCount = await client.category.aggregate({
     _count: true,
   });
@@ -16,7 +17,7 @@ export const GET = apiErrorHandler(async (req: NextRequest) => {
     },
 
     skip: Number(offset),
-    take: 10,
+    take: limit,
     include: {
       posts: {
         orderBy: {
@@ -34,7 +35,9 @@ export const GET = apiErrorHandler(async (req: NextRequest) => {
               createdAt: "desc",
             },
           },
-          author: true,
+          author: {
+            include: { _count: { select: { follower: true, blogs: true } } },
+          },
           createdAt: true,
         },
         take: Number(postCount),

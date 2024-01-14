@@ -86,7 +86,7 @@ const GeneralSettingsForms = () => {
         />
         <p className="text-sm text-muted-foreground">
           Your Profile URL: {BASE_URL + "/"}
-          <span className="font-medium">{input.username}</span>
+          <span className="font-medium">{"@" + input.username}</span>
         </p>
 
         <p

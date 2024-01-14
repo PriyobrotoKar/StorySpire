@@ -25,7 +25,7 @@ module.exports = {
       lg: "1.2rem",
       base: "1.125rem",
       md: "1rem",
-      sm: "0.75rem",
+      sm: "0.875rem",
     },
     extend: {
       colors: {

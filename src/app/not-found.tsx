@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 const NotFound = () => {
   const router = useRouter();
   return (
-    <div className="flex min-h-[inherit] items-center justify-center px-2 md:px-0">
+    <div className="flex min-h-[inherit] items-center justify-center px-6 md:px-0">
       <div>
         <p className="text-sm font-semibold text-black">404 error</p>
         <h1 className="mt-3 text-2xl font-semibold text-gray-800 md:text-3xl">

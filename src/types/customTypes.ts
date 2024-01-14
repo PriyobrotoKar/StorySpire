@@ -11,9 +11,14 @@ export interface BlogPreview {
   thumbnail: string;
   slug?: string;
   author: {
+    bio?: string;
     fullname: string;
     username?: string;
     profile_pic?: string;
+    _count: {
+      follower: number;
+      blogs: number;
+    };
   };
   createdAt: Date;
   categories: Tags[];

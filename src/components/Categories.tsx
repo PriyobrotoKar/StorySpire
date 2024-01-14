@@ -1,5 +1,5 @@
 "use client";
-import { Blog, Category } from "@/types/schemaTypes";
+import { Blog, BlogWithoutContent, Category } from "@/types/schemaTypes";
 import { capitalize } from "@/utils/helpers";
 import BlogArticleCard from "./BlogArticleCard";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -44,7 +44,7 @@ const Categories = ({
                 return (
                   <BlogArticleCard
                     key={post.id}
-                    blog={post as Blog}
+                    blog={post as BlogWithoutContent}
                     size="small"
                     showTopic={false}
                   />

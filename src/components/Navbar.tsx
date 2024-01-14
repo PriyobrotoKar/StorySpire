@@ -7,7 +7,7 @@ const Navbar = async () => {
   const session = await getServerSession(authOptions);
   return (
     <>
-      <MobileNavbar />
+      <MobileNavbar session={session} />
       <DesktopNavbar session={session} />
     </>
   );

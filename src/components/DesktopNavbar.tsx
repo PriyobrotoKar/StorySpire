@@ -19,7 +19,16 @@ import { FaRegUser } from "react-icons/fa6";
 import { PiNotePencil } from "react-icons/pi";
 import { signOut } from "next-auth/react";
 import { FiLogOut } from "react-icons/fi";
+import { LuSettings } from "react-icons/lu";
 import { useLayoutEffect } from "react";
+import TabGroup from "./TabGroup";
+
+const tabs = [
+  { id: "home", label: "Home", link: "/" },
+  { id: "explore", label: "Explore", link: "/explore" },
+  { id: "bookmark", label: "Bookmark", link: "/bookmarks" },
+  { id: "about", label: "About", link: "/" },
+];
 
 const DesktopNavbar = ({ session }: { session: Session | null }) => {
   const router = useRouter();
@@ -47,16 +56,7 @@ const DesktopNavbar = ({ session }: { session: Session | null }) => {
             !isAtBlogPage ? "text-foreground" : ""
           } `}
         >
-          <li>
-            <Link href={"/"}>Home</Link>
-          </li>
-          <li>
-            <Link href={"/explore"}>Explore</Link>
-          </li>
-          <li>
-            <Link href={"/bookmarks"}>Bookmarks</Link>
-          </li>
-          <li>About</li>
+          <TabGroup tabs={tabs} />
         </ul>
       </nav>
       <div className="flex items-center gap-6">
@@ -127,6 +127,12 @@ const DesktopNavbar = ({ session }: { session: Session | null }) => {
                 <DropdownMenuItem>
                   <PiNotePencil className="text-lg" />
                   Write
+                </DropdownMenuItem>
+              </Link>
+              <Link href={"/account"}>
+                <DropdownMenuItem>
+                  <LuSettings className="text-lg" />
+                  Settings
                 </DropdownMenuItem>
               </Link>
               <DropdownMenuSeparator />

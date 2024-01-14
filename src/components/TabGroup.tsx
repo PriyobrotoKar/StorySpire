@@ -1,17 +1,24 @@
 "use client";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
-const tabs = [
-  { id: "recent", label: "Recent" },
-  { id: "popular", label: "Popular" },
-  { id: "about", label: "About" },
-];
+interface TabProps {
+  id: string;
+  label: string;
+  link: string;
+}
+interface TabGroupProps {
+  tabs: TabProps[];
+}
 
-const UserPostNav = () => {
-  const [activeTab, setActiveTab] = useState("recent");
+const TabGroup = ({ tabs }: TabGroupProps) => {
+  const pathname = usePathname();
+  const currentTab = tabs.filter((tab) => tab.link === pathname);
+  const [activeTab, setActiveTab] = useState(currentTab[0]?.id);
   return (
-    <nav className=" border-b py-2">
+    <nav className=" ">
       <ul className="flex gap-6 text-md">
         {tabs.map((tab) => {
           return (
@@ -22,7 +29,7 @@ const UserPostNav = () => {
                 activeTab === tab.id && "text-primary"
               }`}
             >
-              {tab.label}
+              <Link href={tab.link}>{tab.label}</Link>
               {activeTab === tab.id && (
                 <motion.div
                   layoutId="indicator"
@@ -37,4 +44,4 @@ const UserPostNav = () => {
   );
 };
 
-export default UserPostNav;
+export default TabGroup;

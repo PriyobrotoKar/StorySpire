@@ -14,7 +14,16 @@ export const GET = apiErrorHandler(async (reqest: Request) => {
           createdAt: "desc",
         },
       },
-      author: true,
+      author: {
+        include: {
+          _count: {
+            select: {
+              follower: true,
+              blogs: true,
+            },
+          },
+        },
+      },
     },
     take: 5,
     orderBy: {

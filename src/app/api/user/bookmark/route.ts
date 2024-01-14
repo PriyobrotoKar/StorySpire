@@ -34,7 +34,16 @@ export const GET = apiErrorHandler(async (req: Request) => {
           createdAt: "desc",
         },
       },
-      author: true,
+      author: {
+        include: {
+          _count: {
+            select: {
+              follower: true,
+              blogs: true,
+            },
+          },
+        },
+      },
       createdAt: true,
     },
   });

@@ -11,7 +11,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import AddLinkBtn from "@/components/AddLinkBtn";
-import UserPostNav from "@/components/UserPostNav";
+import UserPostNav from "@/components/TabGroup";
 import { capitalize, formatDate, readingTime } from "@/utils/helpers";
 import { Blog, User } from "@/types/schemaTypes";
 import Link from "next/link";
@@ -20,6 +20,13 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import BlogArticleCard from "@/components/BlogArticleCard";
 import FollowUserButton from "@/components/FollowUserButton";
 import UserFollowerCount from "@/components/UserFollowerCount";
+import TabGroup from "@/components/TabGroup";
+
+const tabs = [
+  { id: "recent", label: "Recent", link: "/" },
+  { id: "popular", label: "Popular", link: "/" },
+  { id: "about", label: "About", link: "/" },
+];
 
 const user = async ({ params }: { params: { username: string } }) => {
   const session = await getServerSession(authOptions);
@@ -53,7 +60,7 @@ const user = async ({ params }: { params: { username: string } }) => {
           />
         )}
       </section>
-      <div className="flex-grow -translate-y-3  rounded-t-2xl bg-background  shadow-[0_-10px_50px_0] shadow-black/20">
+      <div className="flex-grow -translate-y-3  rounded-t-2xl bg-background  shadow-[0_-70px_60px_-40px] shadow-black/20">
         <div className="mx-auto flex flex-col  sm:container lg:flex-row">
           <section className="top-20 z-10 flex-1 self-start px-4 py-16 lg:sticky lg:py-20">
             <div className="absolute -top-10 h-24 w-24 overflow-hidden rounded-full border-[4px] border-white shadow-lg lg:-top-16 lg:h-32 lg:w-32">
@@ -66,14 +73,16 @@ const user = async ({ params }: { params: { username: string } }) => {
               />
             </div>
             {session?.user.username === user.username && (
-              <Button
-                variant={"outline"}
-                className="absolute right-6 top-6 lg:top-12"
-              >
-                Edit
-              </Button>
+              <Link href={"/account/profile"}>
+                <Button
+                  variant={"outline"}
+                  className="absolute right-6 top-6 lg:top-12"
+                >
+                  Edit
+                </Button>
+              </Link>
             )}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div>
                 <h1 className="text-xl font-bold text-secondary-foreground">
                   {user.fullname}
@@ -83,7 +92,9 @@ const user = async ({ params }: { params: { username: string } }) => {
                 </p>
               </div>
               <UserFollowerCount followerCount={user._count.follower} />
-              <p className="text-sm text-muted-foreground">{user.bio}</p>
+              <p className="text-md leading-snug text-muted-foreground">
+                {user.bio}
+              </p>
               {user.location && (
                 <div className="flex items-center gap-1 text-sm text-muted-foreground">
                   <HiOutlineLocationMarker />
@@ -98,13 +109,15 @@ const user = async ({ params }: { params: { username: string } }) => {
               <FollowUserButton
                 isSameUser={isSameUser}
                 isFollowing={isFollowing}
-                targetUser={user}
+                targetUsername={user.username}
                 followerCount={user._count.follower}
               />
             </div>
           </section>
           <section className="flex-[2_1_0%]  space-y-6 px-4 lg:py-12">
-            <UserPostNav />
+            <div className="border-b py-2">
+              <TabGroup tabs={tabs} />
+            </div>
             {!blogs.length && (
               <p className="my-32 text-center text-sm text-muted-foreground">
                 {user.fullname} hasn&apos;t written any blogs yet.

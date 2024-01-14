@@ -2,11 +2,11 @@
 
 import { useSession } from "next-auth/react";
 import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { deleteFetchAPi, postFetchAPi } from "@/utils/fetchData";
 import { User } from "@/types/schemaTypes";
 import { updateUser, updateUserPage } from "@/utils/fetchActions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   decreaseFollowers,
@@ -16,18 +16,27 @@ import {
 const FollowUserButton = ({
   isSameUser,
   isFollowing,
-  targetUser,
+  targetUsername,
   followerCount,
+  showDesc = true,
 }: {
   isSameUser: boolean;
-  isFollowing: boolean;
-  targetUser: User;
+  isFollowing: boolean | null;
+  showDesc?: boolean;
+  targetUsername: string;
   followerCount: number;
 }) => {
   const { data: session } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
   const [isFollowed, setIsFollowed] = useState(isFollowing);
   const dispatch = useDispatch();
+  const isUserPage = /^\/@([a-zA-Z0-9_]+)$/.test(pathname);
+  console.log(isFollowed);
+
+  useEffect(() => {
+    setIsFollowed(isFollowing);
+  }, [isFollowing]);
 
   const handleFollow = async () => {
     if (!session) {
@@ -38,24 +47,35 @@ const FollowUserButton = ({
       //TODO: unfollow the user
       setIsFollowed(false);
       dispatch(decreaseFollowers(followerCount));
-      await deleteFetchAPi(`/api/user/${targetUser.username}/follow`);
+      await deleteFetchAPi(`/api/user/${targetUsername}/follow`);
     } else {
       setIsFollowed(true);
       dispatch(increaseFollowers(followerCount));
-      await postFetchAPi(`/api/user/${targetUser.username}/follow`, {});
+      await postFetchAPi(`/api/user/${targetUsername}/follow`, {});
     }
-    updateUserPage(targetUser.username);
+    isUserPage ? updateUserPage(targetUsername) : router.refresh();
   };
+
+  if (isFollowed === null) {
+    return;
+  }
 
   return (
     <div>
       {!isSameUser && (
-        <div className="flex items-center justify-between gap-4 rounded-md border p-4">
-          <div className="text-sm font-medium">
-            {isFollowed
-              ? "You will be receiving all new updates in your activity feed or start page"
-              : "Follow to get new updates in your activity feed or start page"}
-          </div>
+        <div
+          className={
+            "flex items-center justify-between rounded-md  " +
+            (showDesc ? "  gap-4 border p-4 " : "")
+          }
+        >
+          {showDesc && (
+            <div className="text-sm font-medium">
+              {isFollowed
+                ? "You will be receiving all new updates in your activity feed or start page"
+                : "Follow to get new updates in your activity feed or start page"}
+            </div>
+          )}
           <Button
             onClick={handleFollow}
             variant={isFollowed ? "secondary" : "default"}
