@@ -51,14 +51,14 @@ const BlogArticleCard = ({
           }`}
         >
           <div
-            className={`h-[8rem] overflow-hidden rounded-xl transition-shadow ${
-              layout === "small" && "flex-[0_0_8rem]  sm:flex-[0_0_12rem]"
+            className={`h-[8rem]  overflow-hidden rounded-xl transition-shadow  ${
+              layout === "small" && "flex-[0_0_8rem] sm:flex-[0_0_12rem]"
             } ${
               layout === "isFeatured" &&
               " flex-[0_0_12rem] md:h-[12rem] md:flex-[0_0_18rem] lg:h-[16rem] lg:flex-[0_0_24rem] 2xl:h-[20rem] 2xl:flex-[0_0_32rem]"
             } ${
               layout === "large" &&
-              "sm:h-[10rem] sm:flex-[0_0_16rem] lg:h-[8rem] lg:flex-[0_0_12rem] 2xl:h-[10rem] 2xl:flex-[0_0_16rem]"
+              "flex-[0_0_8rem] sm:h-[10rem] sm:flex-[0_0_16rem] lg:h-[8rem] lg:flex-[0_0_12rem] 2xl:h-[10rem] 2xl:flex-[0_0_16rem]"
             }`}
           >
             <Link
@@ -89,11 +89,11 @@ const BlogArticleCard = ({
               <div className="space-y-2">
                 <h2
                   className={
-                    " line-clamp-3 font-semibold leading-tight " +
+                    " line-clamp-3 font-semibold leading-tight  " +
                     (layout === "isFeatured" &&
                       " text-xl font-bold lg:text-2xl 2xl:text-3xl ") +
                     (layout === "small" && " text-lg") +
-                    (layout === "large" && " text-xl")
+                    (layout === "large" && " text-lg sm:text-xl")
                   }
                 >
                   {blog.title}

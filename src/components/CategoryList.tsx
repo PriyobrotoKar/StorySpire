@@ -1,5 +1,5 @@
 import { Category } from "@/types/schemaTypes";
-import { fetchAllCategories } from "@/utils/fetchActions";
+import { fetchAllCategories, sleep } from "@/utils/fetchActions";
 import { capitalize, capitalizeSentence } from "@/utils/helpers";
 import {
   Carousel,

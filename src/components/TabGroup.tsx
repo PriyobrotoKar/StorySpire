@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface TabProps {
   id: string;
@@ -11,12 +11,20 @@ interface TabProps {
 }
 interface TabGroupProps {
   tabs: TabProps[];
+  // canHaveOtherLinks: boolean;
 }
 
 const TabGroup = ({ tabs }: TabGroupProps) => {
   const pathname = usePathname();
   const currentTab = tabs.filter((tab) => tab.link === pathname);
   const [activeTab, setActiveTab] = useState(currentTab[0]?.id);
+
+  useEffect(() => {
+    const validTab = tabs.filter((tab) => tab.link === pathname);
+    if (!validTab.length) {
+      setActiveTab("");
+    }
+  }, [pathname, tabs]);
   return (
     <nav className=" ">
       <ul className="flex gap-6 text-md">

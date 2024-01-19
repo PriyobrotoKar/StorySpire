@@ -1,12 +1,23 @@
 import Categories from "@/components/Categories";
 import CategoryList from "@/components/CategoryList";
+import CategoryListSkeletons from "@/components/skeletons/CategoryListSkeletons";
+import TopicSkeletons from "@/components/skeletons/TopicSkeletons";
 import { Input } from "@/components/ui/input";
-import { fetchAllCategories } from "@/utils/fetchActions";
-import React from "react";
+import { fetchAllCategories, sleep } from "@/utils/fetchActions";
+import React, { Suspense } from "react";
 import { FiSearch } from "react-icons/fi";
 
-const page = async () => {
+const CategorySection = async () => {
   const initialCategories = await fetchAllCategories(4);
+  return (
+    <Categories
+      initialCategories={initialCategories.categories}
+      total={initialCategories._count}
+    />
+  );
+};
+
+const page = () => {
   return (
     <div className="container space-y-10 ">
       <section className="space-y-6 pt-10 sm:pt-28">
@@ -27,11 +38,12 @@ const page = async () => {
           />
         </div>
       </section>
-      <CategoryList />
-      <Categories
-        initialCategories={initialCategories.categories}
-        total={initialCategories._count}
-      />
+      <Suspense fallback={<CategoryListSkeletons />}>
+        <CategoryList />
+      </Suspense>
+      <Suspense fallback={<TopicSkeletons />}>
+        <CategorySection />
+      </Suspense>
     </div>
   );
 };

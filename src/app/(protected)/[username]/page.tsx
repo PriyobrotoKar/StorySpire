@@ -3,8 +3,9 @@ import {
   fetchFollowers,
   fetchSingleUser,
   fetchUserBlogs,
+  sleep,
 } from "@/utils/fetchActions";
-import React from "react";
+import React, { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
@@ -21,14 +22,37 @@ import BlogArticleCard from "@/components/BlogArticleCard";
 import FollowUserButton from "@/components/FollowUserButton";
 import UserFollowerCount from "@/components/UserFollowerCount";
 import TabGroup from "@/components/TabGroup";
+import UserBlogsSkeletons from "@/components/skeletons/UserBlogsSkeletons";
 
-const tabs = [
-  { id: "recent", label: "Recent", link: "/" },
-  { id: "popular", label: "Popular", link: "/" },
-  { id: "about", label: "About", link: "/" },
-];
+const UserBlogs = async ({
+  username,
+  user,
+}: {
+  username: string;
+  user: User;
+}) => {
+  const blogs = await fetchUserBlogs(username);
+  return (
+    <>
+      {!blogs.length && (
+        <p className="my-32 text-center text-sm text-muted-foreground">
+          {user.fullname} hasn&apos;t written any blogs yet.
+        </p>
+      )}
+      {blogs.map((blog: Blog, i: number) => {
+        return (
+          <div key={blog.id} className="space-y-6">
+            <BlogArticleCard showAuthor={false} blog={blog} />
+            {i !== blogs.length - 1 && <hr />}
+          </div>
+        );
+      })}
+    </>
+  );
+};
 
 const user = async ({ params }: { params: { username: string } }) => {
+  await sleep(2000);
   const session = await getServerSession(authOptions);
   let { username } = params;
 
@@ -36,12 +60,17 @@ const user = async ({ params }: { params: { username: string } }) => {
     return notFound();
   }
   username = username.slice(3);
+  const tabs = [
+    { id: "recent", label: "Recent", link: `/@${username}` },
+    { id: "popular", label: "Popular", link: `/@${username}/` },
+    { id: "about", label: "About", link: `/@${username}/` },
+  ];
   const user: User = await fetchSingleUser(username);
   if (!user) {
     return notFound();
   }
   const isSameUser = session?.user.username === user.username;
-  const blogs = await fetchUserBlogs(username);
+
   const { isFollowing } =
     session && !isSameUser
       ? await checkIsFollowing(session.user.username, username)
@@ -118,19 +147,9 @@ const user = async ({ params }: { params: { username: string } }) => {
             <div className="border-b py-2">
               <TabGroup tabs={tabs} />
             </div>
-            {!blogs.length && (
-              <p className="my-32 text-center text-sm text-muted-foreground">
-                {user.fullname} hasn&apos;t written any blogs yet.
-              </p>
-            )}
-            {blogs.map((blog: Blog, i: number) => {
-              return (
-                <div key={blog.id} className="space-y-6">
-                  <BlogArticleCard showAuthor={false} blog={blog} />
-                  {i !== blogs.length - 1 && <hr />}
-                </div>
-              );
-            })}
+            <Suspense fallback={<UserBlogsSkeletons />}>
+              <UserBlogs user={user} username={username} />
+            </Suspense>
           </section>
         </div>
       </div>

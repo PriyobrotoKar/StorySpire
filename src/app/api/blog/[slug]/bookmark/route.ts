@@ -1,6 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import client from "@/lib/prisma";
 import apiErrorHandler, { ApiError } from "@/utils/apiErrorHandler";
+import { revalidate } from "@/utils/fetchActions";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
@@ -42,7 +43,7 @@ export const POST = apiErrorHandler(
         },
       },
     });
-    revalidatePath("/bookmarks");
+    revalidate("/bookmarks");
     revalidatePath(`/@${updatedBookmark.username}/${blog.slug}`);
 
     return NextResponse.json("Bookmark added successfully", { status: 200 });
