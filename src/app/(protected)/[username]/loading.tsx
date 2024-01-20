@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const Loading = () => {
   return (
-    <div>
+    <div className="-mt-32">
       <section>
         <Skeleton className="h-64 w-full rounded-none lg:h-[40svh]" />
       </section>

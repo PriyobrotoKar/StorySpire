@@ -6,7 +6,7 @@ const AccountLayout = ({
   children: React.ReactNode;
 }) => {
   return (
-    <section className="container mx-auto space-y-4 px-4 pb-20 pt-6 sm:py-20 lg:max-w-screen-lg lg:py-32">
+    <section className="container mx-auto space-y-4 px-4 pb-20  lg:max-w-screen-lg">
       <h1 className="text-xl font-bold">Account Settings:</h1>
       <main className="flex flex-col gap-4 md:flex-row md:gap-12 ">
         <AccountSidebar />

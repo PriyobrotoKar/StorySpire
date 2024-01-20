@@ -1,6 +1,6 @@
 "use client";
 
-import { useMotionValueEvent, useScroll, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -34,18 +34,10 @@ import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { FiLogOut } from "react-icons/fi";
 import { signOut } from "next-auth/react";
+import useToggleNavbar from "@/hooks/useToggleNavbar";
 
 const MobileNavbar = ({ session }: { session: Session | null }) => {
-  const [showNav, setShowNav] = useState(true);
-  const { scrollY } = useScroll();
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious();
-    if (latest < previous) {
-      setShowNav(true);
-    } else {
-      setShowNav(false);
-    }
-  });
+  const showNav = useToggleNavbar();
   const pathname = usePathname();
   const router = useRouter();
   return (

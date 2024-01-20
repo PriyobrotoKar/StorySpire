@@ -77,7 +77,7 @@ const user = async ({ params }: { params: { username: string } }) => {
       : { isFollowing: false };
 
   return (
-    <div className="flex min-h-[inherit] flex-col">
+    <div className="flex min-h-[inherit] flex-col sm:-mt-32">
       <section className="lg:mih-h-[20rem] h-[16rem] bg-muted-foreground/20 lg:h-[40svh] ">
         {user.cover_pic && (
           <Image
