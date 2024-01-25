@@ -1,6 +1,6 @@
 import { GeneralSettingsForms } from "@/components/AccountSettingsForms";
 
-const page = () => {
+const page = async () => {
   return (
     <>
       <GeneralSettingsForms />

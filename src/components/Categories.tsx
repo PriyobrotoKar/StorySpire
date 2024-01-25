@@ -1,5 +1,5 @@
 "use client";
-import { Blog, Category } from "@/types/schemaTypes";
+import { Blog, BlogWithoutContent, Category } from "@/types/schemaTypes";
 import { capitalize } from "@/utils/helpers";
 import BlogArticleCard from "./BlogArticleCard";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -31,7 +31,7 @@ const Categories = ({
             <div className="flex justify-between gap-8">
               <h2 className="text-xl font-bold">{capitalize(topic.name)}</h2>
               <Link href={`/explore/${topic.name.toLowerCase()}`}>
-                <Button className="group gap-2">
+                <Button variant={"link"} className="group gap-2">
                   View All
                   <FaArrowRightLong
                     className={"transition delay-75 group-hover:translate-x-1"}
@@ -44,7 +44,7 @@ const Categories = ({
                 return (
                   <BlogArticleCard
                     key={post.id}
-                    blog={post as Blog}
+                    blog={post as BlogWithoutContent}
                     size="small"
                     showTopic={false}
                   />

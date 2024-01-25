@@ -4,30 +4,37 @@ import { Button } from "@/components/ui/button";
 
 import { FiSearch } from "react-icons/fi";
 import { Input } from "@/components/ui/input";
-import { fetchFeaturedBlogs, fetchRecentBlogs } from "@/utils/fetchActions";
+import {
+  fetchFeaturedBlogs,
+  fetchRecentBlogs,
+  sleep,
+} from "@/utils/fetchActions";
 import { Blog } from "@/types/schemaTypes";
 import BlogArticleCard from "@/components/BlogArticleCard";
+import { Suspense } from "react";
+import FeaturedSkeletons from "@/components/skeletons/FeaturedSkeletons";
+import BlogPostGridSkeleton from "@/components/skeletons/BlogPostGridSkeleton";
 
-const RecentBlogs = ({ blogs }: { blogs: Blog[] }) => {
+const RecentBlogs = async () => {
+  const recentBlogs: Blog[] = await fetchRecentBlogs(4);
   return (
-    <section className="space-y-4">
-      <h2 className="text-xl font-bold">Recent Blogs</h2>
-      <div className="grid grid-cols-1 gap-8 overflow-hidden sm:grid-cols-2  sm:gap-2 lg:auto-rows-[0rem] lg:grid-cols-3 lg:grid-rows-1 2xl:grid-cols-4">
-        {blogs.map((blog) => {
-          return <BlogArticleCard size={"small"} key={blog.id} blog={blog} />;
-        })}
-      </div>
-    </section>
+    <div className="grid grid-cols-1 gap-8 overflow-hidden sm:auto-rows-[0rem]  sm:grid-cols-2 sm:grid-rows-2 sm:gap-2 lg:grid-cols-3 lg:grid-rows-1 2xl:grid-cols-4">
+      {recentBlogs.map((blog) => {
+        return <BlogArticleCard size="small" key={blog.id} blog={blog} />;
+      })}
+    </div>
   );
 };
 
-const FeaturedBlogs = ({ blogs }: { blogs: Blog[] }) => {
+const FeaturedBlogs = async () => {
+  const featuredBlogs: Blog[] = await fetchFeaturedBlogs();
+
   return (
-    <section className="grid grid-cols-1 grid-rows-2 gap-8 overflow-hidden sm:auto-rows-[0rem] sm:grid-cols-2  sm:gap-2  lg:grid-cols-3 2xl:grid-cols-4">
+    <section className="grid grid-cols-1 grid-rows-[auto_1fr] gap-8 overflow-hidden sm:auto-rows-[0rem] sm:grid-cols-2  sm:gap-2  lg:grid-cols-3 2xl:grid-cols-4">
       <div className="sm:col-span-2 lg:col-span-3 2xl:col-span-4">
-        <BlogArticleCard blog={blogs[0]} isFeatured />
+        <BlogArticleCard blog={featuredBlogs[0]} isFeatured />
       </div>
-      {blogs.map((blog, i: number) => {
+      {featuredBlogs.map((blog, i: number) => {
         if (i === 0) return;
         return <BlogArticleCard size={"small"} key={blog.id} blog={blog} />;
       })}
@@ -36,11 +43,9 @@ const FeaturedBlogs = ({ blogs }: { blogs: Blog[] }) => {
 };
 
 export default async function Home() {
-  const recentBlogs = await fetchRecentBlogs(4);
-  const featuredBlogs = await fetchFeaturedBlogs();
   return (
     <div>
-      <section className="space-y-6 pt-10 sm:pt-28">
+      <section className="space-y-6 ">
         <main className="space-y-4 text-center">
           <h1 className="mx-auto w-[22rem] text-3xl font-bold leading-tight text-secondary-foreground">
             Discover <span className="text-primary">Untold</span> Stories
@@ -59,8 +64,15 @@ export default async function Home() {
         </div>
       </section>
       <div className="container mx-auto mt-10 space-y-10">
-        <FeaturedBlogs blogs={featuredBlogs} />
-        <RecentBlogs blogs={recentBlogs} />
+        <Suspense fallback={<FeaturedSkeletons />}>
+          <FeaturedBlogs />
+        </Suspense>
+        <section className="space-y-4">
+          <h2 className="text-xl font-bold">Recent Blogs</h2>
+          <Suspense fallback={<BlogPostGridSkeleton />}>
+            <RecentBlogs />
+          </Suspense>
+        </section>
       </div>
     </div>
   );

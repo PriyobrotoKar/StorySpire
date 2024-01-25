@@ -2,7 +2,12 @@ import { Prisma } from "@prisma/client";
 
 export interface Blog
   extends Prisma.BlogGetPayload<{
-    include: { categories: true; author: true };
+    include: {
+      categories: true;
+      author: {
+        include: { _count: { select: { follower: true; blogs: true } } };
+      };
+    };
   }> {}
 
 export type BlogWithoutContent = Prisma.BlogGetPayload<{
@@ -14,7 +19,9 @@ export type BlogWithoutContent = Prisma.BlogGetPayload<{
     length: true;
     slug: true;
     categories: true;
-    author: true;
+    author: {
+      include: { _count: { select: { follower: true; blogs: true } } };
+    };
     createdAt: true;
   };
 }>;

@@ -112,7 +112,15 @@ export const GET = apiErrorHandler(
             createdAt: "desc",
           },
         },
-        author: true,
+        author: {
+          include: {
+            _count: {
+              select: {
+                follower: true,
+              },
+            },
+          },
+        },
         savedBy: {
           where: {
             username: session ? session.user.username : "",

@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 
 export default function ProtectedLayout({
@@ -6,10 +7,12 @@ export default function ProtectedLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="min-h-[inherit]">
-      <Navbar />
-
-      {children}
+    <section className="flex min-h-[inherit] flex-col gap-12">
+      <div>
+        <Navbar />
+        <div className="pt-14 sm:pt-24">{children}</div>
+      </div>
+      <Footer />
     </section>
   );
 }

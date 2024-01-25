@@ -4,9 +4,18 @@ import { headers } from "next/headers";
 import { ApiError } from "./apiErrorHandler";
 import { revalidatePath, revalidateTag } from "next/cache";
 
+export async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export const updateUser = async () => {
   revalidateTag("user");
 };
+
+export const revalidate = async (path: string) => {
+  revalidatePath(path);
+};
+
 export const updateUserPage = async (username: string) => {
   revalidatePath(`/@${username}`);
 };

@@ -1,6 +1,7 @@
 "use client";
 
 import { Blog, User } from "@/types/schemaTypes";
+import { revalidate } from "@/utils/fetchActions";
 import { deleteFetchAPi, postFetchAPi } from "@/utils/fetchData";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -21,9 +22,11 @@ const BlogPostBookmark = ({
       if (isBookmarked) {
         setIsBookmarked(false);
         await deleteFetchAPi(`/api/blog/${blog.slug}/bookmark`);
+        router.refresh();
       } else {
         setIsBookmarked(true);
         await postFetchAPi(`/api/blog/${blog.slug}/bookmark`, {});
+        router.refresh();
       }
     } else {
       router.push("/login");

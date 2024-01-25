@@ -37,7 +37,7 @@ const SocialButtons = ({ social }: { social: Social }) => {
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         variant={"secondary"}
-        className="space-x-2 pl-2  pr-4 text-sm"
+        className="space-x-2 pl-1.5  pr-4 text-sm"
         style={{
           backgroundColor: `${
             socialObj[social.name as keyof typeof socialObj]?.color +
@@ -46,7 +46,7 @@ const SocialButtons = ({ social }: { social: Social }) => {
         }}
       >
         <span
-          className="rounded-[6px] bg-slate-300  p-1.5 text-slate-500"
+          className="rounded-[6px] bg-slate-300  p-1.5 text-md text-slate-500"
           style={{
             backgroundColor:
               socialObj[social.name as keyof typeof socialObj]?.color,

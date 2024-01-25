@@ -4,7 +4,7 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 import client from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export const GET = apiErrorHandler(async (req: Request) => {
+export const GET = apiErrorHandler(async () => {
   const session = await getServerSession(authOptions);
   if (!session) {
     throw new ApiError(
@@ -34,7 +34,16 @@ export const GET = apiErrorHandler(async (req: Request) => {
           createdAt: "desc",
         },
       },
-      author: true,
+      author: {
+        include: {
+          _count: {
+            select: {
+              follower: true,
+              blogs: true,
+            },
+          },
+        },
+      },
       createdAt: true,
     },
   });

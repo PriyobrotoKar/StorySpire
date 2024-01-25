@@ -139,7 +139,11 @@ const UploadModal = ({
         <hr className="md:hidden" />
         <div className="mx-auto flex max-w-md flex-col  gap-8 md:max-w-full md:flex-row">
           <section className="  flex-1 space-y-6">
-            <BlogArticleCard size={"small"} blog={blog} />
+            <BlogArticleCard
+              size={"small"}
+              blog={blog as BlogPreview}
+              disableHoverCard={true}
+            />
           </section>
           <section className="flex-1 space-y-6">
             <div className="space-y-2">
