@@ -56,7 +56,7 @@ const DesktopNavbar = ({ session }: { session: Session | null }) => {
           animate={showNav ? "visible" : "hidden"}
           transition={{ duration: 0.2, ease: "easeIn" }}
           className={
-            "sticky top-0 z-10 hidden  w-full justify-between border-b border-b-foreground/10  px-4 py-3 text-secondary backdrop-blur sm:flex " +
+            "fixed top-0 z-10 hidden  w-full justify-between border-b border-b-foreground/10  px-4 py-3 text-secondary backdrop-blur sm:flex " +
             (isAtBlogPage ? "bg-background/5" : "bg-background/60")
           }
         >

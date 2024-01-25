@@ -5,13 +5,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const Loading = () => {
   return (
-    <div className="-mt-32">
+    <div className="-mt-14 sm:-mt-24">
       <section>
         <Skeleton className="h-64 w-full rounded-none lg:h-[40svh]" />
       </section>
-      <section className="min-h-screen w-full -translate-y-2  rounded-2xl bg-muted  ">
-        <div className="container mx-auto flex flex-col  lg:flex-row">
-          <div className="px-4 py-16 lg:flex-1 lg:py-24">
+      <section className="min-h-screen w-full -translate-y-2 rounded-2xl bg-muted sm:px-4  ">
+        <div className="container mx-auto flex flex-col   lg:flex-row">
+          <div className="py-16  lg:flex-1 lg:py-24">
             <div className="absolute -top-10 h-24 w-24 overflow-hidden rounded-full border-[4px] border-white bg-muted lg:-top-16 lg:h-32  lg:w-32 ">
               <Skeleton />
             </div>

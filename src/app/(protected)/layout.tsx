@@ -10,7 +10,7 @@ export default function ProtectedLayout({
     <section className="flex min-h-[inherit] flex-col gap-12">
       <div>
         <Navbar />
-        <div className="sm:pt-14">{children}</div>
+        <div className="pt-14 sm:pt-24">{children}</div>
       </div>
       <Footer />
     </section>

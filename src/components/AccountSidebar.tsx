@@ -41,7 +41,7 @@ const MobileSidebar = () => {
   return (
     <aside className="md:hidden">
       <Select
-        defaultValue={pathname.slice(pathname.lastIndexOf("/") + 1)}
+        defaultValue={pathname}
         onValueChange={(value) => router.push(value)}
       >
         <SelectTrigger className="w-full">
@@ -50,7 +50,7 @@ const MobileSidebar = () => {
         <SelectContent>
           {navItems.map((item, i: number) => {
             return (
-              <SelectItem key={i + 1} value={item.path.slice(1)}>
+              <SelectItem key={i + 1} value={item.path}>
                 {item.name}
               </SelectItem>
             );
