@@ -98,6 +98,7 @@ const user = async ({ params }: { params: { username: string } }) => {
                 alt="user profile picture"
                 width={150}
                 height={150}
+                priority
                 className="h-full w-full object-cover"
               />
             </div>
