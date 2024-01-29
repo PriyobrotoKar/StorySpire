@@ -2,23 +2,23 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
+import Code from "@editorjs/code";
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
-import Underline from "@editorjs/underline";
-import List from "@editorjs/list";
-import Code from "@editorjs/code";
-import InlineCode from "@editorjs/inline-code";
-import Quote from "@editorjs/quote";
 import ImageTool from "@editorjs/image";
+import InlineCode from "@editorjs/inline-code";
+import List from "@editorjs/list";
+import Quote from "@editorjs/quote";
+import Underline from "@editorjs/underline";
 
-import { Textarea } from "./ui/textarea";
 import { FiImage } from "react-icons/fi";
+import { Textarea } from "./ui/textarea";
 
-import useAutosizeTextArea from "../hooks/useAutoSizeTextArea";
 import { uploadToCloud } from "@/utils/uploadToCloudinary";
-import { Button } from "./ui/button";
-import UploadModal from "./UploadModal";
 import Image from "next/image";
+import useAutosizeTextArea from "../hooks/useAutoSizeTextArea";
+import UploadModal from "./UploadModal";
+import { Button } from "./ui/button";
 
 const Editor = () => {
   const ref = useRef<EditorJS | null>();
@@ -150,12 +150,17 @@ const Editor = () => {
       setMounted(true);
     }
   }, []);
+  useEffect(() => {
+    if (showDialogue) {
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.documentElement.style.overflow = "auto";
+    }
+  }, [showDialogue]);
 
   return (
-    <div
-      className={`relative ${showDialogue ? "h-[100svh] overflow-hidden" : ""}`}
-    >
-      <article className="ignoreEditorjs mx-6 max-w-3xl space-y-2 pt-6 sm:pt-28 md:mx-auto">
+    <div className={` ${showDialogue ? "h-[100svh] overflow-hidden" : ""}`}>
+      <article className="ignoreEditorjs mx-6 max-w-3xl space-y-2 pt-6  md:mx-auto">
         <header className="mx-auto flex max-w-2xl items-center justify-between">
           <div className="text-sm  text-muted-foreground">
             {wordCount} Words

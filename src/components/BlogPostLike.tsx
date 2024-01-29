@@ -22,10 +22,12 @@ const BlogPostLike = ({
         setIsLiked(false);
         setLikes(likes - 1);
         await deleteFetchAPi(`/api/blog/${blog.slug}/like`);
+        router.refresh();
       } else {
         setIsLiked(true);
         setLikes(likes + 1);
         await postFetchAPi(`/api/blog/${blog.slug}/like`, {});
+        router.refresh();
       }
     } else {
       router.push("/login");

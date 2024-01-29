@@ -1,5 +1,4 @@
 import SearchBar from "@/components/SearchBar";
-import Image from "next/image";
 
 const page = () => {
   return (
@@ -19,13 +18,13 @@ const page = () => {
         {/* <p className="hidden text-md text-muted-foreground sm:block">
           Search for blogs, topics and authors
         </p> */}
-        <Image
+        {/* <Image
           src={"/images/search.svg"}
           alt="search"
           width={300}
           height={300}
           className="mx-auto sm:w-[50vw] sm:max-w-2xl"
-        />
+        /> */}
       </section>
     </div>
   );

@@ -31,7 +31,7 @@ const SearchBar = () => {
       return;
     }
 
-    const res = await fetchDataFromApi("/api/search", { q: value });
+    const res = await fetchDataFromApi("/api/searchSuggestions", { q: value });
     setSearchResults(res);
   };
 

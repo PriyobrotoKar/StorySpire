@@ -1,8 +1,8 @@
 "use server";
 import { BASE_URL } from "@/constants/constant";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { ApiError } from "./apiErrorHandler";
-import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -126,6 +126,16 @@ export const checkIsFollowingTopic = async (category_name: string) => {
     {
       method: "GET",
       headers: headers(),
+    }
+  );
+  return await response.json();
+};
+export const searchBlogs = async (query: string, offset = 0) => {
+  const response = await fetch(
+    `${BASE_URL}/api/search/blogs?q=${query}&offset=${offset}`,
+    {
+      method: "GET",
+      // headers: headers(),
     }
   );
   return await response.json();

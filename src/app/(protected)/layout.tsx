@@ -8,7 +8,7 @@ export default function ProtectedLayout({
 }) {
   return (
     <section className="flex min-h-[inherit] flex-col gap-12">
-      <div>
+      <div className="flex-1">
         <Navbar />
         <div className="pt-14 sm:pt-24">{children}</div>
       </div>
