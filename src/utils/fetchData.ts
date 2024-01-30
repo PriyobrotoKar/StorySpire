@@ -4,7 +4,7 @@ import { ApiError } from "./apiErrorHandler";
 
 export const fetchDataFromApi = async (
   url: string,
-  params: { [key: string]: string }
+  params?: { [key: string]: string }
 ) => {
   try {
     const qparams = new URLSearchParams(params);

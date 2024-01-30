@@ -14,7 +14,6 @@ const useInfiniteScroll = <T>(
     const loadMoreItems = async () => {
       const next = offset + 10;
       const res = await fetchItems(...(args as []), next);
-      console.log(res);
       const newItems = Object.values(res)[0] as T[];
       if (newItems?.length) {
         setOffset(next);

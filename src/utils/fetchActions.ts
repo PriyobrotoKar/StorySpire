@@ -140,3 +140,13 @@ export const searchBlogs = async (query: string, offset = 0) => {
   );
   return await response.json();
 };
+export const searchUsers = async (query: string, offset = 0) => {
+  const response = await fetch(
+    `${BASE_URL}/api/search/users?q=${query}&offset=${offset}`,
+    {
+      method: "GET",
+      // headers: headers(),
+    }
+  );
+  return await response.json();
+};
