@@ -14,7 +14,6 @@ type UserCardProps = {
 const UserCard = ({ user, session }: UserCardProps) => {
   const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
   const isSameUser = session ? session.user.username === user.username : false;
-  console.log(user._count.follower);
   useEffect(() => {
     const getIsFollowing = async () => {
       const data =

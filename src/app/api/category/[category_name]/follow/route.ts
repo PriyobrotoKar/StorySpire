@@ -42,8 +42,6 @@ export const GET = apiErrorHandler(
       },
     });
 
-    console.log(isFollowing);
-
     return NextResponse.json(
       { isFollowing: !!isFollowing },
       {

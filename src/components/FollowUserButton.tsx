@@ -31,7 +31,6 @@ const FollowUserButton = ({
   const [isFollowed, setIsFollowed] = useState(isFollowing);
   const dispatch = useDispatch();
   const isUserPage = /^\/@([a-zA-Z0-9_]+)$/.test(pathname);
-  console.log(isFollowed);
 
   useEffect(() => {
     setIsFollowed(isFollowing);

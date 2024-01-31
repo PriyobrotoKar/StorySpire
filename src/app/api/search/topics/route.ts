@@ -7,7 +7,7 @@ export const GET = apiErrorHandler(async (req: NextRequest) => {
   //   const session = await getServerSession(authOptions);
   const query = req.nextUrl.searchParams.get("q");
   const offset = req.nextUrl.searchParams.get("offset") ?? 0;
-  const userCount = req.nextUrl.searchParams.get("user_count") ?? 10;
+  const topicCount = req.nextUrl.searchParams.get("topic_count") ?? 20;
 
   if (!query) {
     throw new ApiError(
@@ -17,44 +17,27 @@ export const GET = apiErrorHandler(async (req: NextRequest) => {
     );
   }
 
-  const dbQuery: Prisma.UserWhereInput | undefined = {
-    OR: [
-      {
-        username: {
-          contains: query,
-          mode: "insensitive",
-        },
-      },
-      {
-        fullname: {
-          contains: query,
-          mode: "insensitive",
-        },
-      },
-    ],
+  const dbQuery: Prisma.CategoryWhereInput | undefined = {
+    name: {
+      contains: query,
+      mode: "insensitive",
+    },
   };
 
-  const users = await client.user.findMany({
+  const topics = await client.category.findMany({
     where: dbQuery,
     select: {
       id: true,
-      fullname: true,
-      username: true,
-      bio: true,
-      profile_pic: true,
-      _count: {
-        select: {
-          follower: true,
-        },
-      },
+      color: true,
+      name: true,
     },
-    take: Number(userCount),
+    take: Number(topicCount),
     skip: Number(offset),
   });
 
-  const resultCount = await client.user.count({
+  const resultCount = await client.category.count({
     where: dbQuery,
   });
 
-  return NextResponse.json({ users, _count: resultCount }, { status: 200 });
+  return NextResponse.json({ topics, _count: resultCount }, { status: 200 });
 });

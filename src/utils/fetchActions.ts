@@ -150,3 +150,13 @@ export const searchUsers = async (query: string, offset = 0) => {
   );
   return await response.json();
 };
+export const searchTopics = async (query: string, offset = 0) => {
+  const response = await fetch(
+    `${BASE_URL}/api/search/topics?q=${query}&offset=${offset}`,
+    {
+      method: "GET",
+      // headers: headers(),
+    }
+  );
+  return await response.json();
+};
