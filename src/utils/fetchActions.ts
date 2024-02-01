@@ -160,3 +160,11 @@ export const searchTopics = async (query: string, offset = 0) => {
   );
   return await response.json();
 };
+
+export const fetchRecentSearches = async () => {
+  const response = await fetch(`${BASE_URL}/api/search/recents`, {
+    method: "GET",
+    headers: headers(),
+  });
+  return await response.json();
+};

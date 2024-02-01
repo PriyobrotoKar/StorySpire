@@ -1,6 +1,17 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import DeleteSearchItem from "@/components/DeleteSearchItem";
 import SearchBar from "@/components/SearchBar";
+import { Separator } from "@/components/ui/separator";
+import { fetchRecentSearches } from "@/utils/fetchActions";
+import { UserSearchHistory } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import Link from "next/link";
 
-const page = () => {
+const page = async () => {
+  const session = await getServerSession(authOptions);
+  const searches: UserSearchHistory[] = session
+    ? await fetchRecentSearches()
+    : [];
   return (
     <div>
       <section className="space-y-6 ">
@@ -14,17 +25,29 @@ const page = () => {
         </main>
         <SearchBar />
       </section>
-      <section className="container my-16 text-center">
-        {/* <p className="hidden text-md text-muted-foreground sm:block">
-          Search for blogs, topics and authors
-        </p> */}
-        {/* <Image
-          src={"/images/search.svg"}
-          alt="search"
-          width={300}
-          height={300}
-          className="mx-auto sm:w-[50vw] sm:max-w-2xl"
-        /> */}
+      <section className="container my-8 max-w-screen-md px-4">
+        {session && (
+          <>
+            <h2 className="text-xl font-medium">Recent Searches</h2>
+            <Separator />
+            {searches.map((search) => {
+              return (
+                <div
+                  key={search.id}
+                  className="flex items-center justify-between rounded-md px-2 py-2 hover:bg-muted"
+                >
+                  <Link
+                    className="flex-1"
+                    href={`/search/blogs?q=${search.searchQuery}`}
+                  >
+                    <p>{search.searchQuery}</p>
+                  </Link>
+                  <DeleteSearchItem id={search.id} />
+                </div>
+              );
+            })}
+          </>
+        )}
       </section>
     </div>
   );

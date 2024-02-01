@@ -1,11 +1,10 @@
 import { BlogPreview } from "@/types/customTypes";
-import { Blog, BlogWithoutContent } from "@/types/schemaTypes";
+import { BlogWithoutContent } from "@/types/schemaTypes";
 import { capitalize, formatDate, readingTime } from "@/utils/helpers";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { Avatar, AvatarImage } from "./ui/avatar";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { Separator } from "./ui/separator";
 
 const BlogArticleCard = ({
@@ -85,6 +84,7 @@ const BlogArticleCard = ({
                   ? `/@${blog.author.username}/${blog.slug}`
                   : "/write"
               }
+              className="flex-1"
             >
               <div className="space-y-2">
                 <h2

@@ -29,7 +29,7 @@ const UserCard = ({ user, session }: UserCardProps) => {
 
   return (
     <div className="group flex items-center justify-between gap-4 rounded-xl p-4 transition-all hover:bg-muted">
-      <Link href={`/@${user.username}`}>
+      <Link className="flex-1" href={`/@${user.username}`}>
         <div className="flex gap-4">
           <div className="h-14 min-w-[3.5rem] overflow-hidden rounded-full transition-shadow group-hover:shadow-xl">
             <Image
