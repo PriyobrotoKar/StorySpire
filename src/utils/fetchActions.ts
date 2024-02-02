@@ -168,3 +168,14 @@ export const fetchRecentSearches = async () => {
   });
   return await response.json();
 };
+
+export const addRecentSearch = async (query: string) => {
+  const res = await fetch(`${BASE_URL}/api/search/recents`, {
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    headers: headers(),
+  });
+  console.log(await res.json());
+};

@@ -28,8 +28,13 @@ const page = async () => {
       <section className="container my-8 max-w-screen-md px-4">
         {session && (
           <>
-            <h2 className="text-xl font-medium">Recent Searches</h2>
+            <h2 className="text-xl font-semibold">Recent Searches</h2>
             <Separator />
+            {!searches.length && (
+              <p className="my-10 text-center text-md text-muted-foreground">
+                You have no recent searches
+              </p>
+            )}
             {searches.map((search) => {
               return (
                 <div

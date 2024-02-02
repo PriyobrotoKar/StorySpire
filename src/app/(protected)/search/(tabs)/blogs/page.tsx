@@ -1,5 +1,6 @@
 import SearchResults from "@/components/SearchResults";
-import { searchBlogs } from "@/utils/fetchActions";
+import { addRecentSearch, searchBlogs } from "@/utils/fetchActions";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 const page = async ({
@@ -10,8 +11,11 @@ const page = async ({
   if (!("q" in searchParams) || !searchParams.q) {
     redirect("/search");
   }
+  const addSearchPromise = addRecentSearch(searchParams.q);
+  const blogsPromise = searchBlogs(searchParams.q);
+  const [initialResults] = await Promise.all([blogsPromise, addSearchPromise]);
+  revalidatePath("/search", "page");
 
-  const initialResults = await searchBlogs(searchParams.q);
   return (
     <div>
       <SearchResults

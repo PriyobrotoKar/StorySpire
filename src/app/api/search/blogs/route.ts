@@ -59,7 +59,7 @@ export const GET = apiErrorHandler(async (req: NextRequest) => {
     ],
   };
 
-  const blogs = await client.blog.findMany({
+  const blogsPromise = client.blog.findMany({
     where: dbQuery,
     select: {
       title: true,
@@ -81,10 +81,11 @@ export const GET = apiErrorHandler(async (req: NextRequest) => {
     take: Number(postCount),
     skip: Number(offset),
   });
-
-  const resultCount = await client.blog.count({
+  const countPromise = client.blog.count({
     where: dbQuery,
   });
+
+  const [blogs, resultCount] = await Promise.all([blogsPromise, countPromise]);
 
   return NextResponse.json({ blogs, _count: resultCount }, { status: 200 });
 });
