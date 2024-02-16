@@ -1,9 +1,10 @@
 import client from "@/lib/prisma";
 import apiErrorHandler, { ApiError } from "@/utils/apiErrorHandler";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const GET = apiErrorHandler(
-  async (req: Request, { params }: { params: { username: string } }) => {
+  async (req: NextRequest, { params }: { params: { username: string } }) => {
+    const limit = req.nextUrl.searchParams.get("limit") ?? 0;
     const user = await client.user.findUnique({
       where: {
         username: params.username,
@@ -30,14 +31,24 @@ export const GET = apiErrorHandler(
       orderBy: {
         createdAt: "desc",
       },
-      include: {
+      select: {
+        title: true,
+        thumbnail: true,
+        description: true,
+        id: true,
+        length: true,
+        slug: true,
         categories: {
           orderBy: {
             createdAt: "desc",
           },
         },
-        author: true,
+        author: {
+          include: { _count: { select: { follower: true, blogs: true } } },
+        },
+        createdAt: true,
       },
+      ...(limit && { take: Number(limit) }),
     });
 
     return NextResponse.json(blogs, { status: 200 });

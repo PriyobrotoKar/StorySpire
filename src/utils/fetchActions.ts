@@ -44,10 +44,13 @@ export const fetchSingleBlog = async (slug: string) => {
   }
 };
 
-export const fetchUserBlogs = async (username: string) => {
-  const response = await fetch(`${BASE_URL}/api/user/${username}/blogs`, {
-    method: "GET",
-  });
+export const fetchUserBlogs = async (username: string, limit?: number) => {
+  const response = await fetch(
+    `${BASE_URL}/api/user/${username}/blogs${limit ? `?limit=${limit}` : ""}`,
+    {
+      method: "GET",
+    }
+  );
   return await response.json();
 };
 

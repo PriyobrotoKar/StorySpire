@@ -1,28 +1,24 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import BlogArticleCard from "@/components/BlogArticleCard";
+import FollowUserButton from "@/components/FollowUserButton";
+import Socials from "@/components/Socials";
+import TabGroup from "@/components/TabGroup";
+import UserFollowerCount from "@/components/UserFollowerCount";
+import UserBlogsSkeletons from "@/components/skeletons/UserBlogsSkeletons";
+import { Button } from "@/components/ui/button";
+import { Blog, User } from "@/types/schemaTypes";
 import {
   checkIsFollowing,
-  fetchFollowers,
   fetchSingleUser,
   fetchUserBlogs,
   sleep,
 } from "@/utils/fetchActions";
-import React, { Suspense } from "react";
-import { notFound } from "next/navigation";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import AddLinkBtn from "@/components/AddLinkBtn";
-import UserPostNav from "@/components/TabGroup";
-import { capitalize, formatDate, readingTime } from "@/utils/helpers";
-import { Blog, User } from "@/types/schemaTypes";
 import Link from "next/link";
-import Socials from "@/components/Socials";
-import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import BlogArticleCard from "@/components/BlogArticleCard";
-import FollowUserButton from "@/components/FollowUserButton";
-import UserFollowerCount from "@/components/UserFollowerCount";
-import TabGroup from "@/components/TabGroup";
-import UserBlogsSkeletons from "@/components/skeletons/UserBlogsSkeletons";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { HiOutlineLocationMarker } from "react-icons/hi";
 
 const UserBlogs = async ({
   username,
