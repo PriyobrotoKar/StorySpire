@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import LinkIcon from "./LinkIcon";
 
 const navLinks = [
@@ -22,12 +21,7 @@ const Footer = () => {
       <div className="container mx-auto space-y-8 ">
         <section className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <Image
-              src={"./logo-white.svg"}
-              alt="logo"
-              width={150}
-              height={60}
-            />
+            <Image src={"/logo-white.svg"} alt="logo" width={150} height={80} />
           </div>
           <div className="space-x-6">
             {navLinks.map((link) => {

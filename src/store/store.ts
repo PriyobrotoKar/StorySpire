@@ -1,3 +1,4 @@
+import BlogBannerInViewSlice from "@/reducers/BlogBannerInViewSlice";
 import FollowerCountSlice from "@/reducers/UserFollowerCountSlice";
 import loginDetailsSlice from "@/reducers/loginDetailsSlice";
 import { configureStore } from "@reduxjs/toolkit";
@@ -6,6 +7,7 @@ export const store = configureStore({
   reducer: {
     LoginDetails: loginDetailsSlice,
     FollowerCount: FollowerCountSlice,
+    BlogBannerInView: BlogBannerInViewSlice,
   },
 });
 

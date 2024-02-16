@@ -1,17 +1,16 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { Button } from "./ui/button";
-import { usePathname, useRouter } from "next/navigation";
-import { deleteFetchAPi, postFetchAPi } from "@/utils/fetchData";
-import { User } from "@/types/schemaTypes";
-import { updateUser, updateUserPage } from "@/utils/fetchActions";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import {
   decreaseFollowers,
   increaseFollowers,
 } from "@/reducers/UserFollowerCountSlice";
+import { updateUserPage } from "@/utils/fetchActions";
+import { deleteFetchAPi, postFetchAPi } from "@/utils/fetchData";
+import { useSession } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Button } from "./ui/button";
 
 const FollowUserButton = ({
   isSameUser,
@@ -32,7 +31,6 @@ const FollowUserButton = ({
   const [isFollowed, setIsFollowed] = useState(isFollowing);
   const dispatch = useDispatch();
   const isUserPage = /^\/@([a-zA-Z0-9_]+)$/.test(pathname);
-  console.log(isFollowed);
 
   useEffect(() => {
     setIsFollowed(isFollowing);

@@ -1,32 +1,27 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import BlogPostBookmark from "@/components/BlogPostBookmark";
+import BlogPostLike from "@/components/BlogPostLike";
+import Codeblock from "@/components/Codeblock";
+import FollowUserButton from "@/components/FollowUserButton";
+import ObserverWrapper from "@/components/ObserverWrapper";
+import { colors } from "@/constants/colors";
+import { Blog, User } from "@/types/schemaTypes";
 import {
   checkIsFollowing,
   fetchBlogViews,
   fetchSingleBlog,
   fetchSingleUser,
 } from "@/utils/fetchActions";
-import Image from "next/image";
-import React from "react";
-import edjsHTML from "editorjs-html";
-import parse from "html-react-parser";
-import { v4 as uuid } from "uuid";
-import "highlight.js/styles/github.css";
-import styles from "./styles.module.css";
-import { Button } from "@/components/ui/button";
-import { LuEye } from "react-icons/lu";
-import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
-import { TbMessageCircle2 } from "react-icons/tb";
-import { CiBookmark } from "react-icons/ci";
 import { capitalize, formatDate, readingTime } from "@/utils/helpers";
-import { Blog, User } from "@/types/schemaTypes";
-import Codeblock from "@/components/Codeblock";
-import { colors } from "@/constants/colors";
-import { notFound } from "next/navigation";
-import BlogPostActions from "@/components/BlogPostActions";
-import BlogPostBookmark from "@/components/BlogPostBookmark";
+import edjsHTML from "editorjs-html";
+import "highlight.js/styles/github.css";
+import parse from "html-react-parser";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import BlogPostLike from "@/components/BlogPostLike";
-import FollowUserButton from "@/components/FollowUserButton";
+import Image from "next/image";
+import { notFound } from "next/navigation";
+import { LuEye } from "react-icons/lu";
+import { v4 as uuid } from "uuid";
+import styles from "./styles.module.css";
 
 const page = async ({
   params,
@@ -61,55 +56,54 @@ const page = async ({
 
   return (
     <>
-      <section
-        className={
-          "relative flex h-[25rem] flex-col items-center gap-4  bg-blue-400 py-20 text-white before:absolute  before:left-0 before:top-0 before:h-full before:w-full before:bg-white/30 sm:h-[28rem] md:h-[35rem] lg:h-[42rem] lg:gap-10"
-        }
-        style={{
-          backgroundColor:
-            blog.categories[0]?.color ||
-            colors[Number((Math.random() * 10).toFixed(0))],
-        }}
-      >
-        <div className="relative z-10 mt-10 font-medium">
-          {blog.categories.length
-            ? capitalize(blog.categories[0].name) + " • "
-            : ""}
-          {readingTime(blog.length)} mins
-        </div>
-
-        <h1 className="relative z-10  mx-auto text-center text-xl font-bold leading-tight sm:container sm:text-2xl md:text-3xl lg:max-w-3xl">
-          {blog.title}
-        </h1>
-
-        <div className="relative z-10 flex items-center gap-4">
-          <div className="aspect-square w-12 overflow-hidden rounded-full shadow-xl lg:w-16">
-            <Image
-              src={blog.author.profile_pic || "/images/avatarFallback.png"}
-              alt="Author Profile Picture"
-              width={90}
-              height={90}
-              className="h-full w-full object-cover"
-            />
+      <ObserverWrapper>
+        <section
+          className={
+            "relative -mt-14 flex h-[25rem] flex-col items-center gap-4 bg-blue-400  py-20 text-white before:absolute before:left-0  before:top-0 before:h-full before:w-full before:bg-white/30 sm:-mt-24 sm:h-[28rem] md:h-[35rem] lg:h-[42rem] lg:gap-10"
+          }
+          style={{
+            backgroundColor:
+              blog.categories[0]?.color ||
+              colors[Number((Math.random() * 10).toFixed(0))],
+          }}
+        >
+          <div className="relative z-10 mt-10 font-medium">
+            {blog.categories.length
+              ? capitalize(blog.categories[0].name) + " • "
+              : ""}
+            {readingTime(blog.length)} mins
           </div>
-          <div>
-            <div className="font-semibold">{blog.author.fullname}</div>
-            <div className="text-sm text-white/80">
-              {formatDate(blog.createdAt)}
+          <h1 className="relative z-10  mx-auto text-center text-xl font-bold leading-tight sm:container sm:text-2xl md:text-3xl lg:max-w-3xl">
+            {blog.title}
+          </h1>
+          <div className="relative z-10 flex items-center gap-4">
+            <div className="aspect-square w-12 overflow-hidden rounded-full shadow-xl lg:w-16">
+              <Image
+                src={blog.author.profile_pic || "/images/avatarFallback.png"}
+                alt="Author Profile Picture"
+                width={90}
+                height={90}
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div>
+              <div className="font-semibold">{blog.author.fullname}</div>
+              <div className="text-sm text-white/80">
+                {formatDate(blog.createdAt)}
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* <BlogPostActions blog={blog} user={user} /> */}
-        <div className="flex gap-4">
-          <div className="flex items-center gap-1">
-            <LuEye className="text-xl" />
-            <p>{views}</p>
+          {/* <BlogPostActions blog={blog} user={user} /> */}
+          <div className="flex gap-4">
+            <div className="flex items-center gap-1">
+              <LuEye className="text-xl" />
+              <p>{views}</p>
+            </div>
+            <BlogPostLike blog={blog} user={user} />
+            <BlogPostBookmark blog={blog} user={user} />
           </div>
-          <BlogPostLike blog={blog} user={user} />
-          <BlogPostBookmark blog={blog} user={user} />
-        </div>
-      </section>
+        </section>
+      </ObserverWrapper>
 
       {blog.thumbnail && (
         <section className="mx-auto h-[14rem] max-w-[25rem] px-4 sm:h-[14rem] sm:w-[35rem] sm:max-w-full md:h-[14rem] lg:h-[25rem] lg:w-full lg:max-w-4xl">

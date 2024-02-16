@@ -1,8 +1,8 @@
 "use server";
 import { BASE_URL } from "@/constants/constant";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { ApiError } from "./apiErrorHandler";
-import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -129,4 +129,53 @@ export const checkIsFollowingTopic = async (category_name: string) => {
     }
   );
   return await response.json();
+};
+export const searchBlogs = async (query: string, offset = 0) => {
+  const response = await fetch(
+    `${BASE_URL}/api/search/blogs?q=${query}&offset=${offset}`,
+    {
+      method: "GET",
+      // headers: headers(),
+    }
+  );
+  return await response.json();
+};
+export const searchUsers = async (query: string, offset = 0) => {
+  const response = await fetch(
+    `${BASE_URL}/api/search/users?q=${query}&offset=${offset}`,
+    {
+      method: "GET",
+      // headers: headers(),
+    }
+  );
+  return await response.json();
+};
+export const searchTopics = async (query: string, offset = 0) => {
+  const response = await fetch(
+    `${BASE_URL}/api/search/topics?q=${query}&offset=${offset}`,
+    {
+      method: "GET",
+      // headers: headers(),
+    }
+  );
+  return await response.json();
+};
+
+export const fetchRecentSearches = async () => {
+  const response = await fetch(`${BASE_URL}/api/search/recents`, {
+    method: "GET",
+    headers: headers(),
+  });
+  return await response.json();
+};
+
+export const addRecentSearch = async (query: string) => {
+  const res = await fetch(`${BASE_URL}/api/search/recents`, {
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    headers: headers(),
+  });
+  console.log(await res.json());
 };

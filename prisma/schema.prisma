@@ -11,26 +11,29 @@ datasource db {
 }
 
 model User {
-  id             String        @id @default(auto()) @map("_id") @db.ObjectId
-  username       String        @unique
+  id             String              @id @default(auto()) @map("_id") @db.ObjectId
+  username       String              @unique
   fullname       String
   bio            String
   password       String?
   location       String?
   profile_pic    String?
   cover_pic      String?
-  email          String        @unique
+  email          String              @unique
   socials        Social[]
   blogs          Blog[]
-  savedBlogs     Blog[]        @relation("Bookmarks", fields: [savedBlogsIDs], references: [id])
-  savedBlogsIDs  String[]      @db.ObjectId
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  savedBlogs     Blog[]              @relation("Bookmarks", fields: [savedBlogsIDs], references: [id])
+  savedBlogsIDs  String[]            @db.ObjectId
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
   Like           Like[]
-  following      Follow[]      @relation("Following")
-  follower       Follow[]      @relation("Follower")
+  following      Follow[]            @relation("Following")
+  follower       Follow[]            @relation("Follower")
   blogsViewed    BLogView[]
   followedTopics FollowTopic[]
+  searchHistory  UserSearchHistory[]
+
+  @@index([fullname])
 }
 
 model Social {
@@ -61,6 +64,8 @@ model Blog {
   updatedAt   DateTime   @updatedAt
   Like        Like[]
   BLogView    BLogView[]
+
+  @@index([title, description])
 }
 
 model BLogView {
@@ -113,4 +118,12 @@ model FollowTopic {
   followTopicID String   @db.ObjectId
 
   @@unique([followerID, followTopicID])
+}
+
+model UserSearchHistory {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  searchQuery String
+  user        User     @relation(fields: [userID], references: [id])
+  userID      String   @db.ObjectId
+  createdAt   DateTime @default(now())
 }

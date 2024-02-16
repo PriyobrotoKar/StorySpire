@@ -1,23 +1,21 @@
 "use client";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import confetti from "canvas-confetti";
+import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { colors } from "../constants/colors";
-import confetti from "canvas-confetti";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 
-import { IoMdClose } from "react-icons/io";
-import { uploadToCloud } from "@/utils/uploadToCloudinary";
 import { postFetchAPi } from "@/utils/fetchData";
+import { uploadToCloud } from "@/utils/uploadToCloudinary";
+import { IoMdClose } from "react-icons/io";
 
-import { useSession } from "next-auth/react";
-import { Blog } from "@/types/schemaTypes";
 import { BlogPreview, Tags } from "@/types/customTypes";
-import BlogArticleCard from "./BlogArticleCard";
-import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import BlogArticleCard from "./BlogArticleCard";
 
 const UploadModal = ({
   image,
@@ -115,7 +113,7 @@ const UploadModal = ({
 
   return (
     <div
-      className={`absolute top-0 z-30 flex h-[100svh] w-full items-end justify-center overflow-hidden bg-neutral-500/30 backdrop-blur-sm transition md:items-center ${
+      className={`absolute top-0 z-50 flex h-[100svh] w-full items-end justify-center overflow-hidden bg-neutral-500/30 backdrop-blur-sm transition md:items-center ${
         showDialogue ? "" : "pointer-events-none opacity-0"
       }`}
     >
