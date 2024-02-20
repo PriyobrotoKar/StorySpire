@@ -11,7 +11,7 @@ import {
   checkIsFollowing,
   fetchSingleUser,
   fetchUserBlogs,
-  sleep,
+  fetchUserDrafts,
 } from "@/utils/fetchActions";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
@@ -23,11 +23,18 @@ import { HiOutlineLocationMarker } from "react-icons/hi";
 const UserBlogs = async ({
   username,
   user,
+  tab,
 }: {
   username: string;
   user: User;
+  tab: "drafts" | undefined;
 }) => {
-  const blogs = await fetchUserBlogs(username);
+  let blogs;
+  if (tab === "drafts") {
+    blogs = await fetchUserDrafts(username);
+  } else {
+    blogs = await fetchUserBlogs(username);
+  }
   return (
     <>
       {!blogs.length && (
@@ -47,9 +54,15 @@ const UserBlogs = async ({
   );
 };
 
-const user = async ({ params }: { params: { username: string } }) => {
-  await sleep(2000);
+const user = async ({
+  params,
+  searchParams,
+}: {
+  params: { username: string };
+  searchParams: { tab: "drafts" | undefined };
+}) => {
   const session = await getServerSession(authOptions);
+
   let { username } = params;
 
   if (!username.includes("%40")) {
@@ -59,7 +72,7 @@ const user = async ({ params }: { params: { username: string } }) => {
   const tabs = [
     { id: "recent", label: "Recent", link: `/@${username}` },
     { id: "popular", label: "Popular", link: `/@${username}/` },
-    { id: "about", label: "About", link: `/@${username}/` },
+    { id: "draft", label: "Draft", link: `/@${username}?tab=drafts` },
   ];
   const user: User = await fetchSingleUser(username);
   if (!user) {
@@ -145,7 +158,11 @@ const user = async ({ params }: { params: { username: string } }) => {
               <TabGroup tabs={tabs} />
             </div>
             <Suspense fallback={<UserBlogsSkeletons />}>
-              <UserBlogs user={user} username={username} />
+              <UserBlogs
+                user={user}
+                username={username}
+                tab={searchParams.tab}
+              />
             </Suspense>
           </section>
         </div>

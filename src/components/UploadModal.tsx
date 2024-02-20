@@ -39,6 +39,7 @@ const UploadModal = ({
   const [topic, setTopic] = useState("");
   const { data: session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const confettiColors = ["#bb0000", "#ffffff"];
   const router = useRouter();
 
@@ -77,6 +78,24 @@ const UploadModal = ({
       ]);
       setTopic("");
     }
+  };
+
+  const handleSaveDraft = async () => {
+    setIsSaving(true);
+    const uploadThumbUrl = image.file ? await uploadToCloud(image.file) : "";
+    const categories = tags.map((tag) => ({
+      name: tag.name,
+      color: tag.color,
+    }));
+    const res = await postFetchAPi("/api/blog/draft", {
+      title,
+      description,
+      content,
+      thumbnail: uploadThumbUrl,
+      length: words,
+      categories,
+    });
+    router.push(`/@${res.data.author.username}?tab=drafts`);
   };
 
   const handleSubmit = async () => {
@@ -118,7 +137,7 @@ const UploadModal = ({
       }`}
     >
       <main
-        className={`w-full space-y-4 rounded-t-md bg-background p-4 transition md:w-[45rem] md:rounded-md md:p-8 lg:w-[50rem] ${
+        className={`w-full space-y-4 rounded-t-md bg-background p-4 shadow-lg transition md:w-[45rem] md:rounded-md md:p-8 lg:w-[50rem] ${
           showDialogue ? "" : "translate-y-full"
         }`}
       >
@@ -175,7 +194,7 @@ const UploadModal = ({
                 placeholder="Add a topic..."
               />
             </div>
-            <div>
+            <div className="space-x-2">
               <Button disabled={isSubmitting} onClick={handleSubmit}>
                 {isSubmitting ? (
                   <>
@@ -184,6 +203,20 @@ const UploadModal = ({
                   </>
                 ) : (
                   "Publish Now"
+                )}
+              </Button>
+              <Button
+                disabled={isSaving}
+                variant={"secondary"}
+                onClick={handleSaveDraft}
+              >
+                {isSaving ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving
+                  </>
+                ) : (
+                  "Save as draft"
                 )}
               </Button>
             </div>

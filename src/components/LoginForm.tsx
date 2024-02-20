@@ -1,16 +1,16 @@
 "use client";
-import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { FcGoogle } from "react-icons/fc";
-import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { updateEmail } from "@/reducers/loginDetailsSlice";
 import { Loader2 } from "lucide-react";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
+import { FcGoogle } from "react-icons/fc";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -22,6 +22,7 @@ const LoginForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(false);
   const router = useRouter();
+  const callbackUrl = useSearchParams().get("callbackUrl");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput((prev) => ({
@@ -43,7 +44,7 @@ const LoginForm = () => {
         callbackUrl: "/",
       }).then((res) => {
         if (res?.ok) {
-          window.location.href = "/";
+          window.location.href = callbackUrl ? callbackUrl : "/";
         } else if (res?.status === 401) {
           dispatch(updateEmail(input.email));
           router.push("/register");
