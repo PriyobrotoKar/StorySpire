@@ -69,16 +69,18 @@ const user = async ({
     return notFound();
   }
   username = username.slice(3);
-  const tabs = [
-    { id: "recent", label: "Recent", link: `/@${username}` },
-    { id: "popular", label: "Popular", link: `/@${username}/` },
-    { id: "draft", label: "Draft", link: `/@${username}?tab=drafts` },
-  ];
   const user: User = await fetchSingleUser(username);
   if (!user) {
     return notFound();
   }
   const isSameUser = session?.user.username === user.username;
+  const tabs = [
+    { id: "recent", label: "Recent", link: `/@${username}` },
+    { id: "popular", label: "Popular", link: `/@${username}/` },
+    ...(isSameUser
+      ? [{ id: "draft", label: "Draft", link: `/@${username}?tab=drafts` }]
+      : []),
+  ];
 
   const { isFollowing } =
     session && !isSameUser

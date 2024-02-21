@@ -76,6 +76,10 @@ const page = async ({
   const isSameUser = session
     ? session.user.username === blog.author.username
     : false;
+
+  if (!blog.isPublished && !isSameUser) {
+    return notFound();
+  }
   const { isFollowing } =
     session && !isSameUser
       ? await checkIsFollowing(session.user.username, blog.author.username)
@@ -118,7 +122,9 @@ const page = async ({
             <div>
               <div className="font-semibold">{blog.author.fullname}</div>
               <div className="text-sm text-white/80">
-                {formatDate(blog.createdAt)}
+                {blog.isPublished
+                  ? formatDate(blog.createdAt)
+                  : "Saved as draft"}
               </div>
             </div>
           </div>
