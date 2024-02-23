@@ -12,6 +12,7 @@ import {
   fetchSingleUser,
   fetchUserBlogs,
   fetchUserDrafts,
+  fetchUserPopularBlogs,
 } from "@/utils/fetchActions";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
@@ -32,6 +33,8 @@ const UserBlogs = async ({
   let blogs;
   if (tab === "drafts") {
     blogs = await fetchUserDrafts(username);
+  } else if (tab === "popular") {
+    blogs = await fetchUserPopularBlogs(username);
   } else {
     blogs = await fetchUserBlogs(username);
   }
@@ -76,7 +79,7 @@ const user = async ({
   const isSameUser = session?.user.username === user.username;
   const tabs = [
     { id: "recent", label: "Recent", link: `/@${username}` },
-    { id: "popular", label: "Popular", link: `/@${username}/` },
+    { id: "popular", label: "Popular", link: `/@${username}?tab=popular` },
     ...(isSameUser
       ? [{ id: "draft", label: "Draft", link: `/@${username}?tab=drafts` }]
       : []),

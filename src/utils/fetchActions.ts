@@ -53,6 +53,20 @@ export const fetchUserBlogs = async (username: string, limit?: number) => {
   );
   return await response.json();
 };
+export const fetchUserPopularBlogs = async (
+  username: string,
+  limit?: number
+) => {
+  const response = await fetch(
+    `${BASE_URL}/api/user/${username}/blogs/popular${
+      limit ? `?limit=${limit}` : ""
+    }`,
+    {
+      method: "GET",
+    }
+  );
+  return await response.json();
+};
 export const fetchUserDrafts = async (username: string, limit?: number) => {
   const response = await fetch(
     `${BASE_URL}/api/user/${username}/drafts${limit ? `?limit=${limit}` : ""}`,
