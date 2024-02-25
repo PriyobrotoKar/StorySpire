@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
@@ -30,7 +30,7 @@ const Editor = () => {
     file: null,
   });
   const [wordCount, setWordCount] = useState(0);
-  const [showDialogue, setShowDialogue] = useState(false);
+  const [showDialogue, setShowDialogue] = useState(true);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useAutosizeTextArea(textAreaRef.current, title);

@@ -26,7 +26,7 @@ export const GET = apiErrorHandler(
         author: {
           username: user.username,
         },
-        isPublished: true,
+        isPublished: false,
       },
       orderBy: {
         createdAt: "desc",

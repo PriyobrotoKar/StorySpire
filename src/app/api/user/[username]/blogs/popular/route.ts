@@ -29,7 +29,9 @@ export const GET = apiErrorHandler(
         isPublished: true,
       },
       orderBy: {
-        createdAt: "desc",
+        BLogView: {
+          _count: "desc",
+        },
       },
       select: {
         title: true,

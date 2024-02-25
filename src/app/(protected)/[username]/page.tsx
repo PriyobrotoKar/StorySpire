@@ -1,37 +1,43 @@
-import {
-  checkIsFollowing,
-  fetchFollowers,
-  fetchSingleUser,
-  fetchUserBlogs,
-  sleep,
-} from "@/utils/fetchActions";
-import React, { Suspense } from "react";
-import { notFound } from "next/navigation";
-import { getServerSession } from "next-auth";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import AddLinkBtn from "@/components/AddLinkBtn";
-import UserPostNav from "@/components/TabGroup";
-import { capitalize, formatDate, readingTime } from "@/utils/helpers";
-import { Blog, User } from "@/types/schemaTypes";
-import Link from "next/link";
-import Socials from "@/components/Socials";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import BlogArticleCard from "@/components/BlogArticleCard";
 import FollowUserButton from "@/components/FollowUserButton";
-import UserFollowerCount from "@/components/UserFollowerCount";
+import Socials from "@/components/Socials";
 import TabGroup from "@/components/TabGroup";
+import UserFollowerCount from "@/components/UserFollowerCount";
 import UserBlogsSkeletons from "@/components/skeletons/UserBlogsSkeletons";
+import { Button } from "@/components/ui/button";
+import { Blog, User } from "@/types/schemaTypes";
+import {
+  checkIsFollowing,
+  fetchSingleUser,
+  fetchUserBlogs,
+  fetchUserDrafts,
+  fetchUserPopularBlogs,
+} from "@/utils/fetchActions";
+import { getServerSession } from "next-auth";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { HiOutlineLocationMarker } from "react-icons/hi";
 
 const UserBlogs = async ({
   username,
   user,
+  tab,
 }: {
   username: string;
   user: User;
+  tab: "drafts" | undefined;
 }) => {
-  const blogs = await fetchUserBlogs(username);
+  let blogs;
+  if (tab === "drafts") {
+    blogs = await fetchUserDrafts(username);
+  } else if (tab === "popular") {
+    blogs = await fetchUserPopularBlogs(username);
+  } else {
+    blogs = await fetchUserBlogs(username);
+  }
   return (
     <>
       {!blogs.length && (
@@ -51,25 +57,33 @@ const UserBlogs = async ({
   );
 };
 
-const user = async ({ params }: { params: { username: string } }) => {
-  await sleep(2000);
+const user = async ({
+  params,
+  searchParams,
+}: {
+  params: { username: string };
+  searchParams: { tab: "drafts" | undefined };
+}) => {
   const session = await getServerSession(authOptions);
+
   let { username } = params;
 
   if (!username.includes("%40")) {
     return notFound();
   }
   username = username.slice(3);
-  const tabs = [
-    { id: "recent", label: "Recent", link: `/@${username}` },
-    { id: "popular", label: "Popular", link: `/@${username}/` },
-    { id: "about", label: "About", link: `/@${username}/` },
-  ];
   const user: User = await fetchSingleUser(username);
   if (!user) {
     return notFound();
   }
   const isSameUser = session?.user.username === user.username;
+  const tabs = [
+    { id: "recent", label: "Recent", link: `/@${username}` },
+    { id: "popular", label: "Popular", link: `/@${username}?tab=popular` },
+    ...(isSameUser
+      ? [{ id: "draft", label: "Draft", link: `/@${username}?tab=drafts` }]
+      : []),
+  ];
 
   const { isFollowing } =
     session && !isSameUser
@@ -149,7 +163,11 @@ const user = async ({ params }: { params: { username: string } }) => {
               <TabGroup tabs={tabs} />
             </div>
             <Suspense fallback={<UserBlogsSkeletons />}>
-              <UserBlogs user={user} username={username} />
+              <UserBlogs
+                user={user}
+                username={username}
+                tab={searchParams.tab}
+              />
             </Suspense>
           </section>
         </div>

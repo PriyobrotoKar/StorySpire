@@ -2,7 +2,6 @@ import { BlogPostSkeleton } from "@/components/skeletons/BlogPostCardSkeletons";
 import CategoryListSkeletons from "@/components/skeletons/CategoryListSkeletons";
 import FeaturedSkeletons from "@/components/skeletons/FeaturedSkeletons";
 import TopicSkeletons from "@/components/skeletons/TopicSkeletons";
-import React from "react";
 import { v4 as uuid } from "uuid";
 
 const page = () => {

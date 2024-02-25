@@ -1,9 +1,11 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import BlogArticleCard from "@/components/BlogArticleCard";
 import BlogPostBookmark from "@/components/BlogPostBookmark";
 import BlogPostLike from "@/components/BlogPostLike";
 import Codeblock from "@/components/Codeblock";
 import FollowUserButton from "@/components/FollowUserButton";
 import ObserverWrapper from "@/components/ObserverWrapper";
+import UserBlogsSkeletons from "@/components/skeletons/UserBlogsSkeletons";
 import { colors } from "@/constants/colors";
 import { Blog, User } from "@/types/schemaTypes";
 import {
@@ -11,6 +13,7 @@ import {
   fetchBlogViews,
   fetchSingleBlog,
   fetchSingleUser,
+  fetchUserBlogs,
 } from "@/utils/fetchActions";
 import { capitalize, formatDate, readingTime } from "@/utils/helpers";
 import edjsHTML from "editorjs-html";
@@ -18,10 +21,36 @@ import "highlight.js/styles/github.css";
 import parse from "html-react-parser";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { LuEye } from "react-icons/lu";
 import { v4 as uuid } from "uuid";
 import styles from "./styles.module.css";
+
+const MoreFromAuthor = async ({
+  username,
+  currentBlog,
+}: {
+  username: string;
+  currentBlog: string;
+}) => {
+  const res: Blog[] = await fetchUserBlogs(username, 4);
+  const moreBlogs = res.filter((blog) => blog.slug !== currentBlog);
+  if (moreBlogs.length === 4) moreBlogs.pop();
+
+  if (moreBlogs.length === 0) return;
+  return (
+    <div className="container max-w-screen-md space-y-6">
+      <h2 className="text-center text-xl font-semibold">
+        More from {moreBlogs[0].author.fullname}
+      </h2>
+      {moreBlogs.map((blog, i: number) => {
+        return <BlogArticleCard key={blog.id} blog={blog} />;
+      })}
+    </div>
+  );
+};
 
 const page = async ({
   params,
@@ -47,6 +76,10 @@ const page = async ({
   const isSameUser = session
     ? session.user.username === blog.author.username
     : false;
+
+  if (!blog.isPublished && !isSameUser) {
+    return notFound();
+  }
   const { isFollowing } =
     session && !isSameUser
       ? await checkIsFollowing(session.user.username, blog.author.username)
@@ -89,7 +122,9 @@ const page = async ({
             <div>
               <div className="font-semibold">{blog.author.fullname}</div>
               <div className="text-sm text-white/80">
-                {formatDate(blog.createdAt)}
+                {blog.isPublished
+                  ? formatDate(blog.createdAt)
+                  : "Saved as draft"}
               </div>
             </div>
           </div>
@@ -153,7 +188,11 @@ const page = async ({
             <div className="font-semibold text-muted-foreground">
               Written By
             </div>
-            <div className="text-lg font-semibold">{blog.author.fullname}</div>
+            <div className="text-lg font-semibold hover:underline">
+              <Link href={`/@${blog.author.username}`}>
+                {blog.author.fullname}
+              </Link>
+            </div>
             <div className="line-clamp-2  text-md text-muted-foreground">
               {blog.author.bio}
             </div>
@@ -168,8 +207,13 @@ const page = async ({
         />
       </section>
 
-      <section className="mx-4">
-        <h2 className="text-center">More from {blog.author.fullname}</h2>
+      <section className=" mx-auto  max-w-screen-md">
+        <Suspense fallback={<UserBlogsSkeletons />}>
+          <MoreFromAuthor
+            username={blog.author.username}
+            currentBlog={blog.slug}
+          />
+        </Suspense>
       </section>
     </>
   );
