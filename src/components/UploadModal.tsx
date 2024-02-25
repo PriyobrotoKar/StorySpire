@@ -24,18 +24,20 @@ const UploadModal = ({
   words,
   showDialogue,
   setShowDialogue,
+  topics,
 }: {
   image: {
     localPath: string;
     file: null;
   };
+  topics: Tags[];
   title: string;
   content: any;
   words: number;
   showDialogue: boolean;
   setShowDialogue: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const [tags, setTags] = useState<Tags[]>([]);
+  const [tags, setTags] = useState<Tags[]>(topics);
   const [topic, setTopic] = useState("");
   const { data: session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);

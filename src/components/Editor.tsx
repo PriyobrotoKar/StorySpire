@@ -14,34 +14,17 @@ import Underline from "@editorjs/underline";
 import { FiImage } from "react-icons/fi";
 import { Textarea } from "./ui/textarea";
 
+import { Blog } from "@/types/schemaTypes";
 import { uploadToCloud } from "@/utils/uploadToCloudinary";
 import Image from "next/image";
 import useAutosizeTextArea from "../hooks/useAutoSizeTextArea";
 import UploadModal from "./UploadModal";
 import { Button } from "./ui/button";
 
-const Editor = () => {
-  const ref = useRef<EditorJS | null>();
-  const [mounted, setMounted] = useState(false);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState(null);
-  const [coverImg, setCoverImg] = useState({
-    localPath: "",
-    file: null,
-  });
-  const [wordCount, setWordCount] = useState(0);
-  const [showDialogue, setShowDialogue] = useState(true);
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
-  useAutosizeTextArea(textAreaRef.current, title);
-
-  const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const val = evt.target?.value;
-
-    setTitle(val);
-  };
-
+const Editor = ({ blog }: { blog?: Blog }) => {
   const countTotalWords = (blocks) => {
+    if (!blocks) return;
+
     return blocks
       .filter((block) => {
         return "text" in block.data || "items" in block.data;
@@ -75,6 +58,28 @@ const Editor = () => {
       }, 0);
   };
 
+  const ref = useRef<EditorJS | null>();
+  const [mounted, setMounted] = useState(false);
+  const [title, setTitle] = useState(blog?.title || "");
+  const [content, setContent] = useState(blog?.content || null);
+  const [coverImg, setCoverImg] = useState({
+    localPath: blog?.thumbnail || "",
+    file: null,
+  });
+  const [wordCount, setWordCount] = useState(
+    countTotalWords(blog?.content.blocks) || 0
+  );
+  const [showDialogue, setShowDialogue] = useState(false);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useAutosizeTextArea(textAreaRef.current, title);
+
+  const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = evt.target?.value;
+
+    setTitle(val);
+  };
+
   const initEditor = useCallback(async () => {
     const editor = new EditorJS({
       holder: "editorjs",
@@ -87,6 +92,7 @@ const Editor = () => {
         setContent(data);
         setWordCount(countTotalWords(data.blocks));
       },
+      data: blog ? blog.content : {},
       tools: {
         header: {
           class: Header,
@@ -129,7 +135,7 @@ const Editor = () => {
         },
       },
     });
-  }, []);
+  }, [blog]);
   useEffect(() => {
     const init = async () => {
       await initEditor();
@@ -225,6 +231,7 @@ const Editor = () => {
         title={title}
         content={content}
         words={wordCount}
+        topics={blog?.categories || []}
       />
     </div>
   );
