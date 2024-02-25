@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import Code from "@editorjs/code";
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
-import ImageTool from "@editorjs/image";
 import InlineCode from "@editorjs/inline-code";
 import List from "@editorjs/list";
 import Quote from "@editorjs/quote";
@@ -15,6 +14,7 @@ import { FiImage } from "react-icons/fi";
 import { Textarea } from "./ui/textarea";
 
 import { Blog } from "@/types/schemaTypes";
+import { MyImageTool } from "@/utils/helpers";
 import { uploadToCloud } from "@/utils/uploadToCloudinary";
 import Image from "next/image";
 import useAutosizeTextArea from "../hooks/useAutoSizeTextArea";
@@ -89,6 +89,7 @@ const Editor = ({ blog }: { blog?: Blog }) => {
       placeholder: "Start writing your story",
       onChange: async () => {
         let data = await editor.saver.save();
+        console.log(data);
         setContent(data);
         setWordCount(countTotalWords(data.blocks));
       },
@@ -110,7 +111,7 @@ const Editor = ({ blog }: { blog?: Blog }) => {
         quote: Quote,
         inlineCode: InlineCode,
         image: {
-          class: ImageTool,
+          class: MyImageTool,
           config: {
             uploader: {
               async uploadByFile(file) {
