@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { v4 } from "uuid";
 
 interface TabProps {
@@ -18,7 +18,7 @@ interface TabGroupProps {
 const TabGroup = ({ tabs }: TabGroupProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams().toString();
-  const [indicator, setIndicator] = useState(v4());
+  const indicator = useRef(v4());
   const fullPath = pathname + (searchParams ? "?" + searchParams : "");
   const currentTab = tabs.filter(
     (tab) =>
@@ -41,7 +41,7 @@ const TabGroup = ({ tabs }: TabGroupProps) => {
         {tabs.map((tab) => {
           return (
             <li
-              // onClick={() => setActiveTab(tab.id)}
+              onClick={() => setActiveTab(tab.id)}
               key={tab.id}
               className={`relative cursor-pointer transition ${
                 activeTab === tab.id && "text-primary"
@@ -50,7 +50,7 @@ const TabGroup = ({ tabs }: TabGroupProps) => {
               <Link href={tab.link}>{tab.label}</Link>
               {activeTab === tab.id && (
                 <motion.div
-                  layoutId={indicator}
+                  layoutId={indicator.current}
                   className="absolute -bottom-1/2 left-[30%] h-1.5 w-6 rounded-sm bg-primary"
                 ></motion.div>
               )}

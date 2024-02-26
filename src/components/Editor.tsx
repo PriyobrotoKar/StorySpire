@@ -14,9 +14,10 @@ import { FiImage } from "react-icons/fi";
 import { Textarea } from "./ui/textarea";
 
 import { Blog } from "@/types/schemaTypes";
-import { MyImageTool } from "@/utils/helpers";
+import { MyImageTool } from "@/utils/Editorjs";
 import { uploadToCloud } from "@/utils/uploadToCloudinary";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import useAutosizeTextArea from "../hooks/useAutoSizeTextArea";
 import UploadModal from "./UploadModal";
 import { Button } from "./ui/button";
@@ -58,6 +59,8 @@ const Editor = ({ blog }: { blog?: Blog }) => {
       }, 0);
   };
 
+  const pathname = usePathname();
+  const isEditing = pathname.slice(pathname.lastIndexOf("/")) !== "/write";
   const ref = useRef<EditorJS | null>();
   const [mounted, setMounted] = useState(false);
   const [title, setTitle] = useState(blog?.title || "");
@@ -176,7 +179,7 @@ const Editor = ({ blog }: { blog?: Blog }) => {
             onClick={() => setShowDialogue(true)}
             disabled={!content?.blocks.length || !title}
           >
-            Publish
+            {!isEditing ? "Publish" : "Edit"}
           </Button>
         </header>
         {coverImg.localPath && (
@@ -191,7 +194,7 @@ const Editor = ({ blog }: { blog?: Blog }) => {
             />
           </div>
         )}
-        <div className="md:mx-10">
+        <div className="flex items-center gap-4 md:mx-10">
           <label
             htmlFor="coverImg"
             className="flex w-fit items-center gap-2 rounded-md font-medium hover:cursor-pointer md:px-3 md:py-1 md:hover:bg-secondary"
@@ -213,6 +216,14 @@ const Editor = ({ blog }: { blog?: Blog }) => {
             accept=".jpg,.jpeg,.png,.webp"
             type="file"
           />
+          {coverImg.localPath && (
+            <Button
+              variant={"destructive"}
+              onClick={() => setCoverImg({ localPath: "", file: null })}
+            >
+              Remove Cover
+            </Button>
+          )}
         </div>
         <div className="mx-0">
           <Textarea
@@ -230,6 +241,7 @@ const Editor = ({ blog }: { blog?: Blog }) => {
         setShowDialogue={setShowDialogue}
         image={coverImg}
         title={title}
+        initialData={blog}
         content={content}
         words={wordCount}
         topics={blog?.categories || []}

@@ -7,14 +7,16 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-import { postFetchAPi } from "@/utils/fetchData";
+import { postFetchAPi, putFetchAPi } from "@/utils/fetchData";
 import { uploadToCloud } from "@/utils/uploadToCloudinary";
 import { IoMdClose } from "react-icons/io";
 
 import { BlogPreview, Tags } from "@/types/customTypes";
+import { Blog } from "@/types/schemaTypes";
+import { deleteFromCloud } from "@/utils/deleteFromCloudinary";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import BlogArticleCard from "./BlogArticleCard";
 
 const UploadModal = ({
@@ -24,6 +26,7 @@ const UploadModal = ({
   words,
   showDialogue,
   setShowDialogue,
+  initialData,
   topics,
 }: {
   image: {
@@ -31,6 +34,7 @@ const UploadModal = ({
     file: null;
   };
   topics: Tags[];
+  initialData?: Blog;
   title: string;
   content: any;
   words: number;
@@ -44,6 +48,8 @@ const UploadModal = ({
   const [isSaving, setIsSaving] = useState(false);
   const confettiColors = ["#bb0000", "#ffffff"];
   const router = useRouter();
+  const pathname = usePathname();
+  const isEditing = pathname.slice(pathname.lastIndexOf("/")) !== "/write";
 
   const description = content?.blocks.find(
     (block: any) => block.type === "paragraph"
@@ -100,7 +106,7 @@ const UploadModal = ({
     router.push(`/@${res.data.author.username}?tab=drafts`);
   };
 
-  const handleSubmit = async () => {
+  const handlePublish = async () => {
     setIsSubmitting(true);
     const uploadThumbUrl = image.file ? await uploadToCloud(image.file) : "";
     const categories = tags.map((tag) => ({
@@ -129,7 +135,43 @@ const UploadModal = ({
       origin: { x: 1 },
       colors: confettiColors,
     });
-    router.push(`/@${res.data.author.username}/${res.data.slug}`);
+    document.documentElement.style.overflow = "auto";
+    router.replace(`/@${res.data.author.username}/${res.data.slug}`);
+  };
+  const handleEdit = async () => {
+    if (!initialData) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const uploadThumbUrl =
+      image.file && new URL(image.localPath).hostname !== "res.cloudinary.com"
+        ? await uploadToCloud(image.file)
+        : image.localPath;
+
+    if (
+      initialData.thumbnail &&
+      initialData.thumbnail !== uploadThumbUrl &&
+      !uploadThumbUrl
+    ) {
+      await deleteFromCloud(initialData.thumbnail);
+    }
+    const categories = tags.map((tag) => ({
+      name: tag.name,
+      color: tag.color,
+    }));
+    const res = await putFetchAPi("/api/blog", {
+      title,
+      description,
+      content,
+      thumbnail: uploadThumbUrl,
+      length: words,
+      categories,
+      slug: initialData.slug,
+    });
+    document.documentElement.style.overflow = "auto";
+    router.replace(`/@${res.data.author.username}/${res.data.slug}`);
   };
 
   return (
@@ -197,12 +239,17 @@ const UploadModal = ({
               />
             </div>
             <div className="space-x-2">
-              <Button disabled={isSubmitting} onClick={handleSubmit}>
+              <Button
+                disabled={isSubmitting}
+                onClick={isEditing ? handleEdit : handlePublish}
+              >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Publishing
+                    {isEditing ? "Editing" : "Publishing"}
                   </>
+                ) : isEditing ? (
+                  "Edit"
                 ) : (
                   "Publish Now"
                 )}

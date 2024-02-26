@@ -20,6 +20,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { HiOutlineLocationMarker } from "react-icons/hi";
+import { v4 } from "uuid";
 
 const UserBlogs = async ({
   username,
@@ -162,7 +163,7 @@ const user = async ({
             <div className="border-b py-2">
               <TabGroup tabs={tabs} />
             </div>
-            <Suspense fallback={<UserBlogsSkeletons />}>
+            <Suspense key={v4()} fallback={<UserBlogsSkeletons key={v4()} />}>
               <UserBlogs
                 user={user}
                 username={username}

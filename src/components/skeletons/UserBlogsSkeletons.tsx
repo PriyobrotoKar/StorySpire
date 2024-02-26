@@ -1,16 +1,12 @@
 import { v4 as uuid } from "uuid";
-import { Separator } from "../ui/separator";
 import { BlogPostSkeleton } from "./BlogPostCardSkeletons";
 
 const UserBlogsSkeletons = () => {
   return (
-    <div className=" space-y-6">
+    <div className=" space-y-14">
       {[
         ...Array(2).fill(
-          <div key={uuid()}>
-            <BlogPostSkeleton size="large" showAuthor={false}  />
-            <Separator />
-          </div>
+          <BlogPostSkeleton key={uuid()} size="large" showAuthor={false} />
         ),
       ]}
     </div>
