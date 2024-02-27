@@ -76,6 +76,12 @@ export const fetchUserDrafts = async (username: string, limit?: number) => {
   );
   return await response.json();
 };
+export const fetchDraftBlog = async (slug: string) => {
+  const response = await fetch(`${BASE_URL}/api/blog/draft/${slug}`, {
+    method: "GET",
+  });
+  return await response.json();
+};
 
 export const fetchRecentBlogs = async (limit?: number) => {
   const response = await fetch(`${BASE_URL}/api/blog/recent?limit=${limit}`, {

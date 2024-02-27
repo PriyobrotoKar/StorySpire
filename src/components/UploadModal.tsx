@@ -103,24 +103,59 @@ const UploadModal = ({
       length: words,
       categories,
     });
+    document.documentElement.style.overflow = "auto";
     router.push(`/@${res.data.author.username}?tab=drafts`);
   };
 
   const handlePublish = async () => {
+    let res;
     setIsSubmitting(true);
-    const uploadThumbUrl = image.file ? await uploadToCloud(image.file) : "";
-    const categories = tags.map((tag) => ({
-      name: tag.name,
-      color: tag.color,
-    }));
-    const res = await postFetchAPi("/api/blog", {
-      title,
-      description,
-      content,
-      thumbnail: uploadThumbUrl,
-      length: words,
-      categories,
-    });
+    if (isEditing) {
+      if (!initialData) {
+        return;
+      }
+      const uploadThumbUrl =
+        image.file && new URL(image.localPath).hostname !== "res.cloudinary.com"
+          ? await uploadToCloud(image.file)
+          : image.localPath;
+
+      if (
+        initialData.thumbnail &&
+        initialData.thumbnail !== uploadThumbUrl &&
+        !uploadThumbUrl
+      ) {
+        await deleteFromCloud(initialData.thumbnail);
+      }
+      const categories = tags.map((tag) => ({
+        name: tag.name,
+        color: tag.color,
+      }));
+      res = await putFetchAPi("/api/blog", {
+        title,
+        description,
+        content,
+        thumbnail: uploadThumbUrl,
+        length: words,
+        categories,
+        slug: initialData.slug,
+        isPublished: true,
+      });
+    } else {
+      const uploadThumbUrl = image.file ? await uploadToCloud(image.file) : "";
+      const categories = tags.map((tag) => ({
+        name: tag.name,
+        color: tag.color,
+      }));
+      res = await postFetchAPi("/api/blog", {
+        title,
+        description,
+        content,
+        thumbnail: uploadThumbUrl,
+        length: words,
+        categories,
+      });
+    }
+
     confetti({
       particleCount: 100,
       angle: 60,
@@ -143,7 +178,7 @@ const UploadModal = ({
       return;
     }
 
-    setIsSubmitting(true);
+    initialData.isPublished ? setIsSubmitting(true) : setIsSaving(true);
 
     const uploadThumbUrl =
       image.file && new URL(image.localPath).hostname !== "res.cloudinary.com"
@@ -169,6 +204,7 @@ const UploadModal = ({
       length: words,
       categories,
       slug: initialData.slug,
+      isPublished: initialData.isPublished,
     });
     document.documentElement.style.overflow = "auto";
     router.replace(`/@${res.data.author.username}/${res.data.slug}`);
@@ -239,35 +275,61 @@ const UploadModal = ({
               />
             </div>
             <div className="space-x-2">
-              <Button
-                disabled={isSubmitting}
-                onClick={isEditing ? handleEdit : handlePublish}
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {isEditing ? "Editing" : "Publishing"}
-                  </>
-                ) : isEditing ? (
-                  "Edit"
-                ) : (
-                  "Publish Now"
-                )}
-              </Button>
-              <Button
-                disabled={isSaving}
-                variant={"secondary"}
-                onClick={handleSaveDraft}
-              >
-                {isSaving ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving
-                  </>
-                ) : (
-                  "Save as draft"
-                )}
-              </Button>
+              {!isEditing || !initialData?.isPublished ? (
+                <Button disabled={isSubmitting} onClick={handlePublish}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Publishing
+                    </>
+                  ) : (
+                    "Publish Now"
+                  )}
+                </Button>
+              ) : (
+                <Button disabled={isSubmitting} onClick={handleEdit}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Editing
+                    </>
+                  ) : (
+                    "Edit"
+                  )}
+                </Button>
+              )}
+              {!isEditing && (
+                <Button
+                  disabled={isSaving}
+                  variant={"secondary"}
+                  onClick={handleSaveDraft}
+                >
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Saving
+                    </>
+                  ) : (
+                    "Save as draft"
+                  )}
+                </Button>
+              )}
+              {isEditing && !initialData?.isPublished && (
+                <Button
+                  disabled={isSaving}
+                  variant={"secondary"}
+                  onClick={handleEdit}
+                >
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Editing
+                    </>
+                  ) : (
+                    "Edit"
+                  )}
+                </Button>
+              )}
             </div>
           </section>
         </div>

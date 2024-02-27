@@ -83,7 +83,6 @@ export const PUT = apiErrorHandler(async (req: Request) => {
 
       slug,
       author: { connect: { username } },
-      isPublished: true,
     },
     include: {
       author: true,
