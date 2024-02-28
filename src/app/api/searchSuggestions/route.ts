@@ -62,6 +62,7 @@ export const GET = apiErrorHandler(async (req: NextRequest) => {
       id: true,
       title: true,
       slug: true,
+      isPublished: true,
       author: {
         select: {
           username: true,

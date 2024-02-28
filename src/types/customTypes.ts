@@ -20,6 +20,7 @@ export interface BlogPreview {
       blogs: number;
     };
   };
+  isPublished: boolean;
   createdAt: Date;
   categories: Tags[];
 }

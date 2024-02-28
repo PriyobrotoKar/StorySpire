@@ -156,7 +156,7 @@ const Editor = ({ blog }: { blog?: Blog }) => {
     }
   }, [mounted, initEditor]);
   useEffect(() => {
-    if (typeof window !== undefined) {
+    if (typeof window !== "undefined") {
       setMounted(true);
     }
   }, []);

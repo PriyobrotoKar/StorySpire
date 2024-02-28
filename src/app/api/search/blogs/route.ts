@@ -68,6 +68,7 @@ export const GET = apiErrorHandler(async (req: NextRequest) => {
       id: true,
       length: true,
       slug: true,
+      isPublished: true,
       categories: {
         orderBy: {
           createdAt: "desc",

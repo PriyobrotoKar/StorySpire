@@ -47,6 +47,7 @@ export const GET = apiErrorHandler(
           include: { _count: { select: { follower: true, blogs: true } } },
         },
         createdAt: true,
+        isPublished: true,
       },
       ...(limit && { take: Number(limit) }),
     });

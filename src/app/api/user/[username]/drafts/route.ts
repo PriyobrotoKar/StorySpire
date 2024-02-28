@@ -37,6 +37,7 @@ export const GET = apiErrorHandler(
         description: true,
         id: true,
         length: true,
+        isPublished: true,
         slug: true,
         categories: {
           orderBy: {

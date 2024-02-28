@@ -1,8 +1,8 @@
-import apiErrorHandler, { ApiError } from "@/utils/apiErrorHandler";
-import { Session, getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/options";
 import client from "@/lib/prisma";
+import apiErrorHandler from "@/utils/apiErrorHandler";
+import { Session, getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { authOptions } from "../../auth/[...nextauth]/options";
 
 const hasViewed = async (
   session: Session | null,
@@ -105,6 +105,7 @@ export const GET = apiErrorHandler(
     const blog = await client.blog.findUnique({
       where: {
         slug: params.slug,
+        isPublished: true,
       },
       include: {
         categories: {

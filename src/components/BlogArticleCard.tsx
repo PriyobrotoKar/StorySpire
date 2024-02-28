@@ -7,6 +7,14 @@ import { Avatar, AvatarImage } from "./ui/avatar";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { Separator } from "./ui/separator";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Button } from "./ui/button";
 const BlogArticleCard = ({
   blog,
   size = "large",
@@ -30,16 +38,48 @@ const BlogArticleCard = ({
         (isFeatured ? "rounded-3xl lg:p-12" : "rounded-md md:p-4")
       }
     >
-      <div
-        className={`font-semibold  ${
-          layout === "isFeatured" ? "text-md" : "text-sm lg:text-md"
-        }`}
-        style={{ color: blog.categories[0]?.color }}
-      >
-        {showTopic && blog.categories.length
-          ? capitalize(blog.categories[0].name) + " • "
-          : ""}
-        {readingTime(blog.length)} mins
+      <div className="flex items-center justify-between gap-4">
+        <div
+          className={`font-semibold  ${
+            layout === "isFeatured" ? "text-md" : "text-sm lg:text-md"
+          }`}
+          style={{ color: blog.categories[0]?.color }}
+        >
+          {showTopic && blog.categories.length
+            ? capitalize(blog.categories[0].name) + " • "
+            : ""}
+          {readingTime(blog.length)} mins
+        </div>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant={"ghost"}
+              size={"sm"}
+              className="text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 data-[state=open]:bg-accent data-[state=open]:text-foreground data-[state=open]:opacity-100"
+            >
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className=" font-medium">
+            <a
+              href={
+                blog.isPublished
+                  ? `/write/${blog.slug}`
+                  : `/write/draft/${blog.slug}`
+              }
+            >
+              <DropdownMenuItem>
+                <Pencil size={16} />
+                Edit
+              </DropdownMenuItem>
+            </a>
+            <DropdownMenuItem className="focus:bg-primary/10 focus:text-primary">
+              <Trash2 size={16} />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="flex-1">
         <div

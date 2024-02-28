@@ -1,8 +1,8 @@
+import client from "@/lib/prisma";
 import apiErrorHandler, { ApiError } from "@/utils/apiErrorHandler";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/options";
-import client from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { authOptions } from "../../auth/[...nextauth]/options";
 
 export const GET = apiErrorHandler(async () => {
   const session = await getServerSession(authOptions);
@@ -29,6 +29,7 @@ export const GET = apiErrorHandler(async () => {
       id: true,
       length: true,
       slug: true,
+      isPublished: true,
       categories: {
         orderBy: {
           createdAt: "desc",

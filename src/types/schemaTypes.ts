@@ -22,6 +22,7 @@ export type BlogWithoutContent = Prisma.BlogGetPayload<{
     author: {
       include: { _count: { select: { follower: true; blogs: true } } };
     };
+    isPublished: boolean;
     createdAt: true;
   };
 }>;
