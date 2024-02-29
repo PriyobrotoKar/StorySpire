@@ -13,7 +13,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil } from "lucide-react";
+import DeleteBlogModal from "./DeleteBlogModal";
 import { Button } from "./ui/button";
 const BlogArticleCard = ({
   blog,
@@ -74,9 +75,8 @@ const BlogArticleCard = ({
                 Edit
               </DropdownMenuItem>
             </a>
-            <DropdownMenuItem className="focus:bg-primary/10 focus:text-primary">
-              <Trash2 size={16} />
-              Delete
+            <DropdownMenuItem asChild>
+              <DeleteBlogModal />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
