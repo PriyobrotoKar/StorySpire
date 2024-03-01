@@ -73,7 +73,7 @@ model BLogView {
   user   User?   @relation(fields: [userID], references: [id])
   userID String? @db.ObjectId
   userIP String
-  blog   Blog    @relation(fields: [blogID], references: [id])
+  blog   Blog    @relation(fields: [blogID], references: [id], onDelete: Cascade)
   blogID String  @db.ObjectId
 }
 
@@ -91,7 +91,7 @@ model Category {
 model Like {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   likedBy   User     @relation(fields: [userId], references: [id])
-  post      Blog     @relation(fields: [postID], references: [id])
+  post      Blog     @relation(fields: [postID], references: [id], onDelete: Cascade)
   postID    String   @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

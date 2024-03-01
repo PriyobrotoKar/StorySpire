@@ -1,5 +1,7 @@
 import client from "@/lib/prisma";
-import apiErrorHandler from "@/utils/apiErrorHandler";
+import apiErrorHandler, { ApiError } from "@/utils/apiErrorHandler";
+import { deleteFromCloud } from "@/utils/deleteFromCloudinary";
+import { Prisma } from "@prisma/client";
 import { Session, getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../../auth/[...nextauth]/options";
@@ -166,5 +168,75 @@ export const GET = apiErrorHandler(
     }
 
     return NextResponse.json(blog, { status: 200 });
+  }
+);
+
+export const DELETE = apiErrorHandler(
+  async (request: NextRequest, { params }: { params: { slug: string } }) => {
+    const session = await getServerSession(authOptions);
+    if (!session)
+      throw new ApiError(
+        "Not Authorized",
+        { title: "Unauthorized", description: "Please login" },
+        401
+      );
+
+    //check if the user is deleting his own blog
+    const blog = await client.blog.findUnique({
+      where: {
+        slug: params.slug,
+      },
+      include: {
+        author: true,
+      },
+    });
+
+    if (!blog) {
+      throw new ApiError(
+        "Invalid Params",
+        { title: "Invalid Slug", description: "No blog found with this slug" },
+        400
+      );
+    }
+
+    if (blog.author.username !== session.user.username) {
+      throw new ApiError(
+        "Unauthorized",
+        {
+          title: "Not Alllowed",
+          description: "You can only delete your own blogs",
+        },
+        400
+      );
+    }
+    //start deleting blog post
+    //delete the images of the blog from cloud
+    //delete the thumbnail of the blog
+    if (blog.thumbnail) {
+      await deleteFromCloud(blog.thumbnail);
+    }
+    //delete the images in the blog
+    const content = blog.content as Prisma.JsonObject;
+    if (Array.isArray(content.blocks)) {
+      const blocks = content.blocks as Prisma.JsonArray;
+      blocks.forEach((element) => {
+        if (element && typeof element === "object" && !Array.isArray(element)) {
+          const block = element as Prisma.JsonObject;
+
+          if (block["type"] === "image") {
+            const data = block.data as any;
+            deleteFromCloud(data.file.url);
+          }
+        }
+      });
+    }
+    //delete the blog record from data base
+    await client.blog.delete({
+      where: {
+        slug: params.slug,
+      },
+    });
+
+    return NextResponse.json("Blog Deleted Successfully", { status: 200 });
   }
 );
