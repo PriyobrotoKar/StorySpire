@@ -40,4 +40,12 @@ export const social = {
     icon: "FaYoutube",
     color: "#ff0000",
   },
+  whatsapp: {
+    icon: "FaWhatsapp",
+    color: "#25D366",
+  },
+  reddit: {
+    icon: "FaRedditAlien",
+    color: "#ff6314",
+  },
 };

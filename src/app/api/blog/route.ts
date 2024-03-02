@@ -24,7 +24,7 @@ export const POST = apiErrorHandler(async (req: Request) => {
   // const { title } = await req.json();
   const body = await req.json();
   // const title = "This is a sample blog title";
-  const slug = body.title.replaceAll(/\s+/g, "-") + "-" + uuid();
+  const slug = body.title.replaceAll(/[^A-Za-z0-9]/g, "-") + "-" + uuid();
 
   const blog = await client.blog.create({
     data: {

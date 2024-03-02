@@ -1,11 +1,10 @@
 import Categories from "@/components/Categories";
 import CategoryList from "@/components/CategoryList";
+import SearchBar from "@/components/SearchBar";
 import CategoryListSkeletons from "@/components/skeletons/CategoryListSkeletons";
 import TopicSkeletons from "@/components/skeletons/TopicSkeletons";
-import { Input } from "@/components/ui/input";
-import { fetchAllCategories, sleep } from "@/utils/fetchActions";
-import React, { Suspense } from "react";
-import { FiSearch } from "react-icons/fi";
+import { fetchAllCategories } from "@/utils/fetchActions";
+import { Suspense } from "react";
 
 const CategorySection = async () => {
   const initialCategories = await fetchAllCategories(4);
@@ -29,14 +28,7 @@ const page = () => {
             (Have to change this subtitle)
           </p>
         </main>
-        <div className=" mx-6 flex max-w-xl items-center gap-2 rounded-md border border-white px-4 shadow-lg focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-1 sm:mx-auto">
-          <FiSearch className="text-lg text-primary" />
-          <Input
-            type="text"
-            placeholder="Search blogs by topic or keywords..."
-            className="border-none  focus-visible:ring-0 focus-visible:ring-offset-0"
-          />
-        </div>
+        <SearchBar />
       </section>
       <Suspense fallback={<CategoryListSkeletons />}>
         <CategoryList />

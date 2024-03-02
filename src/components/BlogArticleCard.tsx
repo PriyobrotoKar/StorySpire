@@ -3,19 +3,11 @@ import { BlogWithoutContent } from "@/types/schemaTypes";
 import { capitalize, formatDate, readingTime } from "@/utils/helpers";
 import Image from "next/image";
 import Link from "next/link";
+import BlogArticleOptions from "./BlogArticleOptions";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { Separator } from "./ui/separator";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Pencil } from "lucide-react";
-import DeleteBlogModal from "./DeleteBlogModal";
-import { Button } from "./ui/button";
 const BlogArticleCard = ({
   blog,
   size = "large",
@@ -51,35 +43,7 @@ const BlogArticleCard = ({
             : ""}
           {readingTime(blog.length)} mins
         </div>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant={"ghost"}
-              size={"sm"}
-              className="text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 data-[state=open]:bg-accent data-[state=open]:text-foreground data-[state=open]:opacity-100"
-            >
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className=" font-medium">
-            <a
-              href={
-                blog.isPublished
-                  ? `/write/${blog.slug}`
-                  : `/write/draft/${blog.slug}`
-              }
-            >
-              <DropdownMenuItem>
-                <Pencil size={16} />
-                Edit
-              </DropdownMenuItem>
-            </a>
-            <DropdownMenuItem asChild>
-              <DeleteBlogModal />
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <BlogArticleOptions blog={blog} />
       </div>
       <div className="flex-1">
         <div
