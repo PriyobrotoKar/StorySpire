@@ -24,7 +24,7 @@ const ShareBlogModal = ({ url }: { url: string }) => {
       url
     )}`,
     `https://api.whatsapp.com/send?text=${encodeURIComponent(url)}`,
-    `http://www.reddit.com/submit?url=${encodeURIComponent(url)}`,
+    `https://www.reddit.com/submit?url=${encodeURIComponent(url)}`,
   ];
   const [isCopied, setIsCopied] = useState(false);
 
