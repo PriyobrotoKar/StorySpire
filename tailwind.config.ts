@@ -2,18 +2,30 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1rem",
       screens: {
-        "2xl": "1400px",
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        "2xl": "1536px",
       },
+    },
+    fontSize: {
+      "3xl": "3rem",
+      "2xl": "2.25rem",
+      xl: "1.5rem",
+      lg: "1.2rem",
+      base: "1.125rem",
+      md: "1rem",
+      sm: "0.875rem",
     },
     extend: {
       colors: {
@@ -72,5 +84,10 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography")({
+      className: "ignoreEditorjs",
+    }),
+  ],
+};
