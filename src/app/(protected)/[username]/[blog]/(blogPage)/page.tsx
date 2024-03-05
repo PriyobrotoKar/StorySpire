@@ -3,6 +3,7 @@ import BlogArticleCard from "@/components/BlogArticleCard";
 import BlogPostBookmark from "@/components/BlogPostBookmark";
 import BlogPostLike from "@/components/BlogPostLike";
 import Codeblock from "@/components/Codeblock";
+import Confetti from "@/components/Confetti";
 import FollowUserButton from "@/components/FollowUserButton";
 import ObserverWrapper from "@/components/ObserverWrapper";
 import UserBlogsSkeletons from "@/components/skeletons/UserBlogsSkeletons";
@@ -37,6 +38,7 @@ const MoreFromAuthor = async ({
 }) => {
   const res: Blog[] = await fetchUserBlogs(username, 4);
   const moreBlogs = res.filter((blog) => blog.slug !== currentBlog);
+
   if (moreBlogs.length === 4) moreBlogs.pop();
 
   if (moreBlogs.length === 0) return;
@@ -89,6 +91,7 @@ const page = async ({
 
   return (
     <>
+      <Confetti />
       <ObserverWrapper>
         <section
           className={

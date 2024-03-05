@@ -1,5 +1,4 @@
 "use client";
-import confetti from "canvas-confetti";
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { colors } from "../constants/colors";
@@ -11,12 +10,14 @@ import { postFetchAPi, putFetchAPi } from "@/utils/fetchData";
 import { uploadToCloud } from "@/utils/uploadToCloudinary";
 import { IoMdClose } from "react-icons/io";
 
+import { updateShowConfetti } from "@/reducers/ShowConfettiSlice";
 import { BlogPreview, Tags } from "@/types/customTypes";
 import { Blog } from "@/types/schemaTypes";
 import { deleteFromCloud } from "@/utils/deleteFromCloudinary";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import BlogArticleCard from "./BlogArticleCard";
 
 const UploadModal = ({
@@ -50,6 +51,7 @@ const UploadModal = ({
   const router = useRouter();
   const pathname = usePathname();
   const isEditing = pathname.slice(pathname.lastIndexOf("/")) !== "/write";
+  const dispatch = useDispatch();
 
   const description = content?.blocks.find(
     (block: any) => block.type === "paragraph"
@@ -155,21 +157,7 @@ const UploadModal = ({
         categories,
       });
     }
-
-    confetti({
-      particleCount: 100,
-      angle: 60,
-      spread: 55,
-      origin: { x: 0 },
-      colors: confettiColors,
-    });
-    confetti({
-      particleCount: 100,
-      angle: 120,
-      spread: 55,
-      origin: { x: 1 },
-      colors: confettiColors,
-    });
+    dispatch(updateShowConfetti(true));
     document.documentElement.style.overflow = "auto";
     router.replace(`/@${res.data.author.username}/${res.data.slug}`);
   };

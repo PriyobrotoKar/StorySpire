@@ -1,14 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { useSession } from "next-auth/react";
 import { BASE_URL } from "@/constants/constant";
-import { Button } from "./ui/button";
-import { Loader2 } from "lucide-react";
-import { patchFetchAPi } from "@/utils/fetchData";
-import { toast } from "./ui/use-toast";
 import { updateUser } from "@/utils/fetchActions";
+import { patchFetchAPi } from "@/utils/fetchData";
+import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { toast } from "./ui/use-toast";
 
 const GeneralSettingsForms = () => {
   const { data: session, update } = useSession();
@@ -45,7 +45,7 @@ const GeneralSettingsForms = () => {
     e.preventDefault();
     if (input.email && input.username && session) {
       setIsSubmitting(true);
-      const res = await patchFetchAPi("/api/user/account", input);
+      const res = await patchFetchAPi("/api/user", input);
       if (res.title) {
         setError({ ...error, [res.field]: res.description });
         setIsSubmitting(false);

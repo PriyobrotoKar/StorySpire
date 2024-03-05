@@ -1,6 +1,19 @@
+"use client";
 import { Button } from "@/components/ui/button";
+import { deleteFetchAPi } from "@/utils/fetchData";
+import { Loader2 } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-const page = () => {
+const Page = () => {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
+  const handleAccountDelete = async () => {
+    setIsDeleting(true);
+    await deleteFetchAPi("/api/user");
+    await signOut({ callbackUrl: "/" });
+  };
   return (
     <div className="space-y-4">
       <main>
@@ -15,10 +28,23 @@ const page = () => {
       </main>
       <div className="space-x-4">
         <Button variant={"secondary"}>Nevermind</Button>
-        <Button variant={"destructive"}>Delete my account</Button>
+        <Button
+          disabled={isDeleting}
+          onClick={handleAccountDelete}
+          variant={"destructive"}
+        >
+          {isDeleting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Deleting
+            </>
+          ) : (
+            "Delete my account"
+          )}
+        </Button>
       </div>
     </div>
   );
 };
 
-export default page;
+export default Page;

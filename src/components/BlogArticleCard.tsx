@@ -8,6 +8,15 @@ import { Avatar, AvatarImage } from "./ui/avatar";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { Separator } from "./ui/separator";
 
+const isBlogPreview = (
+  item: BlogPreview | BlogWithoutContent
+): item is BlogPreview => {
+  if (item && "id" in item) {
+    return false;
+  }
+  return true;
+};
+
 const BlogArticleCard = ({
   blog,
   size = "large",
@@ -43,7 +52,7 @@ const BlogArticleCard = ({
             : ""}
           {readingTime(blog.length)} mins
         </div>
-        <BlogArticleOptions blog={blog} />
+        {!isBlogPreview(blog) && <BlogArticleOptions blog={blog} />}
       </div>
       <div className="flex-1">
         <div

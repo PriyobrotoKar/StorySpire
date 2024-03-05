@@ -6,7 +6,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { BASE_URL } from "@/constants/constant";
-import { BlogPreview } from "@/types/customTypes";
 import { BlogWithoutContent } from "@/types/schemaTypes";
 import { Bookmark, MoreHorizontal, Pencil } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -14,11 +13,7 @@ import DeleteBlogModal from "./DeleteBlogModal";
 import ShareBlogModal from "./ShareBlogModal";
 import { Button } from "./ui/button";
 
-const BlogArticleOptions = ({
-  blog,
-}: {
-  blog: BlogPreview | BlogWithoutContent;
-}) => {
+const BlogArticleOptions = ({ blog }: { blog: BlogWithoutContent }) => {
   const { data: session } = useSession();
   return (
     <DropdownMenu>
@@ -56,7 +51,7 @@ const BlogArticleOptions = ({
               </DropdownMenuItem>
             </a>
             <DropdownMenuItem asChild>
-              <DeleteBlogModal />
+              <DeleteBlogModal slug={blog.slug} />
             </DropdownMenuItem>
           </>
         )}

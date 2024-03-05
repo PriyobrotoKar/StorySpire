@@ -1,10 +1,10 @@
 import client from "@/lib/prisma";
 import { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
-import { cookies } from "next/headers";
 import bcrypt from "bcrypt";
+import { cookies } from "next/headers";
 
 export const authOptions: NextAuthOptions = {
   providers: [

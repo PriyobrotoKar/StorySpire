@@ -86,6 +86,18 @@ const user = async ({
       : []),
   ];
 
+  let profilePicHighQuality: string | null;
+  if (
+    user.profile_pic &&
+    new URL(user.profile_pic).hostname === "lh3.googleusercontent.com"
+  ) {
+    const profilePicPath = user.profile_pic?.split("");
+    profilePicPath?.splice(profilePicPath.indexOf("=") + 1, 3, "s150");
+    profilePicHighQuality = profilePicPath.join("");
+  } else {
+    profilePicHighQuality = user.profile_pic;
+  }
+
   const { isFollowing } =
     session && !isSameUser
       ? await checkIsFollowing(session.user.username, username)
@@ -109,10 +121,10 @@ const user = async ({
           <section className="top-20 z-10 flex-1 self-start px-4 py-16 lg:sticky lg:py-20">
             <div className="absolute -top-10 h-24 w-24 overflow-hidden rounded-full border-[4px] border-white shadow-lg lg:-top-16 lg:h-32 lg:w-32">
               <Image
-                src={user.profile_pic || "/images/avatarFallback.png"}
+                src={profilePicHighQuality || "/images/avatarFallback.png"}
                 alt="user profile picture"
-                width={150}
-                height={150}
+                width={200}
+                height={200}
                 priority
                 className="h-full w-full object-cover"
               />

@@ -231,11 +231,22 @@ export const DELETE = apiErrorHandler(
       });
     }
     //delete the blog record from data base
-    await client.blog.delete({
-      where: {
-        slug: params.slug,
-      },
-    });
+    await client.$transaction([
+      client.blog.update({
+        where: {
+          id: blog.id,
+        },
+        data: {
+          categories: { set: [] },
+          savedBy:{set:[]}
+        },
+      }),
+      client.blog.delete({
+        where: {
+          id: blog.id,
+        },
+      }),
+    ]);
 
     return NextResponse.json("Blog Deleted Successfully", { status: 200 });
   }
