@@ -40,7 +40,7 @@ model Social {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   name   String
   link   String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @db.ObjectId
 }
 
@@ -54,7 +54,7 @@ model Blog {
   length      Int
   isPublished Boolean
   isFeatured  Boolean    @default(false)
-  author      User       @relation(fields: [authorId], references: [id])
+  author      User       @relation(fields: [authorId], references: [id], onDelete: NoAction)
   authorId    String     @db.ObjectId
   savedBy     User[]     @relation("Bookmarks", fields: [savedByIDs], references: [id])
   savedByIDs  String[]   @db.ObjectId
@@ -70,7 +70,7 @@ model Blog {
 
 model BLogView {
   id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  user   User?   @relation(fields: [userID], references: [id])
+  user   User?   @relation(fields: [userID], references: [id], onDelete: Cascade)
   userID String? @db.ObjectId
   userIP String
   blog   Blog    @relation(fields: [blogID], references: [id], onDelete: Cascade)
@@ -90,7 +90,7 @@ model Category {
 
 model Like {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  likedBy   User     @relation(fields: [userId], references: [id])
+  likedBy   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   post      Blog     @relation(fields: [postID], references: [id], onDelete: Cascade)
   postID    String   @db.ObjectId
   createdAt DateTime @default(now())
@@ -102,9 +102,9 @@ model Like {
 
 model Follow {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
-  follower    User   @relation(name: "Following", fields: [followerID], references: [id])
+  follower    User   @relation(name: "Following", fields: [followerID], references: [id], onDelete: Cascade)
   followerID  String @db.ObjectId
-  following   User   @relation(name: "Follower", fields: [followingID], references: [id])
+  following   User   @relation(name: "Follower", fields: [followingID], references: [id], onDelete: Cascade)
   followingID String @db.ObjectId
 
   @@unique([followerID, followingID])
@@ -112,9 +112,9 @@ model Follow {
 
 model FollowTopic {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  follower      User     @relation(fields: [followerID], references: [id])
+  follower      User     @relation(fields: [followerID], references: [id], onDelete: Cascade)
   followerID    String   @db.ObjectId
-  followTopic   Category @relation(fields: [followTopicID], references: [id])
+  followTopic   Category @relation(fields: [followTopicID], references: [id], onDelete: Cascade)
   followTopicID String   @db.ObjectId
 
   @@unique([followerID, followTopicID])
@@ -123,7 +123,7 @@ model FollowTopic {
 model UserSearchHistory {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   searchQuery String
-  user        User     @relation(fields: [userID], references: [id])
+  user        User     @relation(fields: [userID], references: [id], onDelete: Cascade)
   userID      String   @db.ObjectId
   createdAt   DateTime @default(now())
 }

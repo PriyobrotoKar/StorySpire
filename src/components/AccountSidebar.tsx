@@ -3,14 +3,14 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Separator } from "./ui/separator";
 import React from "react";
+import { twMerge } from "tailwind-merge";
+import { Separator } from "./ui/separator";
 
 const navItems = [
   {
@@ -71,16 +71,23 @@ const DesktopSidebar = () => {
             <React.Fragment key={i + 1}>
               {i === navItems.length - 1 && <Separator />}
               <li
-                className={` ${
-                  pathname === item.path
-                    ? "font-semibold text-foreground"
-                    : "transition-colors hover:text-foreground"
-                } ${
-                  item.path.includes("/delete") &&
-                  "text-destructive/80 hover:text-destructive "
-                }`}
+                className={twMerge(
+                  ` ${
+                    pathname === item.path
+                      ? item.path === "/account/delete"
+                        ? "bg-primary/10 font-semibold text-foreground"
+                        : "font-semibold text-foreground"
+                      : "transition-colors hover:text-foreground"
+                  } `,
+                  `${
+                    item.path.includes("/delete") &&
+                    "rounded-md px-2 py-1.5 text-destructive/80 transition-all hover:bg-primary/10 hover:text-destructive"
+                  }`
+                )}
               >
-                <Link href={item.path}>{item.name}</Link>
+                <Link className="block w-full" href={item.path}>
+                  {item.name}
+                </Link>
               </li>
             </React.Fragment>
           );

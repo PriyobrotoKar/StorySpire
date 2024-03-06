@@ -32,8 +32,8 @@ export const POST = apiErrorHandler(async (req: Request) => {
       categories: {
         connectOrCreate: body.categories.map((cat: Tags) => {
           return {
-            where: { name: cat.name },
-            create: { name: cat.name, color: cat.color },
+            where: { name: cat.name.toLowerCase() },
+            create: { name: cat.name.toLowerCase(), color: cat.color },
           };
         }),
       },

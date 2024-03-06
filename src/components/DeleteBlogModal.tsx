@@ -8,12 +8,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { AlertTriangle, Trash2 } from "lucide-react";
+import { deleteFetchAPi } from "@/utils/fetchData";
+import { AlertTriangle, Loader2, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Button } from "./ui/button";
 
-const DeleteBlogModal = () => {
+const DeleteBlogModal = ({ slug }: { slug: string }) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
   const handleDelete = async () => {
-    console.log("Delete blog");
+    setIsDeleting(true);
+    await deleteFetchAPi(`/api/blog/${slug}`);
+    router.refresh();
   };
   return (
     <Dialog>
@@ -35,11 +42,19 @@ const DeleteBlogModal = () => {
           </DialogDescription>
           <DialogFooter>
             <Button
+              disabled={isDeleting}
               onClick={handleDelete}
               variant={"destructive"}
               className="mt-6 w-full bg-primary/10 hover:bg-primary/30"
             >
-              Delete Blog Permanently
+              {isDeleting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting
+                </>
+              ) : (
+                "Delete Blog Permanently"
+              )}
             </Button>
           </DialogFooter>
         </DialogHeader>
