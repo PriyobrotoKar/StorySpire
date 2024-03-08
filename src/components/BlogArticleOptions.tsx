@@ -5,13 +5,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { BASE_URL } from "@/constants/constant";
 import { BlogWithoutContent } from "@/types/schemaTypes";
 import { Bookmark, MoreHorizontal, Pencil } from "lucide-react";
 import { useSession } from "next-auth/react";
 import DeleteBlogModal from "./DeleteBlogModal";
 import ShareBlogModal from "./ShareBlogModal";
 import { Button } from "./ui/button";
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const BlogArticleOptions = ({ blog }: { blog: BlogWithoutContent }) => {
   const { data: session } = useSession();

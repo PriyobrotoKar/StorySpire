@@ -14,6 +14,7 @@ import {
   fetchUserDrafts,
   fetchUserPopularBlogs,
 } from "@/utils/fetchActions";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,6 +22,34 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { v4 } from "uuid";
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { username: string };
+}): Promise<Metadata> => {
+  let { username } = params;
+
+  if (!username.includes("%40")) {
+    return notFound();
+  }
+  username = username.slice(3);
+  const user: User = await fetchSingleUser(username);
+  return {
+    title: user.fullname,
+    description: user.bio,
+    twitter: {
+      card: "summary",
+    },
+    openGraph: {
+      images: [
+        {
+          url: user.profile_pic || "",
+        },
+      ],
+    },
+  };
+};
 
 const UserBlogs = async ({
   username,

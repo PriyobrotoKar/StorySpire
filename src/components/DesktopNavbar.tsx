@@ -32,7 +32,7 @@ const tabs = [
   { id: "home", label: "Home", link: "/" },
   { id: "explore", label: "Explore", link: "/explore" },
   { id: "bookmark", label: "Bookmark", link: "/bookmarks" },
-  { id: "about", label: "About", link: "/" },
+  { id: "about", label: "About", link: "/about" },
 ];
 
 const DesktopNavbar = ({ session }: { session: Session | null }) => {

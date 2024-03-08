@@ -20,6 +20,7 @@ import { capitalize, formatDate, readingTime } from "@/utils/helpers";
 import edjsHTML from "editorjs-html";
 import "highlight.js/styles/github.css";
 import parse from "html-react-parser";
+import { Metadata, Viewport } from "next";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,6 +29,40 @@ import { Suspense } from "react";
 import { LuEye } from "react-icons/lu";
 import { v4 as uuid } from "uuid";
 import styles from "./styles.module.css";
+
+export const generateViewport = async ({
+  params,
+}: {
+  params: { username: string; blog: string };
+}): Promise<Viewport> => {
+  const blog: Blog = await fetchSingleBlog(params.blog);
+  if (!blog) {
+    return notFound();
+  }
+
+  return {
+    themeColor: blog.categories[0].color,
+  };
+};
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { username: string; blog: string };
+}): Promise<Metadata> => {
+  const blog: Blog = await fetchSingleBlog(params.blog);
+  if (!blog) {
+    return notFound();
+  }
+
+  return {
+    title: blog.title,
+    description: blog.description,
+    openGraph: {
+      images: [{ url: blog.thumbnail || "" }],
+    },
+  };
+};
 
 const MoreFromAuthor = async ({
   username,
@@ -103,7 +138,7 @@ const page = async ({
               colors[Number((Math.random() * 10).toFixed(0))],
           }}
         >
-          <div className="relative z-10 mt-10 font-medium">
+          <div className="relative z-10 mt-0 font-medium">
             {blog.categories.length
               ? capitalize(blog.categories[0].name) + " • "
               : ""}
