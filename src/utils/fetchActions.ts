@@ -178,7 +178,7 @@ export const searchUsers = async (query: string, offset = 0) => {
     `${BASE_URL}/api/search/users?q=${query}&offset=${offset}`,
     {
       method: "GET",
-      // headers: headers(),
+      headers: headers(),
     }
   );
   return await response.json();
@@ -215,6 +215,13 @@ export const addRecentSearch = async (query: string) => {
 export const deleteBlogBySlug = async (slug: string) => {
   const res = await fetch(`${BASE_URL}/api/blog/${slug}`, {
     method: "DELETE",
+    headers: headers(),
+  });
+  return await res.json();
+};
+export const getTopWriters = async (limit?: number) => {
+  const res = await fetch(`${BASE_URL}/api/user/top-authors?limit=${limit}`, {
+    method: "GET",
     headers: headers(),
   });
   return await res.json();

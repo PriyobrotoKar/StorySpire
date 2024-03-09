@@ -10,24 +10,25 @@ export const GET = apiErrorHandler(async (request: NextRequest) => {
       isPublished: true,
       isFeatured: false,
     },
-    include: {
+    select: {
+      title: true,
+      thumbnail: true,
+      description: true,
+      id: true,
+      length: true,
+      slug: true,
       categories: {
         orderBy: {
           createdAt: "desc",
         },
       },
       author: {
-        include: {
-          _count: {
-            select: {
-              follower: true,
-              blogs: true,
-            },
-          },
-        },
+        include: { _count: { select: { follower: true, blogs: true } } },
       },
+      createdAt: true,
+      isPublished: true,
     },
-    // take: limit || 5,
+    take: limit || 5,
     orderBy: {
       createdAt: "desc",
     },

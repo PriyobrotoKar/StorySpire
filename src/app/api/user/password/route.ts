@@ -1,9 +1,9 @@
-import apiErrorHandler, { ApiError } from "@/utils/apiErrorHandler";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/options";
 import client from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import apiErrorHandler, { ApiError } from "@/utils/apiErrorHandler";
 import bcrypt from "bcrypt";
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
+import { authOptions } from "../../auth/[...nextauth]/options";
 
 export const PATCH = apiErrorHandler(async (req: Request) => {
   const session = await getServerSession(authOptions);
@@ -71,7 +71,7 @@ export const PATCH = apiErrorHandler(async (req: Request) => {
   return NextResponse.json("Password updated successfully", { status: 200 });
 });
 
-export const errResponse = (
+const errResponse = (
   message: string,
   {
     title,

@@ -138,7 +138,7 @@ const page = async ({
               colors[Number((Math.random() * 10).toFixed(0))],
           }}
         >
-          <div className="relative z-10 mt-0 font-medium">
+          <div className="relative z-10  font-medium sm:mt-4">
             {blog.categories.length
               ? capitalize(blog.categories[0].name) + " • "
               : ""}
@@ -158,7 +158,14 @@ const page = async ({
               />
             </div>
             <div>
-              <div className="font-semibold">{blog.author.fullname}</div>
+              <div className="font-semibold">
+                <Link
+                  className="hover:underline"
+                  href={`/@${blog.author.username}`}
+                >
+                  {blog.author.fullname}
+                </Link>
+              </div>
               <div className="text-sm text-white/80">
                 {blog.isPublished
                   ? formatDate(blog.createdAt)
@@ -166,7 +173,6 @@ const page = async ({
               </div>
             </div>
           </div>
-          {/* <BlogPostActions blog={blog} user={user} /> */}
           <div className="flex gap-4">
             <div className="flex items-center gap-1">
               <LuEye className="text-xl" />

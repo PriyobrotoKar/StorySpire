@@ -1,4 +1,5 @@
 import { Separator } from "@/components/ui/separator";
+import { Metadata } from "next";
 
 const techstacks = [
   {
@@ -61,6 +62,10 @@ const features = [
   " Enable users to share blog posts on various social media platforms.",
   " Enable users to follow their favourite authors or topics.",
 ];
+
+export const metadata: Metadata = {
+  title: "About",
+};
 
 const page = () => {
   return (

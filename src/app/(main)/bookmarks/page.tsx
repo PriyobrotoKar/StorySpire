@@ -4,6 +4,12 @@ import { BlogWithoutContent } from "@/types/schemaTypes";
 import { fetchBookmarks } from "@/utils/fetchActions";
 import { Suspense } from "react";
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Bookmarks",
+};
+
 const Blogs = async () => {
   const bookmarks: BlogWithoutContent[] = await fetchBookmarks();
   return (

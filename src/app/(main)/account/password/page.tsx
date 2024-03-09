@@ -1,5 +1,10 @@
 import PasswordSettingsForm from "@/components/PasswordSettingsForm";
-import React from "react";
+
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Password",
+};
 
 const page = () => {
   return (

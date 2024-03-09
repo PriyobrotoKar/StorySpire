@@ -4,8 +4,13 @@ import SearchBar from "@/components/SearchBar";
 import { Separator } from "@/components/ui/separator";
 import { fetchRecentSearches } from "@/utils/fetchActions";
 import { UserSearchHistory } from "@prisma/client";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Search",
+};
 
 const page = async () => {
   const session = await getServerSession(authOptions);

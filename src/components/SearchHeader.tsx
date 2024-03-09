@@ -1,6 +1,7 @@
 "use client";
 import { capitalizeSentence } from "@/utils/helpers";
 import { useSearchParams } from "next/navigation";
+import { v4 } from "uuid";
 import SearchBar from "./SearchBar";
 import TabGroup from "./TabGroup";
 
@@ -20,7 +21,7 @@ const SearchHeader = () => {
       <h1 className="mx-auto w-fit text-3xl font-bold leading-tight text-secondary-foreground">
         {capitalizeSentence(query)}
       </h1>
-      <SearchBar />
+      <SearchBar key={v4()} />
       <div className="border-b py-2">
         <TabGroup tabs={tabs} />
       </div>

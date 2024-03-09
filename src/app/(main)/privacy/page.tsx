@@ -1,6 +1,11 @@
 import { Separator } from "@/components/ui/separator";
+import { Metadata } from "next";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+};
 
 const page = () => {
   return (

@@ -1,11 +1,15 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import ProfileSettingsForm from "@/components/ProfileSettingsForm";
-import { fetchSingleUser, sleep } from "@/utils/fetchActions";
+import { fetchSingleUser } from "@/utils/fetchActions";
 import { getServerSession } from "next-auth";
-import React from "react";
+
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Profile",
+};
 
 const page = async () => {
-  await sleep(2000);
   const session = await getServerSession(authOptions);
   const profile = await fetchSingleUser(session?.user.username);
   return (

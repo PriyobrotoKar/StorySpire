@@ -43,7 +43,7 @@ const Footer = () => {
           </div>
         </section>
         <section className="flex flex-col gap-4 text-muted-foreground sm:flex-row-reverse sm:justify-between">
-          <Link href={"/"}>Privacy Policy</Link>
+          <Link href={"/privacy"}>Privacy Policy</Link>
           <p>
             Built by{" "}
             <a

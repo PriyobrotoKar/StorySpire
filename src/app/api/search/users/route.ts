@@ -1,13 +1,16 @@
 import client from "@/lib/prisma";
 import apiErrorHandler, { ApiError } from "@/utils/apiErrorHandler";
 import { Prisma } from "@prisma/client";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { authOptions } from "../../auth/[...nextauth]/options";
 
 export const GET = apiErrorHandler(async (req: NextRequest) => {
-  //   const session = await getServerSession(authOptions);
+  // const session = await getServerSession(authOptions);
   const query = req.nextUrl.searchParams.get("q");
   const offset = req.nextUrl.searchParams.get("offset") ?? 0;
   const userCount = req.nextUrl.searchParams.get("user_count") ?? 10;
+  const session = await getServerSession(authOptions);
 
   if (!query) {
     throw new ApiError(
@@ -32,6 +35,11 @@ export const GET = apiErrorHandler(async (req: NextRequest) => {
         },
       },
     ],
+    ...(session && {
+      username: {
+        not: session.user.username,
+      },
+    }),
   };
 
   const users = await client.user.findMany({
