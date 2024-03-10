@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/options";
-import { errResponse } from "./password/route";
+import { errResponse } from "@/utils/helpers";
 
 export const POST = apiErrorHandler(async (req: Request) => {
   const userBody = await req.json();

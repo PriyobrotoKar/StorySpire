@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "../../auth/[...nextauth]/options";
+import { errResponse } from "@/utils/helpers";
 
 export const PATCH = apiErrorHandler(async (req: Request) => {
   const session = await getServerSession(authOptions);
@@ -70,25 +71,3 @@ export const PATCH = apiErrorHandler(async (req: Request) => {
 
   return NextResponse.json("Password updated successfully", { status: 200 });
 });
-
-const errResponse = (
-  message: string,
-  {
-    title,
-    description,
-    field,
-  }: { title: string; description: string; field: string },
-  status: number
-) => {
-  return NextResponse.json(
-    {
-      error: {
-        title: title || "Internal Server Error",
-        description:
-          description || "There's a problem connecting to the server",
-        field: field,
-      },
-    },
-    { status }
-  );
-};

@@ -14,7 +14,6 @@ export const metadata: Metadata = {
 
 const CategorySection = async () => {
   const initialCategories = await fetchAllCategories(4);
-  console.log(initialCategories._count);
   return (
     <Categories
       initialCategories={initialCategories.categories}

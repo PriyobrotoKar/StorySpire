@@ -7,6 +7,7 @@ import Codeblock from "@/components/Codeblock";
 import Confetti from "@/components/Confetti";
 import FollowUserButton from "@/components/FollowUserButton";
 import ObserverWrapper from "@/components/ObserverWrapper";
+import ShareBlogModal from "@/components/ShareBlogModal";
 import UserBlogsSkeletons from "@/components/skeletons/UserBlogsSkeletons";
 import { colors } from "@/constants/colors";
 import { Blog, User } from "@/types/schemaTypes";
@@ -30,6 +31,7 @@ import { Suspense } from "react";
 import { LuEye } from "react-icons/lu";
 import { v4 as uuid } from "uuid";
 import styles from "./styles.module.css";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const generateViewport = async ({
   params,
@@ -174,7 +176,7 @@ const page = async ({
               </div>
             </div>
           </div>
-          <div className="flex gap-4">
+          <div className="relative z-10 flex gap-4">
             <div className="flex items-center gap-1">
               <LuEye className="text-xl" />
               <p>{views}</p>
@@ -182,6 +184,12 @@ const page = async ({
             <BlogPostLike blog={blog} user={user} />
             <BlogPostComment session={session} slug={blog.slug} />
             <BlogPostBookmark blog={blog} user={user} />
+            <ShareBlogModal
+              iconOnly
+              iconsize={18}
+              url={`${BASE_URL}/@${blog.author.username}/${blog.slug}`}
+              className="px-0 hover:bg-transparent"
+            />
           </div>
         </section>
       </ObserverWrapper>

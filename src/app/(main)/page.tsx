@@ -67,7 +67,7 @@ const TopWriters = async () => {
   });
   return (
     <div className="flex flex-col gap-6 lg:flex-row">
-      <div className="relative flex flex-1 items-end justify-center gap-6 rounded-lg bg-secondary-foreground pt-16">
+      <div className="relative flex min-h-[22rem] flex-1 items-end justify-center gap-6 rounded-lg bg-secondary-foreground pt-16">
         <div className="absolute h-full w-full bg-[radial-gradient(#e5e7eb60_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_20%,#000_20%,transparent_150%)]"></div>
 
         <LeaderboardBestWriter writer={second} position={"2nd"} />

@@ -111,7 +111,7 @@ const features = [
   },
   {
     feature: " Comment on blog posts.",
-    completed: false,
+    completed: true,
   },
 ];
 

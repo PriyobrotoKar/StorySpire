@@ -27,6 +27,7 @@ import { useMediaQuery } from "usehooks-ts";
 import TabGroup from "./TabGroup";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const tabs = [
   { id: "home", label: "Home", link: "/" },
@@ -109,7 +110,9 @@ const DesktopNavbar = ({ session }: { session: Session | null }) => {
             {!session ? (
               <Button
                 variant={isAtBlogPage ? "secondary" : "default"}
-                onClick={() => router.push("/login")}
+                onClick={() =>
+                  router.push(`/login?callbackUrl=${BASE_URL + pathname}`)
+                }
                 className={
                   isAtBlogPage && !isDarkText
                     ? "bg-secondary/30 text-muted hover:bg-secondary/50"

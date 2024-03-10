@@ -22,7 +22,7 @@ const LoginForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(false);
   const router = useRouter();
-  const callbackUrl = useSearchParams().get("callbackUrl");
+  const callbackUrl = useSearchParams().get("callbackUrl") ?? "";
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput((prev) => ({
@@ -118,7 +118,7 @@ const LoginForm = () => {
         className="w-full space-x-3 text-xl"
         variant={"outline"}
         size={"lg"}
-        onClick={() => signIn("google", { callbackUrl: "/" })}
+        onClick={() => signIn("google", { callbackUrl })}
       >
         <FcGoogle /> <span className="text-base">Google</span>
       </Button>

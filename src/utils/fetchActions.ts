@@ -217,7 +217,6 @@ export const addRecentSearch = async (query: string) => {
     }),
     headers: headers(),
   });
-  console.log(await res.json());
 };
 export const deleteBlogBySlug = async (slug: string) => {
   const res = await fetch(`${BASE_URL}/api/blog/${slug}`, {

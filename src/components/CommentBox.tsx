@@ -3,14 +3,22 @@ import { postFetchAPi } from "@/utils/fetchData";
 import { Loader2 } from "lucide-react";
 import { Session } from "next-auth";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "./ui/button";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-const CommentBox = ({ session, slug }: { session: Session; slug: string }) => {
+const CommentBox = ({
+  session,
+  slug,
+}: {
+  session: Session | null;
+  slug: string;
+}) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [comment, setComment] = useState("");
-
+  const pathname = usePathname();
   const router = useRouter();
   const handleSubmitComment = async () => {
     setIsSubmitting(true);
@@ -19,6 +27,14 @@ const CommentBox = ({ session, slug }: { session: Session; slug: string }) => {
 
     router.refresh();
   };
+
+  if (!session) {
+    return (
+      <Link href={`/login?callbackUrl=${BASE_URL + pathname}`}>
+        <Button className="mt-6 w-full">Login To Comment</Button>
+      </Link>
+    );
+  }
 
   return (
     <div className="mt-6 flex flex-col gap-4 rounded-md bg-white p-4 shadow-lg">

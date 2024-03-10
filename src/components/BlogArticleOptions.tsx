@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { BlogWithoutContent } from "@/types/schemaTypes";
-import { Bookmark, MoreHorizontal, Pencil } from "lucide-react";
+import { MoreHorizontal, Pencil } from "lucide-react";
 import { useSession } from "next-auth/react";
 import DeleteBlogModal from "./DeleteBlogModal";
 import ShareBlogModal from "./ShareBlogModal";
@@ -32,10 +32,6 @@ const BlogArticleOptions = ({ blog }: { blog: BlogWithoutContent }) => {
           <ShareBlogModal
             url={`${BASE_URL}/@${blog.author.username}/${blog.slug}`}
           />
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Bookmark size={16} />
-          Bookmark
         </DropdownMenuItem>
         {blog.author.username === session?.user.username && (
           <>

@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
-import { NextRequest, NextResponse } from "next/server";
+import { DynamicServerError } from "next/dist/client/components/hooks-server-context";
+import { NextResponse } from "next/server";
 
 export class ApiError extends Error {
   constructor(message, errResponse, status) {
@@ -17,8 +18,11 @@ const apiErrorHandler =
     try {
       return await fn(request, ...args);
     } catch (error) {
+      if (error instanceof DynamicServerError) {
+        throw error;
+      }
       // Log the error to a logging system
-      console.log("API ERROR HANDLER", { error, location: fn.name });
+      // console.log("API ERROR HANDLER", { error, location: fn.name });
 
       if (error instanceof Prisma.PrismaClientValidationError) {
         return NextResponse.json(

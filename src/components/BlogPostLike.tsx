@@ -2,10 +2,10 @@
 
 import { Blog, User } from "@/types/schemaTypes";
 import { deleteFetchAPi, postFetchAPi } from "@/utils/fetchData";
-import { useRouter } from "next/navigation";
+import { Heart } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { IoHeart, IoHeartOutline } from "react-icons/io5";
-
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const BlogPostLike = ({
   blog,
   user,
@@ -13,6 +13,7 @@ const BlogPostLike = ({
   blog: Blog & { isLiked: Boolean; _count: { Like: number } };
   user: User;
 }) => {
+  const pathname = usePathname();
   const router = useRouter();
   const [isLiked, setIsLiked] = useState(blog.isLiked);
   const [likes, setLikes] = useState(blog._count.Like);
@@ -30,15 +31,15 @@ const BlogPostLike = ({
         router.refresh();
       }
     } else {
-      router.push("/login");
+      router.push(`/login?callbackUrl=${BASE_URL + pathname}`);
     }
   };
   return (
     <div
       onClick={handleLike}
-      className=" relative z-10 flex  cursor-pointer items-center gap-1 text-xl"
+      className=" flex  cursor-pointer items-center gap-1 text-xl"
     >
-      {isLiked ? <IoHeart /> : <IoHeartOutline />}
+      {isLiked ? <Heart fill="#e82c4f" strokeWidth={0} /> : <Heart />}
       {likes > 0 && <span className="text-sm">{likes}</span>}
     </div>
   );

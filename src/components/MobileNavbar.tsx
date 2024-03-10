@@ -3,9 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
 import {
-  FaBookmark,
   FaCompass,
   FaRegBookmark,
   FaRegCompass,
@@ -22,19 +20,19 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import useToggleNavbar from "@/hooks/useToggleNavbar";
+import { AvatarImage } from "@radix-ui/react-avatar";
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
+import Image from "next/image";
+import { FiChevronRight, FiLogOut } from "react-icons/fi";
 import { GoHome, GoHomeFill, GoSearch } from "react-icons/go";
-import { FiChevronRight } from "react-icons/fi";
+import { LuLogIn, LuSettings } from "react-icons/lu";
 import { PiNotePencil, PiNotePencilFill } from "react-icons/pi";
 import { Avatar, AvatarFallback } from "./ui/avatar";
-import { AvatarImage } from "@radix-ui/react-avatar";
-import { LuLogIn, LuSettings } from "react-icons/lu";
-import { Session } from "next-auth";
-import Image from "next/image";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
-import { FiLogOut } from "react-icons/fi";
-import { signOut } from "next-auth/react";
-import useToggleNavbar from "@/hooks/useToggleNavbar";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const MobileNavbar = ({ session }: { session: Session | null }) => {
   const showNav = useToggleNavbar();
@@ -182,7 +180,7 @@ const MobileNavbar = ({ session }: { session: Session | null }) => {
                 </DrawerContent>
               </Drawer>
             ) : (
-              <Link href={"/login"}>
+              <Link href={`/login?callbackUrl=${BASE_URL + pathname}`}>
                 <LuLogIn />
               </Link>
             )}

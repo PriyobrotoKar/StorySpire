@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
+import { useMediaQuery } from "usehooks-ts";
 
 const getAnimationProperties = (position: "1st" | "2nd" | "3rd") => {
   if (position === "1st") {
@@ -34,6 +35,7 @@ const LeaderboardBestWriter = ({
   position: "1st" | "2nd" | "3rd";
 }) => {
   const { ref, inView } = useInView({ triggerOnce: true });
+  const isMobile = useMediaQuery("(max-width:768px)");
   const animationProperties = getAnimationProperties(position);
 
   return (
@@ -57,9 +59,9 @@ const LeaderboardBestWriter = ({
       <motion.div
         variants={{
           visible: { height: animationProperties.height },
-          hidden: { height: "0rem" },
+          hidden: { height: isMobile ? animationProperties.height : "0rem" },
         }}
-        animate={inView ? "visible" : "hidden"}
+        animate={inView && !isMobile ? "visible" : "hidden"}
         transition={{
           duration: 0.8,
           ease: "easeInOut",

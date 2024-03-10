@@ -26,7 +26,12 @@ export default function RootLayout({
         <ReduxProvider>
           <ReactCookieProvider>
             <body className={`${inter.className}  min-h-[100svh] text-base`}>
-              {children}
+              <div
+                vaul-drawer-wrapper=""
+                className="min-h-[inherit] bg-background"
+              >
+                {children}
+              </div>
               <Toaster />
             </body>
           </ReactCookieProvider>

@@ -1,7 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CiBookmark } from "react-icons/ci";
-import { IoHeartOutline } from "react-icons/io5";
+import { Bookmark, Heart, MessageCircle, Share2 } from "lucide-react";
 import { LuEye } from "react-icons/lu";
 
 const loading = () => {
@@ -26,8 +25,10 @@ const loading = () => {
 
           <div className="flex animate-pulse items-center gap-4 text-xl text-muted-foreground/30">
             <LuEye />
-            <IoHeartOutline />
-            <CiBookmark />
+            <Heart />
+            <MessageCircle />
+            <Bookmark />
+            <Share2 size={18} />
           </div>
         </div>
       </div>

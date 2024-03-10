@@ -1,12 +1,11 @@
 "use client";
 
 import { Blog, User } from "@/types/schemaTypes";
-import { revalidate } from "@/utils/fetchActions";
 import { deleteFetchAPi, postFetchAPi } from "@/utils/fetchData";
-import { useRouter } from "next/navigation";
+import { Bookmark, BookmarkCheck } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { CiBookmark, CiBookmarkCheck } from "react-icons/ci";
-
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const BlogPostBookmark = ({
   blog,
   user,
@@ -15,6 +14,7 @@ const BlogPostBookmark = ({
   user: User;
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const [isBookmarked, setIsBookmarked] = useState(blog.isBookmarked);
 
   const handleBookmark = async () => {
@@ -29,16 +29,16 @@ const BlogPostBookmark = ({
         router.refresh();
       }
     } else {
-      router.push("/login");
+      router.push(`/login?callbackUrl=${BASE_URL + pathname}`);
     }
   };
 
   return (
     <div
       onClick={handleBookmark}
-      className="relative z-10 cursor-pointer text-xl"
+      className="flex cursor-pointer items-center justify-center text-xl"
     >
-      {isBookmarked ? <CiBookmarkCheck /> : <CiBookmark />}
+      {isBookmarked ? <BookmarkCheck /> : <Bookmark />}
     </div>
   );
 };

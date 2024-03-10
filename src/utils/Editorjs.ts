@@ -5,7 +5,6 @@ import { deleteFromCloud } from "./deleteFromCloudinary";
 export class MyImageTool extends ImageTool {
   removed() {
     const data = (this as any)._data;
-    console.log(data);
     deleteFromCloud(data.file.url)
       .then(() => console.log("Image successfully deleted"))
       .catch((error) => console.log("Error in removing the image"));
