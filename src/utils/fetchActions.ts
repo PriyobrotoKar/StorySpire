@@ -3,7 +3,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { ApiError } from "./apiErrorHandler";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const BASE_URL = process.env.BASE_URL;
 
 export async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
