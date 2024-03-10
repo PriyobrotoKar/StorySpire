@@ -1,12 +1,14 @@
 import client from "@/lib/prisma";
 import apiErrorHandler from "@/utils/apiErrorHandler";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export const GET = apiErrorHandler(async (reqest: Request) => {
-  const featured = await client.blog.findMany({
+export const GET = apiErrorHandler(async (request: NextRequest) => {
+  const params = request.nextUrl.searchParams;
+  const limit = Number(params.get("limit"));
+  const recent = await client.blog.findMany({
     where: {
       isPublished: true,
-      isFeatured: true,
+      isFeatured: false,
     },
     select: {
       title: true,
@@ -26,11 +28,12 @@ export const GET = apiErrorHandler(async (reqest: Request) => {
       createdAt: true,
       isPublished: true,
     },
-    take: 5,
+    take: limit || 5,
     orderBy: {
-      createdAt: "desc",
+      BLogView: {
+        _count: "desc",
+      },
     },
   });
-
-  return NextResponse.json(featured, { status: 200 });
+  return NextResponse.json(recent, { status: 200 });
 });

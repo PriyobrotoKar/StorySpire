@@ -1,14 +1,14 @@
 "use client";
-import { Blog, BlogWithoutContent, Category } from "@/types/schemaTypes";
-import { capitalize } from "@/utils/helpers";
-import BlogArticleCard from "./BlogArticleCard";
-import { FaArrowRightLong } from "react-icons/fa6";
-import { fetchAllCategories } from "@/utils/fetchActions";
-import { v4 as uuid } from "uuid";
-import Image from "next/image";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
-import { Button } from "./ui/button";
+import { BlogWithoutContent, Category } from "@/types/schemaTypes";
+import { fetchAllCategories } from "@/utils/fetchActions";
+import { capitalize } from "@/utils/helpers";
+import Image from "next/image";
 import Link from "next/link";
+import { FaArrowRightLong } from "react-icons/fa6";
+import { v4 as uuid } from "uuid";
+import BlogArticleCard from "./BlogArticleCard";
+import { Button } from "./ui/button";
 
 const Categories = ({
   initialCategories,
@@ -26,6 +26,9 @@ const Categories = ({
   return (
     <>
       {topics.map((topic) => {
+        if (topic.posts.length === 0) {
+          return;
+        }
         return (
           <section key={uuid()} className="space-y-2">
             <div className="flex justify-between gap-8">

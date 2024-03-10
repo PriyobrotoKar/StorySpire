@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { TiDocumentText } from "react-icons/ti";
@@ -26,6 +26,7 @@ const SearchBar = () => {
     null
   );
   const router = useRouter();
+  const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(false);
   let isNoResultsFound = false;
   const [ref, { height }] = useMeasure();
@@ -42,7 +43,9 @@ const SearchBar = () => {
 
     if (value) {
       setIsLoading(true);
-      router.push(`/search/blogs?q=${value}`);
+      router.push(
+        `${pathname === "/search" ? "/search/blogs" : pathname}?q=${value}`
+      );
     }
   };
 

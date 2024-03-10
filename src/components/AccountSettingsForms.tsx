@@ -1,5 +1,4 @@
 "use client";
-import { BASE_URL } from "@/constants/constant";
 import { updateUser } from "@/utils/fetchActions";
 import { patchFetchAPi } from "@/utils/fetchData";
 import { Loader2 } from "lucide-react";
@@ -9,6 +8,8 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { toast } from "./ui/use-toast";
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const GeneralSettingsForms = () => {
   const { data: session, update } = useSession();

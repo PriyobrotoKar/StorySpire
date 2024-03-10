@@ -45,6 +45,8 @@ const SearchResults = ({
     [query]
   );
 
+  console.log(items);
+
   if (!items.length) {
     return (
       <p className="py-10 text-center text-md text-muted-foreground">
@@ -109,9 +111,6 @@ const SearchResults = ({
   return (
     <div className="space-y-4">
       {(items as User[]).map((user) => {
-        if (user.username === session?.user.username) {
-          return;
-        }
         return <UserCard key={user.id} user={user as User} session={session} />;
       })}
       {items.length !== total && (

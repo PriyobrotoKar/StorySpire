@@ -32,6 +32,7 @@ model User {
   blogsViewed    BLogView[]
   followedTopics FollowTopic[]
   searchHistory  UserSearchHistory[]
+  comments       Comment[]
 
   @@index([fullname])
 }
@@ -64,6 +65,7 @@ model Blog {
   updatedAt   DateTime   @updatedAt
   Like        Like[]
   BLogView    BLogView[]
+  comments    Comment[]
 
   @@index([title, description])
 }
@@ -86,6 +88,16 @@ model Category {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   FollowTopic FollowTopic[]
+}
+
+model Comment {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  comment       String
+  commentedBy   User     @relation(fields: [commentedByID], references: [id])
+  post          Blog     @relation(fields: [postID], references: [id])
+  postID        String   @db.ObjectId
+  commentedByID String   @db.ObjectId
+  createdAt     DateTime @default(now())
 }
 
 model Like {

@@ -1,27 +1,29 @@
 "use client";
-import React, { useState, useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdCancel } from "react-icons/md";
 
-import { fetchDataFromApi, postFetchAPi } from "@/utils/fetchData";
-import { Loader2 } from "lucide-react";
 import { RootState } from "@/store/store";
-import { useCookies } from "react-cookie";
-import { DEFAULT_USER_INTRO } from "@/constants/constant";
-import { uploadToCloud } from "@/utils/uploadToCloudinary";
 import { UserDetailsInput } from "@/types/customTypes";
+import { fetchDataFromApi, postFetchAPi } from "@/utils/fetchData";
+import { uploadToCloud } from "@/utils/uploadToCloudinary";
+import { Loader2 } from "lucide-react";
+import { useCookies } from "react-cookie";
+
+const DEFAULT_USER_INTRO =
+  "Welcome to my corner of the internet! I'm a passionate individual who loves to share experiences, ideas, and thoughts through the art of writing";
 
 const OnBoardingForm = () => {
   const email = useSelector((state: RootState) => state.LoginDetails.email);
@@ -81,6 +83,7 @@ const OnBoardingForm = () => {
           file: e.target.files[0],
         },
       });
+      e.target.value = "";
     }
   };
 

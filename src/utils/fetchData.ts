@@ -1,6 +1,7 @@
 import { toast } from "@/components/ui/use-toast";
-import { BASE_URL } from "@/constants/constant";
 import { ApiError } from "./apiErrorHandler";
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const fetchDataFromApi = async (
   url: string,

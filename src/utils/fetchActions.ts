@@ -1,8 +1,9 @@
 "use server";
-import { BASE_URL } from "@/constants/constant";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { ApiError } from "./apiErrorHandler";
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -85,6 +86,13 @@ export const fetchDraftBlog = async (slug: string) => {
 
 export const fetchRecentBlogs = async (limit?: number) => {
   const response = await fetch(`${BASE_URL}/api/blog/recent?limit=${limit}`, {
+    method: "GET",
+    headers: headers(),
+  });
+  return await response.json();
+};
+export const fetchPopularBlogs = async (limit?: number) => {
+  const response = await fetch(`${BASE_URL}/api/blog/popular?limit=${limit}`, {
     method: "GET",
     headers: headers(),
   });
@@ -177,7 +185,7 @@ export const searchUsers = async (query: string, offset = 0) => {
     `${BASE_URL}/api/search/users?q=${query}&offset=${offset}`,
     {
       method: "GET",
-      // headers: headers(),
+      headers: headers(),
     }
   );
   return await response.json();
@@ -214,6 +222,21 @@ export const addRecentSearch = async (query: string) => {
 export const deleteBlogBySlug = async (slug: string) => {
   const res = await fetch(`${BASE_URL}/api/blog/${slug}`, {
     method: "DELETE",
+    headers: headers(),
+  });
+  return await res.json();
+};
+export const getTopWriters = async (limit?: number) => {
+  const res = await fetch(`${BASE_URL}/api/user/top-authors?limit=${limit}`, {
+    method: "GET",
+    headers: headers(),
+  });
+  return await res.json();
+};
+
+export const fetchBlogComments = async (slug: string) => {
+  const res = await fetch(`${BASE_URL}/api/blog/${slug}/comment`, {
+    method: "GET",
     headers: headers(),
   });
   return await res.json();

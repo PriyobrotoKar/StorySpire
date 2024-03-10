@@ -1,16 +1,16 @@
 "use client";
-import Image from "next/image";
-import React, { useState, useEffect } from "react";
-import { Button } from "./ui/button";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { useSession } from "next-auth/react";
 import { User } from "@/types/schemaTypes";
-import { patchFetchAPi } from "@/utils/fetchData";
-import { toast } from "./ui/use-toast";
-import { Loader2 } from "lucide-react";
 import { updateUser } from "@/utils/fetchActions";
+import { patchFetchAPi } from "@/utils/fetchData";
+import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Textarea } from "./ui/textarea";
+import { toast } from "./ui/use-toast";
 
 interface Input {
   cover_pic: {
@@ -78,6 +78,7 @@ const ProfileSettingsForm = ({ userDetails }: { userDetails: User }) => {
   };
 
   const handleImageInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.files?.length);
     if (e.target.files?.length) {
       setInput({
         ...input,
@@ -86,6 +87,7 @@ const ProfileSettingsForm = ({ userDetails }: { userDetails: User }) => {
           file: await getBase64(e.target.files[0]),
         },
       });
+      e.target.value = "";
     }
   };
 
@@ -177,6 +179,7 @@ const ProfileSettingsForm = ({ userDetails }: { userDetails: User }) => {
             className="hidden"
             type="file"
             accept=".jpg,.jpeg,.png,.webp"
+            maxLength={1}
             name="cover_pic"
             onChange={handleImageInput}
             id="cover_pic"
