@@ -52,3 +52,9 @@ export type Category = Prisma.CategoryGetPayload<{
     };
   };
 }>;
+
+export type Comment = Prisma.CommentGetPayload<{
+  include: {
+    commentedBy: true;
+  };
+}>;

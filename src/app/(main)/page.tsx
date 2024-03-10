@@ -1,11 +1,13 @@
 import BlogArticleCard from "@/components/BlogArticleCard";
+import LeaderboardBestWriter from "@/components/LeaderboardBestWriter";
 import SearchBar from "@/components/SearchBar";
 import BlogPostGridSkeleton from "@/components/skeletons/BlogPostGridSkeleton";
 import FeaturedSkeletons from "@/components/skeletons/FeaturedSkeletons";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { Blog, User } from "@/types/schemaTypes";
 import {
   fetchFeaturedBlogs,
+  fetchPopularBlogs,
   fetchRecentBlogs,
   getTopWriters,
 } from "@/utils/fetchActions";
@@ -15,6 +17,16 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { authOptions } from "../api/auth/[...nextauth]/options";
 
+const PopularBlogs = async () => {
+  const recentBlogs: Blog[] = await fetchPopularBlogs(4);
+  return (
+    <div className="grid grid-cols-1 gap-8 overflow-hidden sm:auto-rows-[0rem]  sm:grid-cols-2 sm:grid-rows-2 sm:gap-2 lg:grid-cols-3 lg:grid-rows-1 2xl:grid-cols-4">
+      {recentBlogs.map((blog) => {
+        return <BlogArticleCard size="small" key={blog.id} blog={blog} />;
+      })}
+    </div>
+  );
+};
 const RecentBlogs = async () => {
   const recentBlogs: Blog[] = await fetchRecentBlogs(4);
   return (
@@ -39,55 +51,6 @@ const FeaturedBlogs = async () => {
         return <BlogArticleCard size={"small"} key={blog.id} blog={blog} />;
       })}
     </section>
-  );
-};
-
-const LeaderboardBestWriter = ({
-  writer,
-  position,
-}: {
-  writer: User & { _count: { blogs: true } };
-  position: "1st" | "2nd" | "3rd";
-}) => {
-  return (
-    <div className="relative z-10 w-[25%] space-y-2 sm:w-[20%]">
-      <div className="text-center text-primary-foreground">
-        <Link className="mx-auto block w-fit" href={`/@${writer.username}`}>
-          <div className="h-12 w-12 overflow-hidden rounded-full outline outline-0 outline-border transition-all  hover:scale-125 hover:outline-4">
-            <Image
-              src={writer.profile_pic || "/images/avatarFallback.png"}
-              alt="second"
-              className="h-full w-full object-cover"
-              width={64}
-              height={64}
-            />
-          </div>
-        </Link>
-        <span className="text-md font-medium ">
-          {writer.fullname.split(" ")[0]}
-        </span>
-      </div>
-      <div
-        className={cn(
-          "flex  flex-col items-center justify-center rounded-t-md border border-border  text-secondary-foreground shadow-[inset_0px_-18px_25px_5px_#00000036]",
-          { "h-44 bg-green-300": position === "2nd" },
-          { "h-52 bg-primary": position === "1st" },
-          { "h-32 bg-yellow-200": position === "3rd" }
-        )}
-      >
-        <div className="font-semibold">
-          <span className="text-2xl font-bold">{position[0]}</span>
-          {position.slice(1)}
-        </div>
-        <div className="hidden text-sm font-semibold text-accent-foreground/70 sm:block ">
-          <span className=" text-md">{writer._count.follower}</span> Followers
-        </div>
-        <div className="hidden text-sm font-semibold text-accent-foreground/70 sm:block">
-          <span className=" text-md ">{writer._count.blogs} </span>
-          Articles
-        </div>
-      </div>
-    </div>
   );
 };
 
@@ -159,6 +122,42 @@ const TopWriters = async () => {
   );
 };
 
+const WriteYourPost = () => {
+  return (
+    <section className="flex  items-center gap-6  rounded-xl bg-primary/10 px-10 py-10 lg:px-20 lg:py-0">
+      <div className="flex-[1.5_1_0%] ">
+        <h1 className="mb-6 text-3xl  font-bold leading-tight lg:text-[3rem]  2xl:text-[4.5rem]">
+          Ready to write your <span className="text-primary">story ?</span>
+        </h1>
+        <Link href={`/write`}>
+          <Button size={"lg"} variant={"default"}>
+            Get Started
+          </Button>
+        </Link>
+      </div>
+      <div className="lg:flex-1">
+        <Image
+          src={"/images/writing.svg"}
+          alt="Writing Blog"
+          className="ml-auto hidden lg:block"
+          width={500}
+          height={250}
+        />
+      </div>
+    </section>
+    // <section className="flex flex-col items-center justify-center  gap-6 rounded-xl py-20">
+    //   <h1 className="mb-6 text-[4.5rem] font-bold leading-tight">
+    //     Ready to write your <span className="text-primary">story </span>?
+    //   </h1>
+    //   <Link href={`/write`}>
+    //     <Button size={"lg"} variant={"default"}>
+    //       Get Started
+    //     </Button>
+    //   </Link>
+    // </section>
+  );
+};
+
 export default async function Home() {
   return (
     <div>
@@ -179,6 +178,12 @@ export default async function Home() {
           <FeaturedBlogs />
         </Suspense>
         <section className="space-y-4">
+          <h2 className="text-xl font-bold">Popular Blogs</h2>
+          <Suspense fallback={<BlogPostGridSkeleton />}>
+            <PopularBlogs />
+          </Suspense>
+        </section>
+        <section className="space-y-4">
           <h2 className="text-xl font-bold">Recent Blogs</h2>
           <Suspense fallback={<BlogPostGridSkeleton />}>
             <RecentBlogs />
@@ -190,6 +195,8 @@ export default async function Home() {
             <TopWriters />
           </Suspense>
         </section>
+
+        <WriteYourPost />
       </div>
     </div>
   );

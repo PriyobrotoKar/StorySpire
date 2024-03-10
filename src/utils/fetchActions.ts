@@ -91,6 +91,13 @@ export const fetchRecentBlogs = async (limit?: number) => {
   });
   return await response.json();
 };
+export const fetchPopularBlogs = async (limit?: number) => {
+  const response = await fetch(`${BASE_URL}/api/blog/popular?limit=${limit}`, {
+    method: "GET",
+    headers: headers(),
+  });
+  return await response.json();
+};
 
 export const fetchFeaturedBlogs = async () => {
   const response = await fetch(`${BASE_URL}/api/blog/featured`, {
@@ -221,6 +228,14 @@ export const deleteBlogBySlug = async (slug: string) => {
 };
 export const getTopWriters = async (limit?: number) => {
   const res = await fetch(`${BASE_URL}/api/user/top-authors?limit=${limit}`, {
+    method: "GET",
+    headers: headers(),
+  });
+  return await res.json();
+};
+
+export const fetchBlogComments = async (slug: string) => {
+  const res = await fetch(`${BASE_URL}/api/blog/${slug}/comment`, {
     method: "GET",
     headers: headers(),
   });

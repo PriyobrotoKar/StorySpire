@@ -1,6 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import BlogArticleCard from "@/components/BlogArticleCard";
 import BlogPostBookmark from "@/components/BlogPostBookmark";
+import BlogPostComment from "@/components/BlogPostComment";
 import BlogPostLike from "@/components/BlogPostLike";
 import Codeblock from "@/components/Codeblock";
 import Confetti from "@/components/Confetti";
@@ -144,7 +145,7 @@ const page = async ({
               : ""}
             {readingTime(blog.length)} mins
           </div>
-          <h1 className="relative z-10  mx-auto text-center text-xl font-bold leading-tight sm:container sm:text-2xl md:text-3xl lg:max-w-3xl">
+          <h1 className="relative z-10  mx-auto text-center text-xl font-bold leading-tight sm:container  md:text-3xl lg:max-w-4xl">
             {blog.title}
           </h1>
           <div className="relative z-10 flex items-center gap-4">
@@ -179,6 +180,7 @@ const page = async ({
               <p>{views}</p>
             </div>
             <BlogPostLike blog={blog} user={user} />
+            <BlogPostComment session={session} slug={blog.slug} />
             <BlogPostBookmark blog={blog} user={user} />
           </div>
         </section>

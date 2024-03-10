@@ -44,23 +44,75 @@ const socials = [
 ];
 
 const features = [
-  "User registration and login system to manage user accounts.",
-  "Basic user roles like author and reader.",
-  " Create, edit, and delete blog posts.",
-  " Format text (e.g., bold, italic, headings) and upload images for blog posts.",
-  " Display a list of blog posts on the home page.",
-  " View individual blog posts with their content, author, date, and comments.",
-  " Categorise blog posts into different topics or categories.",
-  " Add tags to blog posts for easy searching and filtering.",
-  " Implement a search bar to search for blog posts by keywords.",
-  " Allow users to filter blog posts by categories, tags, or dates.",
-  " Allow users to categorize blog posts and add tags for organization.",
-  " Create user profiles displaying basic information and authored blog posts.",
-  " Implement a featurerich text editor for creating and formatting blog posts.",
-  " Allow users to comment on blog posts.",
-  " Provide like and share functionality for blog posts.",
-  " Enable users to share blog posts on various social media platforms.",
-  " Enable users to follow their favourite authors or topics.",
+  {
+    feature: "User registration and login system to manage user accounts.",
+    completed: true,
+  },
+  { feature: "Basic user roles like author and reader.", completed: true },
+  { feature: " Create, edit, and delete blog posts.", completed: true },
+  {
+    feature:
+      " Format text (e.g., bold, italic, headings) and upload images for blog posts.",
+    completed: true,
+  },
+  {
+    feature: " Display a list of blog posts on the home page.",
+    completed: true,
+  },
+  {
+    feature:
+      " View individual blog posts with their content, author, date, and comments.",
+    completed: true,
+  },
+  {
+    feature: " Categorise blog posts into different topics or categories.",
+    completed: true,
+  },
+  {
+    feature: " Add tags to blog posts for easy searching and filtering.",
+    completed: true,
+  },
+  {
+    feature: " Implement a search bar to search for blog posts by keywords.",
+    completed: true,
+  },
+  {
+    feature: " Allow users to filter blog posts by categories, tags, or dates.",
+    completed: true,
+  },
+  {
+    feature:
+      " Allow users to categorize blog posts and add tags for organization.",
+    completed: true,
+  },
+  {
+    feature:
+      " Create user profiles displaying basic information and authored blog posts.",
+    completed: true,
+  },
+  {
+    feature:
+      " Implement a featurerich text editor for creating and formatting blog posts.",
+    completed: true,
+  },
+  { feature: " Allow users to comment on blog posts.", completed: true },
+  {
+    feature: " Provide like and share functionality for blog posts.",
+    completed: true,
+  },
+  {
+    feature:
+      " Enable users to share blog posts on various social media platforms.",
+    completed: true,
+  },
+  {
+    feature: " Enable users to follow their favourite authors or topics.",
+    completed: true,
+  },
+  {
+    feature: " Comment on blog posts.",
+    completed: false,
+  },
 ];
 
 export const metadata: Metadata = {
@@ -107,7 +159,11 @@ const page = () => {
       <Separator className="my-2" />
       <ul className="ml-4 list-disc">
         {features.map((feature) => {
-          return <li key={feature}>{feature}</li>;
+          return (
+            <li key={feature.feature}>
+              [{feature.completed ? "x" : " "}]{feature.feature}
+            </li>
+          );
         })}
       </ul>
 

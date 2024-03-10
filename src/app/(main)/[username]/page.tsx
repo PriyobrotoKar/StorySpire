@@ -71,7 +71,7 @@ const UserBlogs = async ({
   return (
     <>
       {!blogs.length && (
-        <p className="my-32 text-center text-sm text-muted-foreground">
+        <p className="py-32 text-center text-sm text-muted-foreground">
           {user.fullname} hasn&apos;t written any blogs yet.
         </p>
       )}
