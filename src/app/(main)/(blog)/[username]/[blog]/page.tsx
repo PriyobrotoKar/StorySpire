@@ -228,7 +228,7 @@ const page = async ({
         </div>
       </section>
 
-      <section className="mx-6 my-20 flex  items-center gap-2 border-y py-8 lg:container sm:mx-auto  sm:max-w-lg sm:gap-6 sm:px-6 lg:max-w-3xl   lg:gap-10">
+      <section className="mx-6 my-20 flex justify-between items-center gap-2 border-y py-8 lg:container sm:mx-auto  sm:max-w-lg sm:gap-6 sm:px-6 lg:max-w-3xl   lg:gap-10">
         <div className="flex items-center gap-2 sm:gap-6 lg:gap-10">
           <div className="aspect-square w-12  flex-shrink-0 overflow-hidden rounded-full shadow-xl sm:w-14 lg:w-16">
             <Image
