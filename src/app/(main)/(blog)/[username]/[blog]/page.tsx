@@ -100,7 +100,6 @@ const page = async ({
   const edjsParser = edjsHTML();
   const { username, blog: slug } = params;
   const session = await getServerSession(authOptions);
-
   const user: User = session
     ? await fetchSingleUser(session.user.username)
     : null;

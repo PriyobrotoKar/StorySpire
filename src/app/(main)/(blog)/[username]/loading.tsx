@@ -7,15 +7,15 @@ const loading = () => {
   return (
     <div className="mb-[40rem]">
       <div className="container ">
-        <div className="my-10 flex flex-col items-center gap-10">
-          <Skeleton className="h-4 w-52"></Skeleton>
+        <div className="my-4 flex flex-col items-center gap-6 sm:my-10 sm:gap-10">
+          <Skeleton className="h-4 w-44 sm:w-52"></Skeleton>
           <div className="space-y-2">
-            <Skeleton className="h-14 w-[30rem]"></Skeleton>
-            <Skeleton className="mx-auto h-14 w-[20rem]"></Skeleton>
+            <Skeleton className="mx-auto h-10 w-[80%] sm:h-14 sm:w-[30rem]"></Skeleton>
+            <Skeleton className="mx-auto h-10 w-[20rem] sm:h-14"></Skeleton>
           </div>
           <div className="flex items-center gap-4">
             <div>
-              <Skeleton className="h-16 w-16 rounded-full" />
+              <Skeleton className="h-12 w-12 rounded-full sm:h-16 sm:w-16" />
             </div>
             <div className="space-y-2">
               <Skeleton className="h-4 w-40" />
@@ -32,7 +32,7 @@ const loading = () => {
           </div>
         </div>
       </div>
-      <Separator className=" mt-44" />
+      <Separator className=" mt-20 sm:mt-44" />
     </div>
   );
 };
