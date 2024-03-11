@@ -31,7 +31,7 @@ const page = () => {
             Explore <span className="text-primary">Topics</span>
           </h1>
           <p className="mx-6 text-lg font-medium ">
-            (Have to change this subtitle)
+            Explore all the difference topics
           </p>
         </main>
         <SearchBar />
