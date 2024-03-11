@@ -2,7 +2,7 @@
 import { updatePassword } from "@/reducers/loginDetailsSlice";
 import { RootState } from "@/store/store";
 import { Label } from "@radix-ui/react-label";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,9 +14,7 @@ const RegisterForm = () => {
   const loginEmail = useSelector(
     (state: RootState) => state.LoginDetails.email
   );
-  if (!loginEmail) {
-    router.replace("/login");
-  }
+
   const dispatch = useDispatch();
   const [mounted, setMounted] = useState(false);
   const [showPassword, setShowPassowrd] = useState({
@@ -39,23 +37,21 @@ const RegisterForm = () => {
     setError(false);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (input.password !== input.confirmPass) {
       setError(true);
     } else {
       dispatch(updatePassword(input.password));
-      mounted && router.push("/onboarding");
+      router.push("/onboarding");
     }
   };
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
+    if (!loginEmail) {
+      router.replace("/login");
+    }
+  }, [loginEmail, router]);
 
   return (
     <div className="flex min-h-[inherit] items-center justify-center px-6">
@@ -69,7 +65,7 @@ const RegisterForm = () => {
             <span className="font-semibold">{loginEmail}</span>
           </p>
         </div>
-        <form className="space-y-3" onSubmit={handleSubmit}>
+        <form className="space-y-3">
           <div>
             <Label htmlFor="password" className={error ? "text-primary" : ""}>
               Password
@@ -136,7 +132,9 @@ const RegisterForm = () => {
               </span>
             )}
           </div>
-          <Button className=" w-full">Continue</Button>
+          <Button onClick={handleSubmit} className=" w-full">
+            Continue
+          </Button>
         </form>
       </main>
     </div>

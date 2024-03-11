@@ -26,7 +26,7 @@ const BlogPostComment = async ({
         <MessageCircle />
         {_count}
       </SheetTrigger>
-      <SheetContent className="overflow-auto">
+      <SheetContent className="w-[90%] overflow-auto">
         <SheetHeader>
           <SheetTitle>Comments ({_count})</SheetTitle>
         </SheetHeader>
