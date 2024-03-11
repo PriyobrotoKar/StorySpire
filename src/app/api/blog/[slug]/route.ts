@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 import { Session, getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../../auth/[...nextauth]/options";
+import { revalidatePath } from "next/cache";
 
 const hasViewed = async (
   session: Session | null,
@@ -238,7 +239,7 @@ export const DELETE = apiErrorHandler(
         },
         data: {
           categories: { set: [] },
-          savedBy:{set:[]}
+          savedBy: { set: [] },
         },
       }),
       client.blog.delete({
@@ -247,6 +248,8 @@ export const DELETE = apiErrorHandler(
         },
       }),
     ]);
+
+    revalidatePath("/", "layout");
 
     return NextResponse.json("Blog Deleted Successfully", { status: 200 });
   }

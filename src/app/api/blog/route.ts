@@ -2,6 +2,7 @@ import client from "@/lib/prisma";
 import { Tags } from "@/types/customTypes";
 import apiErrorHandler, { ApiError } from "@/utils/apiErrorHandler";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { v4 as uuid } from "uuid";
 import { authOptions } from "../auth/[...nextauth]/options";
@@ -46,6 +47,7 @@ export const POST = apiErrorHandler(async (req: Request) => {
     },
   });
 
+  revalidatePath("/", "layout");
   return NextResponse.json(
     { success: true, message: "Blog created successfully", data: blog },
     { status: 200 }
@@ -88,7 +90,7 @@ export const PUT = apiErrorHandler(async (req: Request) => {
       author: true,
     },
   });
-
+  revalidatePath("/", "layout");
   return NextResponse.json(
     { success: true, message: "Blog edited successfully", data: blog },
     { status: 200 }
