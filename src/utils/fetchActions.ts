@@ -34,7 +34,7 @@ export const fetchSingleBlog = async (slug: string) => {
   const response = await fetch(`${BASE_URL}/api/blog/${slug}`, {
     method: "GET",
     next: { tags: ["blog"] },
-    headers: headers(),
+    headers: new Headers(headers()),
   });
   if (!response.ok && response.status !== 404) {
     const { error } = await response.json();
@@ -87,14 +87,14 @@ export const fetchDraftBlog = async (slug: string) => {
 export const fetchRecentBlogs = async (limit?: number) => {
   const response = await fetch(`${BASE_URL}/api/blog/recent?limit=${limit}`, {
     method: "GET",
-    headers: headers(),
+    headers: new Headers(headers()),
   });
   return await response.json();
 };
 export const fetchPopularBlogs = async (limit?: number) => {
   const response = await fetch(`${BASE_URL}/api/blog/popular?limit=${limit}`, {
     method: "GET",
-    headers: headers(),
+    headers: new Headers(headers()),
   });
   return await response.json();
 };
@@ -102,7 +102,7 @@ export const fetchPopularBlogs = async (limit?: number) => {
 export const fetchFeaturedBlogs = async () => {
   const response = await fetch(`${BASE_URL}/api/blog/featured`, {
     method: "GET",
-    headers: headers(),
+    headers: new Headers(headers()),
   });
   return await response.json();
 };
@@ -130,7 +130,7 @@ export const fetchCategory = async (name: string, offset = 0) => {
 export const fetchBookmarks = async () => {
   const response = await fetch(`${BASE_URL}/api/user/bookmark`, {
     method: "GET",
-    headers: headers(),
+    headers: new Headers(headers()),
   });
   return await response.json();
 };
@@ -165,7 +165,7 @@ export const checkIsFollowingTopic = async (category_name: string) => {
     `${BASE_URL}/api/category/${category_name}/follow`,
     {
       method: "GET",
-      headers: headers(),
+      headers: new Headers(headers()),
     }
   );
   return await response.json();
@@ -175,7 +175,7 @@ export const searchBlogs = async (query: string, offset = 0) => {
     `${BASE_URL}/api/search/blogs?q=${query}&offset=${offset}`,
     {
       method: "GET",
-      // headers: headers(),
+      // headers: new Headers(headers()),
     }
   );
   return await response.json();
@@ -185,7 +185,7 @@ export const searchUsers = async (query: string, offset = 0) => {
     `${BASE_URL}/api/search/users?q=${query}&offset=${offset}`,
     {
       method: "GET",
-      headers: headers(),
+      headers: new Headers(headers()),
     }
   );
   return await response.json();
@@ -195,7 +195,7 @@ export const searchTopics = async (query: string, offset = 0) => {
     `${BASE_URL}/api/search/topics?q=${query}&offset=${offset}`,
     {
       method: "GET",
-      // headers: headers(),
+      // headers: new Headers(headers()),
     }
   );
   return await response.json();
@@ -204,7 +204,7 @@ export const searchTopics = async (query: string, offset = 0) => {
 export const fetchRecentSearches = async () => {
   const response = await fetch(`${BASE_URL}/api/search/recents`, {
     method: "GET",
-    headers: headers(),
+    headers: new Headers(headers()),
   });
   return await response.json();
 };
@@ -215,20 +215,20 @@ export const addRecentSearch = async (query: string) => {
     body: JSON.stringify({
       query,
     }),
-    headers: headers(),
+    headers: new Headers(headers()),
   });
 };
 export const deleteBlogBySlug = async (slug: string) => {
   const res = await fetch(`${BASE_URL}/api/blog/${slug}`, {
     method: "DELETE",
-    headers: headers(),
+    headers: new Headers(headers()),
   });
   return await res.json();
 };
 export const getTopWriters = async (limit?: number) => {
   const res = await fetch(`${BASE_URL}/api/user/top-authors?limit=${limit}`, {
     method: "GET",
-    headers: headers(),
+    headers: new Headers(headers()),
   });
   return await res.json();
 };
@@ -236,7 +236,7 @@ export const getTopWriters = async (limit?: number) => {
 export const fetchBlogComments = async (slug: string) => {
   const res = await fetch(`${BASE_URL}/api/blog/${slug}/comment`, {
     method: "GET",
-    headers: headers(),
+    headers: new Headers(headers()),
   });
   return await res.json();
 };
