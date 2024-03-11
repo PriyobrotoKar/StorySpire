@@ -44,7 +44,7 @@ export const generateViewport = async ({
   }
 
   return {
-    themeColor: blog.categories[0].color,
+    themeColor: blog.categories[0]?.color,
   };
 };
 

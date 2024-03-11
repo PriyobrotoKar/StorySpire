@@ -164,7 +164,7 @@ const Editor = ({ blog }: { blog?: Blog }) => {
     if (showDialogue) {
       document.documentElement.style.overflow = "hidden";
     } else {
-      document.documentElement.style.overflow = "auto";
+      document.documentElement.style.overflow = "";
     }
   }, [showDialogue]);
 

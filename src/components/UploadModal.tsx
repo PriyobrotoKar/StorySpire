@@ -105,7 +105,7 @@ const UploadModal = ({
       length: words,
       categories,
     });
-    document.documentElement.style.overflow = "auto";
+    document.documentElement.style.overflow = "";
     router.push(`/@${res.data.author.username}?tab=drafts`);
   };
 
@@ -158,7 +158,7 @@ const UploadModal = ({
       });
     }
     dispatch(updateShowConfetti(true));
-    document.documentElement.style.overflow = "auto";
+    document.documentElement.style.overflow = "";
     router.replace(`/@${res.data.author.username}/${res.data.slug}`);
   };
   const handleEdit = async () => {
@@ -194,7 +194,7 @@ const UploadModal = ({
       slug: initialData.slug,
       isPublished: initialData.isPublished,
     });
-    document.documentElement.style.overflow = "auto";
+    document.documentElement.style.overflow = "";
     router.replace(`/@${res.data.author.username}/${res.data.slug}`);
   };
 
