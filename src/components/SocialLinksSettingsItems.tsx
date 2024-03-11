@@ -1,17 +1,17 @@
-import LinkIcon from "./LinkIcon";
-import { capitalize } from "@/utils/helpers";
-import { Input } from "./ui/input";
-import { MdDragIndicator } from "react-icons/md";
-import { social as socialObj } from "@/utils/socials";
-import { FaTrash } from "react-icons/fa6";
 import { extractDomain } from "@/utils/extractDomain";
-import { toast } from "./ui/use-toast";
-import { ToastAction } from "./ui/toast";
-import { useRouter } from "next/navigation";
-import { useSortable } from "@dnd-kit/sortable";
 import { updateUser } from "@/utils/fetchActions";
-import { Loader2 } from "lucide-react";
+import { capitalize } from "@/utils/helpers";
+import { social as socialObj } from "@/utils/socials";
+import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { FaTrash } from "react-icons/fa6";
+import { MdDragIndicator } from "react-icons/md";
+import LinkIcon from "./LinkIcon";
+import { Input } from "./ui/input";
+import { ToastAction } from "./ui/toast";
+import { toast } from "./ui/use-toast";
 
 import { deleteFetchAPi, patchFetchAPi } from "@/utils/fetchData";
 import { Social } from "@prisma/client";
@@ -29,7 +29,8 @@ const SocialLinkSettingItem = ({
     useSortable({ id: social.id });
   const [input, setInput] = useState(social.link);
   const [isUpdated, setIsUpdated] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
   const dndStyles = {
     transition,
@@ -42,7 +43,7 @@ const SocialLinkSettingItem = ({
   };
 
   const saveLink = async () => {
-    setIsProcessing(true);
+    setIsSaving(true);
     const sanitizedLink =
       input[input.length - 1] === "/" ? input.slice(0, -1) : input;
     const res = await patchFetchAPi(`/api/social/${social.id}`, {
@@ -50,7 +51,7 @@ const SocialLinkSettingItem = ({
       name: extractDomain(input),
     });
     await updateLinks();
-    setIsProcessing(false);
+    setIsSaving(false);
     setIsUpdated(false);
 
     toast({
@@ -70,9 +71,9 @@ const SocialLinkSettingItem = ({
   };
 
   const deleteLink = async () => {
-    setIsProcessing(true);
+    setIsDeleting(true);
     const res = await deleteFetchAPi(`/api/social/${social.id}`);
-    setIsProcessing(false);
+    setIsDeleting(false);
     await updateLinks();
     toast({
       variant: "default",
@@ -138,12 +139,12 @@ const SocialLinkSettingItem = ({
           <div className="flex items-center gap-2">
             {isUpdated && (
               <Button
-                disabled={isProcessing}
+                disabled={isSaving}
                 onClick={handleSave}
                 variant={"secondary"}
                 size={"sm"}
               >
-                {isProcessing ? (
+                {isSaving ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Saving
@@ -154,6 +155,7 @@ const SocialLinkSettingItem = ({
               </Button>
             )}
             <Button
+              disabled={isDeleting}
               onClick={deleteLink}
               className={
                 "pointer-events-none opacity-0 transition-opacity delay-300 group-hover:pointer-events-auto " +
@@ -162,7 +164,7 @@ const SocialLinkSettingItem = ({
               variant={"destructive"}
               size={"sm"}
             >
-              {isProcessing ? (
+              {isDeleting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <FaTrash />
