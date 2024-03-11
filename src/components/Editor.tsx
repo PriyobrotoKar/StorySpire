@@ -170,7 +170,7 @@ const Editor = ({ blog }: { blog?: Blog }) => {
 
   return (
     <div className={` ${showDialogue ? "h-[100svh] overflow-hidden" : ""}`}>
-      <article className="ignoreEditorjs mx-6 max-w-3xl space-y-2 pt-6  md:mx-auto">
+      <article className="ignoreEditorjs mx-6 max-w-3xl space-y-2   md:mx-auto">
         <header className="mx-auto flex max-w-2xl items-center justify-between">
           <div className="text-sm  text-muted-foreground">
             {wordCount} Words

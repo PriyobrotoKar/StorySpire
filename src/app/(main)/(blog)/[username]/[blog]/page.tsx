@@ -147,7 +147,7 @@ const page = async ({
               : ""}
             {readingTime(blog.length)} mins
           </div>
-          <h1 className="relative z-10  mx-auto text-center text-xl font-bold leading-tight sm:container  md:text-3xl lg:max-w-4xl">
+          <h1 className="relative z-10 mx-auto  px-4 text-center text-xl font-bold leading-tight sm:container  md:text-3xl lg:max-w-4xl">
             {blog.title}
           </h1>
           <div className="relative z-10 flex items-center gap-4">

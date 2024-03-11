@@ -41,7 +41,7 @@ const ShareBlogModal = ({
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const socialMedias = [
     `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-    `https://twitter.com/share?url=${encodeURIComponent(url)}`,
+    `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`,
     `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
       url
     )}`,
